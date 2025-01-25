@@ -22,7 +22,7 @@ struct ContentView: View {
                         .frame(width: 300, height: 650)
                 }
                 VStack {
-                    Text("Welcome to\nNetWork")
+                    Text("Welcome \nNetWork")
                         .font(.custom("Baskerville", size: 50))
                         .fontWeight(.semibold)
                         .position(x: 200, y: 275)

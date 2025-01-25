@@ -13,7 +13,7 @@ struct serviceView: View {
             
             Spacer()
                 .navigationBarBackButtonHidden(true)
-            Text("IN PROGRESS")
+            Text("Cenetral cee")
                 .font(.system(size: 36, weight: .bold, design: .default)) // Large font
                 .foregroundColor(.red) // Red text
                 .italic() // Slanted text

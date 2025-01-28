@@ -13,9 +13,9 @@
 		5B80943B2CBDA184007AE322 /* CustomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B80943A2CBDA184007AE322 /* CustomTabView.swift */; };
 		5B9BEB222CC092E200C80747 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9BEB212CC092E200C80747 /* InputView.swift */; };
 		5B9BEB262CC6099A00C80747 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9BEB252CC6099A00C80747 /* LoginView.swift */; };
-		5BB551CF2D49635C003F9D1E /* LoginSignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB551CE2D496342003F9D1E /* LoginSignupView.swift */; };
 		5BB551E42D4966AB003F9D1E /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB551E32D4966A2003F9D1E /* SignupView.swift */; };
 		5BB551E72D4966DB003F9D1E /* SignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB551E62D4966CF003F9D1E /* SignupViewModel.swift */; };
+		5BB552252D49A483003F9D1E /* LoginSignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB552242D49A47A003F9D1E /* LoginSignupView.swift */; };
 		5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */; };
 		5BC98D112CF5AD0F00D9A485 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D102CF5AD0F00D9A485 /* FirebaseAnalytics */; };
 		5BC98D142CF6740D00D9A485 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D132CF6740D00D9A485 /* FirebaseAuth */; };
@@ -32,9 +32,9 @@
 		5B80943A2CBDA184007AE322 /* CustomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabView.swift; sourceTree = "<group>"; };
 		5B9BEB212CC092E200C80747 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 		5B9BEB252CC6099A00C80747 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		5BB551CE2D496342003F9D1E /* LoginSignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSignupView.swift; sourceTree = "<group>"; };
 		5BB551E32D4966A2003F9D1E /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		5BB551E62D4966CF003F9D1E /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
+		5BB552242D49A47A003F9D1E /* LoginSignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSignupView.swift; sourceTree = "<group>"; };
 		5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5BC98D152CF80F9900D9A485 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		5BD056922C968C0900E6DADA /* NetWork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetWork.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,7 +79,7 @@
 			children = (
 				5B292D3B2D19253A001E0FDB /* LoginViewModel.swift */,
 				5B9BEB252CC6099A00C80747 /* LoginView.swift */,
-				5BB551CE2D496342003F9D1E /* LoginSignupView.swift */,
+				5BB552242D49A47A003F9D1E /* LoginSignupView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -222,8 +222,8 @@
 				5B9BEB262CC6099A00C80747 /* LoginView.swift in Sources */,
 				5BC98D162CF80F9900D9A485 /* AuthenticationManager.swift in Sources */,
 				5BD056982C968C0900E6DADA /* ContentView.swift in Sources */,
-				5BB551CF2D49635C003F9D1E /* LoginSignupView.swift in Sources */,
 				5B9BEB222CC092E200C80747 /* InputView.swift in Sources */,
+				5BB552252D49A483003F9D1E /* LoginSignupView.swift in Sources */,
 				5BB551E42D4966AB003F9D1E /* SignupView.swift in Sources */,
 				5B292D3C2D19253A001E0FDB /* LoginViewModel.swift in Sources */,
 				5BD056962C968C0900E6DADA /* NetWorkApp.swift in Sources */,

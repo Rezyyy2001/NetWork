@@ -12,10 +12,12 @@ import Firebase
 struct NetWorkApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject private var authState = AuthState()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(authState)
         }
     }
 }

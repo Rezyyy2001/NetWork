@@ -25,6 +25,13 @@ struct profileView: View {
         List {
             if let user = viewModel.user {
                 Text("UserID: \(user.uid)")
+                Text("Name: \(user.displayName ?? "Not Set")")
+                Text("Email: \(user.email ?? "Not Set")")
+            } else {
+                ProgressView("Loading...")
+            }
+                /*
+                Text("UserID: \(user.uid)")
                 if let displayName = user.displayName {
                     Text("Name: \(user.displayName ?? "")")
                 } else {
@@ -36,6 +43,8 @@ struct profileView: View {
             } else {
                 ProgressView("loading..")
             }
+                 */
+                
         }
         .navigationTitle("Profile")
         .toolbar {

@@ -22,7 +22,7 @@ struct homeView: View {
      
         ZStack {
             //Color(red: 30/255, green: 143/255, blue: 213/255)
-            Color(.green)
+            Color(.white)
                 .edgesIgnoringSafeArea(.all)
             
             VStack {

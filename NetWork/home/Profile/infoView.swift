@@ -1,0 +1,27 @@
+//
+//  infoView.swift
+//  NetWork
+//
+//  Created by Rezka Yuspi on 1/31/25.
+//
+import SwiftUI
+
+struct infoView: View {
+    var body: some View {
+        HStack {
+            HStack {
+                Label("Usual Spot", systemImage: "mappin.circle.fill")
+                    .foregroundColor(.gray)
+                
+                Label("age", systemImage: "person.fill")
+                    .foregroundColor(.gray)
+            }
+            Spacer()
+        }
+        .padding(.horizontal, 40)
+    }
+}
+
+#Preview {
+    infoView()
+}

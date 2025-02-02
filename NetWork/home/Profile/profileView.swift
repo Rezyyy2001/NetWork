@@ -12,6 +12,7 @@ struct profileView: View {
     //@State private var showSettings = false
 
     var body: some View {
+        /*
         List {
             if let user = viewModel.user {
                 Text("UserID: \(user.uid)")
@@ -24,7 +25,15 @@ struct profileView: View {
                 ProgressView("Loading...")
             }
         }
-        .navigationTitle("Profile")
+         */
+        
+        VStack{
+            headerView(viewModel: viewModel)
+            
+            infoView()
+            
+        }
+        Spacer()
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {

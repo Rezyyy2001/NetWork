@@ -29,8 +29,8 @@ struct profileView: View {
         
         VStack{
             headerView(viewModel: viewModel)
-            
             infoView()
+            BiographyView()
             
         }
         Spacer()

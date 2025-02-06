@@ -16,7 +16,7 @@ struct infoView: View {
                 Label("age", systemImage: "person.fill")
                     .foregroundColor(.gray)
             }
-            Spacer()
+            
         }
         .padding(.horizontal, 40)
     }

@@ -28,6 +28,8 @@ struct SignupView: View {
                     .frame(width: UIScreen.main.bounds.width - 200, height: 50)
                     */
                     
+                // TODO: Do not allow birthday years past current year, invalidad BDays past 2025
+                    
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Birthday")
                             .foregroundColor(.green)

@@ -35,10 +35,10 @@ struct headerView: View {
                 Text("UTR: USTA:")
                     
             }
-            .padding(.leading, 10)
+            .padding(.leading, 5)
             Spacer()
         }
-        .padding(.horizontal, 40)
+        .padding(.horizontal, 20)
     }
 }
 

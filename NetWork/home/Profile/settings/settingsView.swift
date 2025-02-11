@@ -6,83 +6,32 @@
 //
 
 import SwiftUI
-import Foundation
-
-class AuthState: ObservableObject {
-    @Published var isAuthenticated: Bool = true
-}
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var authState: AuthState
 
-    @State private var isEditingProfile: Bool = false // Toggle for dropdown visibility
-    @State private var name: String = "" // Example text fields
-    @State private var UTR: String = ""
-    @State private var USTA: String = ""
+    @State private var isEditingProfile: Bool = false
+    @State private var name: String = ""
+    @State private var utr: Double = 1.0
+    @State private var usta: Double = 1.0
     @State private var favoriteSpot: String = ""
     @State private var bio: String = ""
-    
 
     var body: some View {
         NavigationStack {
             List {
-                // Profile Edit Dropdown Section
-                Section {
-                    Button(action: {
-                        withAnimation {
-                            isEditingProfile.toggle() // Toggle dropdown visibility
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: "pencil.circle")
-                                .foregroundColor(.blue)
-                            Text("Edit Profile")
-                                .foregroundColor(.blue)
-                            Spacer()
-                            Image(systemName: isEditingProfile ? "chevron.up" : "chevron.down")
-                                .foregroundColor(.gray)
-                        }
-                    }
-                    
-                    if isEditingProfile {
-                        VStack(alignment: .leading, spacing: 10) {
-                            TextField("Name", text: $name)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                // Edit Profile Section
+                EditProfileSection(
+                    isEditingProfile: $isEditingProfile,
+                    name: $name,
+                    utr: $utr,
+                    usta: $usta,
+                    favoriteSpot: $favoriteSpot,
+                    bio: $bio
+                )
 
-                            TextField("UTR", text: $UTR)
-                                .keyboardType(.numberPad)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            
-                            TextField("USTA", text: $USTA)
-                                .keyboardType(.numberPad)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            
-                            TextField("Favorite Spot", text: $favoriteSpot)
-                                .keyboardType(.numberPad)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-
-                            TextField("Biography", text: $bio)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            
-                            Button(action: {
-                                // Save action for profile updates
-                                print("Profile Updated: \(name), \(UTR), \(bio)")
-                                isEditingProfile = false
-                            }) {
-                                Text("Save")
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.blue)
-                                    .cornerRadius(10)
-                            }
-                        }
-                        .padding(.vertical)
-                    }
-                }
-
-                // Sign Out Button
+                // Sign Out Section
                 Section {
                     Button(role: .destructive) {
                         do {
@@ -101,7 +50,7 @@ struct SettingsView: View {
                     }
                 }
 
-                // Cancel Button
+                // Cancel Button Section
                 Section {
                     Button(action: {
                         dismiss()
@@ -116,11 +65,28 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
+            
+            //.onAppear {
+              //  fetchUserProfile()
+            }
         }
     }
-}
-
-#Preview {
-    SettingsView().environmentObject(AuthState())
-}
-
+/*
+    // Fetch the latest profile data from Firestore when the view appears
+    private func fetchUserProfile() {
+        UserProfileManager.shared.fetchUserProfile { result in
+            switch result {
+            case .success(let data):
+                self.name = data["name"] as? String ?? ""
+                self.utr = data["utr"] as? Double ?? 1.0
+                self.usta = data["usta"] as? Double ?? 1.0
+                self.favoriteSpot = data["favoriteSpot"] as? String ?? ""
+                self.bio = data["bio"] as? String ?? ""
+            case .failure(let error):
+                print("Error fetching profile: \(error.localizedDescription)")
+            }
+        }
+    }
+ */
+ 
+//}

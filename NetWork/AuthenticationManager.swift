@@ -60,4 +60,20 @@ final class AuthenticationManager {
     func getAuthenticatedUser() async throws -> AuthDataResultModel? {
         return Auth.auth().currentUser.map { AuthDataResultModel(user: $0) }
     }
+    func updateDisplayName(newName: String) async throws {
+        guard let user = Auth.auth().currentUser else {
+            throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
+        }
+        
+        // Update the display name in Firebase Authentication
+        let changeRequest = user.createProfileChangeRequest()
+        changeRequest.displayName = newName
+        try await changeRequest.commitChanges()
+        
+        // Update the name in Firestore
+        try await Firestore.firestore()
+            .collection("users")
+            .document(user.uid)
+            .updateData(["name": newName])
+    }
 }

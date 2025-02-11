@@ -22,7 +22,9 @@ struct NetWorkApp: App {
     }
 }
 
-
+class AuthState: ObservableObject {
+    @Published var isAuthenticated: Bool = true
+}
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     

@@ -13,6 +13,7 @@ struct AuthDataResultModel {
     let displayName: String?
     let uid: String
     let email: String?
+
     
     //let photoUrl: String?
     
@@ -20,6 +21,7 @@ struct AuthDataResultModel {
         self.displayName = user.displayName
         self.uid = user.uid
         self.email = user.email
+
         
         //self.photoUrl = user.photoURL?.absoluteString
     }
@@ -44,7 +46,9 @@ final class AuthenticationManager {
             "name": name,
             "email": email,
             "uid": user.uid,
-            "birthday": birthday.map { Timestamp(date: $0) } ?? NSNull() // Convert Date to Timestamp
+            "birthday": birthday.map { Timestamp(date: $0) } ?? NSNull(), // Convert Date to Timestamp
+            "UTR": 0.0,
+            "USTA": 0.0
         ]
         try await Firestore.firestore().collection("users").document(user.uid).setData(userData)
         
@@ -75,5 +79,18 @@ final class AuthenticationManager {
             .collection("users")
             .document(user.uid)
             .updateData(["name": newName])
+    }
+    func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?) {
+        guard let user = Auth.auth().currentUser else {
+            throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
+        }
+        let userRef = Firestore.firestore().collection("users").document(user.uid)
+        let document = try await userRef.getDocument()
+        
+        let UTR = document.data()?["UTR"] as? Double
+        let USTA = document.data()?["USTA"] as? Double
+        
+        return (AuthDataResultModel(user: user), UTR, USTA)
+        
     }
 }

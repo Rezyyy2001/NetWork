@@ -124,9 +124,9 @@
 				5BD056952C968C0900E6DADA /* NetWorkApp.swift */,
 				5BC98D152CF80F9900D9A485 /* AuthenticationManager.swift */,
 				5BB551792D3861DC003F9D1E /* preLogin */,
-				5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */,
 				5B9BEB2E2CCD8CD700C80747 /* home */,
 				5BD056992C968C0C00E6DADA /* Assets.xcassets */,
+				5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */,
 				5BD0569B2C968C0C00E6DADA /* Preview Content */,
 			);
 			path = NetWork;

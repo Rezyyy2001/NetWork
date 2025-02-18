@@ -6,11 +6,7 @@
 //
 
 import SwiftUI
-/*
-class ProfileViewModel: ObservableObject {
-    @Published var user: AuthDataResultModel? = nil
-}
-*/
+
 struct headerView: View {
     @ObservedObject var viewModel: ProfileViewModel
     
@@ -32,13 +28,18 @@ struct headerView: View {
                     Text("Loading Name...")
                         .bold()
                 }
-                Text("UTR: USTA:")
+
+                Text("UTR: \(viewModel.utr != nil ? String(format: "%.1f", viewModel.utr!) : "")")
+                Text("USTA: \(viewModel.usta != nil ? String(format: "%.1f", viewModel.usta!) : "")")
                     
             }
             .padding(.leading, 5)
             Spacer()
         }
         .padding(.horizontal, 20)
+        .task {
+            await viewModel.fetchUserProfile()
+        }
     }
 }
 

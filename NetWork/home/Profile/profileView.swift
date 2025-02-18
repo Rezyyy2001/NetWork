@@ -12,22 +12,8 @@ struct profileView: View {
     //@State private var showSettings = false
 
     var body: some View {
-        /*
-        List {
-            if let user = viewModel.user {
-                Text("UserID: \(user.uid)")
-                Text("Name: \(user.displayName ?? "Not Set")")
-                Text("Email: \(user.email ?? "Not Set")")
-            } else if viewModel.errorMessage != nil {
-                Text(viewModel.errorMessage!)
-                    .foregroundColor(.red)
-            } else {
-                ProgressView("Loading...")
-            }
-        }
-         */
         
-        VStack{
+        VStack{ 
             headerView(viewModel: viewModel)
             infoView()
             BiographyView()

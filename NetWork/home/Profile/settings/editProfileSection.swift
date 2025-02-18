@@ -10,10 +10,13 @@ import SwiftUI
 struct EditProfileSection: View {
     @Binding var isEditingProfile: Bool
     @Binding var name: String
-    @Binding var utr: Double
-    @Binding var usta: Double
+    @Binding var UTR: Double
+    @Binding var USTA: Double
     @Binding var favoriteSpot: String
     @Binding var bio: String
+    
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         Section {
@@ -35,42 +38,92 @@ struct EditProfileSection: View {
 
             if isEditingProfile {
                 VStack(alignment: .leading, spacing: 10) {
-                    TextField("Name", text: $name)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    HStack {
+                        Text("Name:")
+                            .frame(width: 100, alignment: .leading)
+                            .foregroundColor(.gray)
+                        TextField("Enter Name", text: $name)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                    TextField("UTR (1-16)", text: Binding(
-                        get: { String(format: "%.1f", utr) },
-                        set: { if let value = Double($0) { utr = min(max(value, 1.0), 16.0) } }
-                    ))
+                    HStack {
+                        Text("UTR:")
+                            .frame(width: 100, alignment: .leading)
+                            .foregroundColor(.gray)
+                        TextField("1-16", text: Binding(
+                            get: { UTR > 0 ? String(format: "%.1f", UTR) : "" },
+                            set: { newValue in
+                                if let value = Double(newValue), value >= 1.0, value <= 16.0 {
+                                    UTR = value
+                                } else if newValue.isEmpty {
+                                    UTR = 0
+                                }
+                            }
+                        ))
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                    TextField("USTA (1-5)", text: Binding(
-                        get: { String(format: "%.1f", usta) },
-                        set: { if let value = Double($0) { usta = min(max(value, 1.0), 5.0) } }
-                    ))
+                    HStack {
+                        Text("USTA:")
+                            .frame(width: 100, alignment: .leading)
+                            .foregroundColor(.gray)
+                        TextField("1-6", text: Binding(
+                            get: { USTA > 0 ? String(format: "%.1f", USTA) : "" },
+                            set: { newValue in
+                                if let value = Double(newValue), value >= 1.0, value <= 6.0 {
+                                    USTA = value
+                                } else if newValue.isEmpty {
+                                    USTA = 0
+                                }
+                            }
+                        ))
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                    TextField("Favorite Spot", text: $favoriteSpot)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    HStack {
+                        Text("Favorite Spot:")
+                            .frame(width: 100, alignment: .leading)
+                            .foregroundColor(.gray)
+                        TextField("Enter Favorite Spot", text: $favoriteSpot)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                    TextField("Biography", text: $bio)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    HStack {
+                        Text("Biography:")
+                            .frame(width: 100, alignment: .leading)
+                            .foregroundColor(.gray)
+                        TextField("Enter Bio", text: $bio)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
                     Button(action: {
+                        
                         Task {
                             do {
-                                let updatedUser = try await UserProfileManager.shared.updateProfile(
-                                    name: name,
-                                    utr: utr,
-                                    usta: usta,
-                                    favoriteSpot: favoriteSpot,
-                                    bio: bio
-                                )
+                                let currentUserProfile = try await UserProfileManager.shared.fetchUserProfile()
+                                
+                                let updatedName = name.isEmpty ? currentUserProfile.name : name
+                                let updatedUTR = UTR == 0 ? currentUserProfile.UTR : UTR
+                                let updatedUSTA = USTA == 0 ? currentUserProfile.USTA : USTA
+                                let updatedFavoriteSpot = favoriteSpot.isEmpty ? currentUserProfile.favoriteSpot : favoriteSpot
+                                let updatedBio = bio.isEmpty ? currentUserProfile.bio : bio
 
-                                // Immediately reflect the updated name in UI
+                                let updatedUser = try await UserProfileManager.shared.updateProfile(
+                                    name: updatedName,
+                                    UTR: updatedUTR,
+                                    USTA: updatedUSTA,
+                                    favoriteSpot: updatedFavoriteSpot,
+                                    bio: updatedBio
+                                )
+                                
                                 self.name = updatedUser.displayName ?? name
+                                self.UTR = updatedUTR
+                                self.USTA = updatedUSTA
+                                self.favoriteSpot = updatedFavoriteSpot
+                                self.bio = updatedBio
+                                
                                 isEditingProfile = false
                             } catch {
                                 print("Error updating profile: \(error.localizedDescription)")

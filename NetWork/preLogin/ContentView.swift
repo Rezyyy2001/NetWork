@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showLoginSignupView = false
+    @State private var showLoginSignupView = false //meaning the LoginSignupView initially does not show
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.green
                     .ignoresSafeArea()
-                Button(action: { showLoginSignupView = true}) {
+                Button(action: { showLoginSignupView = true}) { //this button shows the LoginSignupView
                     tennisCourt()
                         .stroke(Color.white, lineWidth: 4)
                         .background(Color(red: 30/255, green: 143/255, blue: 213/255))
@@ -38,7 +38,7 @@ struct ContentView: View {
     }
 }
 
-struct tennisCourt: Shape {
+struct tennisCourt: Shape { // defines the tennis court layout
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let serviceLineDepth: CGFloat = 150

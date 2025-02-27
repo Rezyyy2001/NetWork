@@ -9,19 +9,19 @@ import SwiftUI
 
 struct SignupView: View {
 
-    @StateObject private var viewModel = SignupViewModel()
+    @StateObject private var viewModel = SignupViewModel() // to tie the signupViewModel logic and userInput
     
     var body: some View {
         NavigationStack {
             VStack {
                 VStack(spacing: 24) {
-                    InputView(text: $viewModel.name,
+                    InputView(text: $viewModel.name, // binds text to viewModel.name
                               title: "Name",
                               placeholder: "First Last")
                     .autocapitalization(.words)
                     .frame(width: UIScreen.main.bounds.width - 200, height: 50)
                     
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 8) { // binds date to viewModel.birthday
                         Text("Birthday")
                             .foregroundColor(.green)
                             .fontWeight(.semibold)
@@ -31,41 +31,41 @@ struct SignupView: View {
                             selection: Binding(
                                 get: { viewModel.birthday ?? Date() },
                                 set: { newDate in
-                                    let currentDate = Date()
+                                    let currentDate = Date() // so the wheel defaults to today's date
                                     if newDate <= currentDate {
                                         viewModel.birthday = newDate
                                     }
                                 }
                             ),
-                            in: ...Date(),
+                            in: ...Date(), // any date up to todays date
                             displayedComponents: [.date]
                         )
                         .labelsHidden()
                         .frame(width: UIScreen.main.bounds.width - 200)
                     }
                     
-                    InputView(text: $viewModel.email,
+                    InputView(text: $viewModel.email, // binds text to viewModel.email
                               title: "Email address",
                               placeholder: "name@example.com")
                     .autocapitalization(.none)
                     .frame(width: UIScreen.main.bounds.width - 200, height: 50)
                     
-                    InputView(text: $viewModel.password,
+                    InputView(text: $viewModel.password, // binds text to viewModel.password
                               title: "Password",
                               placeholder: "Enter Password",
                               isSecureField: true)
                     .frame(width: UIScreen.main.bounds.width - 200, height: 50)
                     
-                    InputView(text: $viewModel.confirmPassword,
+                    InputView(text: $viewModel.confirmPassword, // binds text viewModel.confirmPassword for authentication
                               title: "Confirm Password",
                               placeholder: "Re-enter Password",
                               isSecureField: true)
                     .frame(width: UIScreen.main.bounds.width - 200, height: 50)
                     
                     Button {
-                        viewModel.signUp()
+                        viewModel.signUp() // calls viewModel.signUp when button tapped
                     } label: {
-                        // add loading screen
+                        // TODO: Add a simple loading screen
                         Text("SIGN UP")
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
@@ -74,8 +74,8 @@ struct SignupView: View {
                             .cornerRadius(10)
                     }
                     .padding(.top, 24)
-                    .navigationDestination(isPresented: $viewModel.showHomeView) {
-                        homeView()
+                    .navigationDestination(isPresented: $viewModel.showHomeView) { // calls viewModel.showHomeView as true
+                        homeView() // if true navigates to homeView
                     }
                 }
                 .padding()

@@ -9,15 +9,12 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-struct AuthDataResultModel {
+struct AuthDataResultModel { // variables that store user info
     let displayName: String?
     let uid: String
     let email: String?
 
-    
-    //let photoUrl: String?
-    
-    init(user: User) {
+    init(user: User) { // extracts user info from firebase
         self.displayName = user.displayName
         self.uid = user.uid
         self.email = user.email
@@ -28,21 +25,21 @@ struct AuthDataResultModel {
 }
 
 
-final class AuthenticationManager {
+final class AuthenticationManager { // for firebase authentication logic
     
-    static let shared = AuthenticationManager()
-    private init() {}
+    static let shared = AuthenticationManager() // ensures only one instance is used
+    private init() {} // prevents other parts of the app from creating an instance ... saves memory
     
-    func signUp(name: String, email: String, password: String, birthday: Date?) async throws -> AuthDataResultModel {
-        let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
+    func signUp(name: String, email: String, password: String, birthday: Date?) async throws -> AuthDataResultModel { // creates a new profile in firebase
+        let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password) // calls firebases function createUser
         let user = authDataResult.user
         
-        let changeRequest = user.createProfileChangeRequest()
+        let changeRequest = user.createProfileChangeRequest() // change name
         changeRequest.displayName = name
-        try await changeRequest.commitChanges()
+        try await changeRequest.commitChanges() // saves changes
 
         
-        let userData: [String: Any] = [
+        let userData: [String: Any] = [ // dictionary of user details
             "name": name,
             "email": email,
             "uid": user.uid,
@@ -55,39 +52,38 @@ final class AuthenticationManager {
         return AuthDataResultModel(user: user)
     }
     func signIn(email: String, password: String) async throws -> AuthDataResultModel {
-        let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
-        return AuthDataResultModel(user: authDataResult.user)
+        let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password) // calls firebase signIn method
+        return AuthDataResultModel(user: authDataResult.user) // if authentication is successful, return user details
     }
     func signOut() throws {
-        try Auth.auth().signOut()
+        try Auth.auth().signOut() // calls signOut
     }
-    func getAuthenticatedUser() async throws -> AuthDataResultModel? {
-        return Auth.auth().currentUser.map { AuthDataResultModel(user: $0) }
+    func getAuthenticatedUser() async throws -> AuthDataResultModel? { // function to check if there is a user signed in
+        return Auth.auth().currentUser.map { AuthDataResultModel(user: $0) } // to check user first before displaying UI elements
     }
-    func updateDisplayName(newName: String) async throws {
+    func updateDisplayName(newName: String) async throws { // ensures there is a user before updating the name
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
         }
         
-        // Update the display name in Firebase Authentication
-        let changeRequest = user.createProfileChangeRequest()
+        let changeRequest = user.createProfileChangeRequest() // updates the users firebase authentication profile name
         changeRequest.displayName = newName
         try await changeRequest.commitChanges()
         
-        // Update the name in Firestore
-        try await Firestore.firestore()
+        try await Firestore.firestore() // firestore will also get updated
             .collection("users")
             .document(user.uid)
             .updateData(["name": newName])
     }
     func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?) {
-        guard let user = Auth.auth().currentUser else {
+        guard let user = Auth.auth().currentUser else { // checks if user is signedIn
             throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
         }
-        let userRef = Firestore.firestore().collection("users").document(user.uid)
-        let document = try await userRef.getDocument()
+        let userRef = Firestore.firestore().collection("users").document(user.uid) // fetches the data in users collection
         
-        let UTR = document.data()?["UTR"] as? Double
+        let document = try await userRef.getDocument() // fetches the document data
+        
+        let UTR = document.data()?["UTR"] as? Double 
         let USTA = document.data()?["USTA"] as? Double
         
         return (AuthDataResultModel(user: user), UTR, USTA)

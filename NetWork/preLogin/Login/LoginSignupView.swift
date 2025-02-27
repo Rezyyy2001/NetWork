@@ -9,9 +9,9 @@ import SwiftUI
 
 
 struct LoginSignupView: View {
-    @State private var tabselection = 1
+    @State var tabselection = 1 // variable to track which tab is selected, 1 is default
     
-    let tabBarItems: [(image: String, title: String)] = [
+    let tabBarItems: [(image: String, title: String)] = [ // tabBar is a list of tuples
         ("person", "Login"),
         ("clipboard", "SignUp")
     ]
@@ -24,7 +24,7 @@ struct LoginSignupView: View {
             
             VStack {
                 
-                CustomTabView(tabSelection: $tabselection, items: tabBarItems)
+                CustomTabView(tabSelection: $tabselection, items: tabBarItems) // a customTabview that switches between the items in tabBar
                 Spacer()
                 if tabselection == 1 {
                     LoginView()

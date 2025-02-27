@@ -9,30 +9,16 @@
 import SwiftUI
 
 struct CustomTabView: View {
-    @Binding var tabSelection: Int
-    @Namespace private var animationNamespace
+    @Binding var tabSelection: Int // controls which tab is clicked
+    @Namespace private var animationNamespace // for tab switching animation
     
     let items: [(image: String, title: String)]
     
-    /*
-    let tabBarItems: [(image: String, title: String)] = [
-        ("person", "Login"),
-        ("clipboard", "SignUp")
-    ]
-    
-    let homeTabItems: [(image: String, title: String)] = [
-        ("figure.tennis", "Friends"),
-        ("globe", "Local"),
-        ("plus.app", "Post"),
-        ("hand.wave", "Services"),
-        ("person", "Profile")
-    ]
-    */
-    private var tabBarOffset: CGFloat {
+    private var tabBarOffset: CGFloat { // for the signupLoginView tab and the homeView tab
         items.count <= 2 ? 80 : UIScreen.main.bounds.height - 80
     }
     
-    private var capsuleWidth: CGFloat {
+    private var capsuleWidth: CGFloat { // layout for 2 tabs
         if items.count <= 2 {
             return 300
         } else {
@@ -40,7 +26,7 @@ struct CustomTabView: View {
         }
     }
     
-    private var indicatorWidth: CGFloat {
+    private var indicatorWidth: CGFloat { // the blue underline change for each tab
         if items.count <= 2 {
             return capsuleWidth / CGFloat(items.count)
         } else {

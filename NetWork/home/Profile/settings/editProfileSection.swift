@@ -86,16 +86,26 @@ struct EditProfileSection: View {
                         Text("Favorite Spot:")
                             .frame(width: 100, alignment: .leading)
                             .foregroundColor(.gray)
-                        TextField("Enter Favorite Spot", text: $favoriteSpot)
+                        TextField("Best court for you", text: $favoriteSpot)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
 
-                    HStack {
+                    VStack(alignment: .leading) {
+                        /*
                         Text("Biography:")
                             .frame(width: 100, alignment: .leading)
                             .foregroundColor(.gray)
-                        TextField("Enter Bio", text: $bio)
+                        TextField("Enter Biography", text: $bio)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                         */
+                        TextEditor(text: $bio)
+                            .frame(width: 300)
+                            .padding (10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .font(.system(size: 15))
                     }
 
                     Button(action: {
@@ -141,5 +151,10 @@ struct EditProfileSection: View {
                 .padding(.vertical)
             }
         }
+    }
+}
+#Preview {
+    NavigationStack {
+        SettingsView()
     }
 }

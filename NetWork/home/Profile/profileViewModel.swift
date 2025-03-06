@@ -15,6 +15,7 @@ final class ProfileViewModel: ObservableObject {
     
     @Published var utr: Double? = nil
     @Published var usta: Double? = nil
+    @Published var bio: String? = nil
 
     func start() async {
         do {
@@ -26,11 +27,12 @@ final class ProfileViewModel: ObservableObject {
     
     func fetchUserProfile() async {
         do {
-            let (userData, fetchedUTR, fetchedUSTA) = try await AuthenticationManager.shared.getUserProfile()
+            let (userData, fetchedUTR, fetchedUSTA, fetchedBio) = try await AuthenticationManager.shared.getUserProfile()
             DispatchQueue.main.async {
                 self.user = userData
                 self.utr = fetchedUTR
                 self.usta = fetchedUSTA
+                self.bio = fetchedBio
             }
         } catch {
             print("rez error")

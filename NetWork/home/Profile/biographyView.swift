@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BiographyView: View {
-    var biography: String? // Optional biography text
+    @ObservedObject var viewModel: ProfileViewModel
 
     var body: some View {
         VStack {
-            Text(biography?.isEmpty == false ? biography! : "Biography") // Uses provided text or default
+            Text(viewModel.bio?.isEmpty == false ? viewModel.bio! : "Biography")
                 .padding()
                 .font(.system(size: 15))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -20,17 +20,22 @@ struct BiographyView: View {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.gray, lineWidth: 1)
                 )
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 20)
                 .foregroundColor(.black)
+        }
+        .onAppear {
+            Task {
+                await viewModel.fetchUserProfile()
+            }
         }
     }
 }
 
 #Preview {
-    VStack {
-        BiographyView(biography: nil) // Shows "Biography"
-        BiographyView(biography: "") // Still shows "Biography"
-        BiographyView(biography: "I love playing tennis and coding!") // Shows user input
+    NavigationStack {
+        profileView()
     }
 }
+
+
 

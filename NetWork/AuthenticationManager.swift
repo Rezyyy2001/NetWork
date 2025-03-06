@@ -13,11 +13,14 @@ struct AuthDataResultModel { // variables that store user info
     let displayName: String?
     let uid: String
     let email: String?
+    let bio: String?
 
-    init(user: User) { // extracts user info from firebase
+    init(user: User, bio: String? = nil) { // extracts user info from firebase
         self.displayName = user.displayName
         self.uid = user.uid
         self.email = user.email
+        self.bio = bio
+
 
         
         //self.photoUrl = user.photoURL?.absoluteString
@@ -46,6 +49,7 @@ final class AuthenticationManager { // for firebase authentication logic
             "birthday": birthday.map { Timestamp(date: $0) } ?? NSNull(), // Convert Date to Timestamp
             "UTR": 0.0,
             "USTA": 0.0
+            //"Bio": bio
         ]
         try await Firestore.firestore().collection("users").document(user.uid).setData(userData)
         
@@ -75,18 +79,18 @@ final class AuthenticationManager { // for firebase authentication logic
             .document(user.uid)
             .updateData(["name": newName])
     }
-    func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?) {
+    func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?, String?) {
         guard let user = Auth.auth().currentUser else { // checks if user is signedIn
             throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
         }
         let userRef = Firestore.firestore().collection("users").document(user.uid) // fetches the data in users collection
-        
         let document = try await userRef.getDocument() // fetches the document data
         
         let UTR = document.data()?["UTR"] as? Double 
         let USTA = document.data()?["USTA"] as? Double
+        let bio = document.data()?["bio"] as? String
         
-        return (AuthDataResultModel(user: user), UTR, USTA)
+        return (AuthDataResultModel(user: user, bio: bio), UTR, USTA, bio)
         
     }
 }

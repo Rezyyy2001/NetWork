@@ -7,11 +7,15 @@
 import SwiftUI
 
 struct infoView: View {
+    @ObservedObject var viewModel: ProfileViewModel
+    
     var body: some View {
         HStack {
             HStack {
+                
                 Label("Usual Spot", systemImage: "mappin.circle.fill")
                     .foregroundColor(.gray)
+                
                 
                 Label("age", systemImage: "person.fill")
                     .foregroundColor(.gray)
@@ -23,5 +27,7 @@ struct infoView: View {
 }
 
 #Preview {
-    infoView()
+    NavigationStack {
+        profileView()
+    }
 }

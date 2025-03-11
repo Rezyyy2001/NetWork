@@ -9,10 +9,12 @@ import SwiftUI
 
 struct BiographyView: View {
     @ObservedObject var viewModel: ProfileViewModel
+    
 
     var body: some View {
         VStack {
-            Text(viewModel.bio?.isEmpty == false ? viewModel.bio! : "Biography")
+            //
+            Text(viewModel.bio ?? "Biography")
                 .padding()
                 .font(.system(size: 15))
                 .frame(maxWidth: .infinity, alignment: .leading)

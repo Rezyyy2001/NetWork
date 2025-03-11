@@ -15,7 +15,7 @@ public struct SettingsView: View {
     @State private var name: String = ""
     @State private var UTR: Double = 0.0
     @State private var USTA: Double = 0.0
-    @State private var favoriteSpot: String = ""
+    @State private var usualSpot: String = ""
     @State private var bio: String = ""
 
     public var body: some View {
@@ -27,7 +27,7 @@ public struct SettingsView: View {
                     name: $name,
                     UTR: $UTR,
                     USTA: $USTA,
-                    favoriteSpot: $favoriteSpot,
+                    usualSpot: $usualSpot,
                     bio: $bio
                 )
 

@@ -8,18 +8,19 @@
 import SwiftUI
     
 struct profileView: View {
-    @StateObject private var viewModel = ProfileViewModel()
+    @StateObject private var viewModel = ProfileViewModel() // @stateObject rebuilds whenever profileViewModel changes
     //@State private var showSettings = false
 
     var body: some View {
         
-        VStack{ 
+        VStack{
+            // This is where all the child views will stack up 
             headerView(viewModel: viewModel)
             infoView(viewModel: viewModel)
             BiographyView(viewModel: viewModel)
+            Spacer()
             
         }
-        Spacer()
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {

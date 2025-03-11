@@ -11,16 +11,11 @@ struct infoView: View {
     
     var body: some View {
         HStack {
-            HStack {
+            Label(viewModel.usualSpot ?? "Usual Spot", systemImage: "mappin.circle.fill")
+                .foregroundColor(.gray)
                 
-                Label("Usual Spot", systemImage: "mappin.circle.fill")
-                    .foregroundColor(.gray)
-                
-                
-                Label("age", systemImage: "person.fill")
-                    .foregroundColor(.gray)
-            }
-            
+            Label("age", systemImage: "person.fill")
+                .foregroundColor(.gray)
         }
         .padding(.horizontal, 40)
     }

@@ -17,6 +17,7 @@ final class SignupViewModel: ObservableObject { // observableObject allows the c
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var showHomeView = false
+    @Published var usualSpot = ""
     
     func signUp() {
         guard !email.isEmpty, !password.isEmpty, !name.isEmpty, let birthday = birthday else { // insures that all these fields are filled
@@ -32,7 +33,7 @@ final class SignupViewModel: ObservableObject { // observableObject allows the c
         isLoading = true // indicates onging signUp process
         Task {
             do {
-                let userData = try await AuthenticationManager.shared.signUp(name: name, email: email, password: password, birthday: birthday) // calls signUp
+                let userData = try await AuthenticationManager.shared.signUp(name: name, email: email, password: password, birthday: birthday, usualSpot: usualSpot) // calls signUp
                 print("Account created successfully: \(userData.uid)")
                 isLoading = false
                 showHomeView = true // after account created shows home view

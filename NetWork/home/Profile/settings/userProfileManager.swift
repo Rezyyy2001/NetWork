@@ -18,12 +18,12 @@ final class UserProfileManager {
         let name: String
         let UTR: Double
         let USTA: Double
-        let favoriteSpot: String
+        let usualSpot: String
         let bio: String
     }
 
     // Update profile information in Firebase Auth and Firestore
-    func updateProfile(name: String, UTR: Double, USTA: Double, favoriteSpot: String, bio: String) async throws -> User {
+    func updateProfile(name: String, UTR: Double, USTA: Double, usualSpot: String, bio: String) async throws -> User {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
@@ -38,7 +38,7 @@ final class UserProfileManager {
             "name": name,
             "UTR": UTR,
             "USTA": USTA,
-            "favoriteSpot": favoriteSpot,
+            "usualSpot": usualSpot,
             "bio": bio
         ]
         try await Firestore.firestore().collection("users").document(user.uid).updateData(userData)
@@ -63,7 +63,7 @@ final class UserProfileManager {
             name: data["name"] as? String ?? "",
             UTR: data["UTR"] as? Double ?? 0.0,
             USTA: data["USTA"] as? Double ?? 0.0,
-            favoriteSpot: data["favoriteSpot"] as? String ?? "",
+            usualSpot: data["usualSpot"] as? String ?? "",
             bio: data["bio"] as? String ?? ""
         )
     }

@@ -8,15 +8,22 @@
 import SwiftUI
 
 struct EditProfileSection: View {
+    //these need to be @Binding because this needs to connect to parent view
     @Binding var isEditingProfile: Bool
     @Binding var name: String
     @Binding var UTR: Double
     @Binding var USTA: Double
-    @Binding var favoriteSpot: String
+    @Binding var usualSpot: String
     @Binding var bio: String
     
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @State private var usualSpotCharacterLimit: Int = 25
+    @State private var bioCharacterLimit: Int = 150
+    
+    var isSaveDisabled: Bool {
+        return usualSpot.count > usualSpotCharacterLimit || bio.count > bioCharacterLimit
+    }
 
     var body: some View {
         Section {
@@ -42,7 +49,7 @@ struct EditProfileSection: View {
                         Text("Name:")
                             .frame(width: 100, alignment: .leading)
                             .foregroundColor(.gray)
-                        TextField("Enter Name", text: $name)
+                        TextField("First Last", text: $name) //passing the binding
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
 
@@ -53,7 +60,7 @@ struct EditProfileSection: View {
                         TextField("1-16", text: Binding(
                             get: { UTR > 0 ? String(format: "%.1f", UTR) : "" },
                             set: { newValue in
-                                if let value = Double(newValue), value >= 1.0, value <= 16.0 {
+                                if let value = Double(newValue), value >= 1.0, value <= 16.0 { // only accepts certain range
                                     UTR = value
                                 } else if newValue.isEmpty {
                                     UTR = 0
@@ -71,7 +78,7 @@ struct EditProfileSection: View {
                         TextField("1-6", text: Binding(
                             get: { USTA > 0 ? String(format: "%.1f", USTA) : "" },
                             set: { newValue in
-                                if let value = Double(newValue), value >= 1.0, value <= 6.0 {
+                                if let value = Double(newValue), value >= 1.0, value <= 6.0 { // only accepts certain range
                                     USTA = value
                                 } else if newValue.isEmpty {
                                     USTA = 0
@@ -83,21 +90,22 @@ struct EditProfileSection: View {
                     }
 
                     HStack {
-                        Text("Favorite Spot:")
+                        Text("Tennis Court")
                             .frame(width: 100, alignment: .leading)
                             .foregroundColor(.gray)
-                        TextField("Best court for you", text: $favoriteSpot)
+                        TextField("(25 Character limit)", text: $usualSpot)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                        /*
+                            .onChange(of: usualSpot) { oldValue, newValue in
+                                if newValue.count > usualSpotCharacterLimit {
+                                    usualSpot = String(newValue.prefix(usualSpotCharacterLimit))
+                                }
+                            }
+                         */
                     }
+                                                       
 
                     VStack(alignment: .leading) {
-                        /*
-                        Text("Biography:")
-                            .frame(width: 100, alignment: .leading)
-                            .foregroundColor(.gray)
-                        TextField("Enter Biography", text: $bio)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                         */
                         TextEditor(text: $bio)
                             .frame(width: 300)
                             .padding (10)
@@ -106,32 +114,41 @@ struct EditProfileSection: View {
                                     .stroke(Color.gray, lineWidth: 1)
                             )
                             .font(.system(size: 15))
+                        /*
+                            .onChange(of: bio) { oldValue, newValue in
+                                if newValue.count > bioCharacterLimit {
+                                    bio = String(newValue.prefix(bioCharacterLimit))
+                                }
+                            }
+                         */
+                        
                     }
 
                     Button(action: {
                         
                         Task {
                             do {
+                                // Stops empty fields from being displayed as the update
                                 let currentUserProfile = try await UserProfileManager.shared.fetchUserProfile()
                                 
                                 let updatedName = name.isEmpty ? currentUserProfile.name : name
                                 let updatedUTR = UTR == 0 ? currentUserProfile.UTR : UTR
                                 let updatedUSTA = USTA == 0 ? currentUserProfile.USTA : USTA
-                                let updatedFavoriteSpot = favoriteSpot.isEmpty ? currentUserProfile.favoriteSpot : favoriteSpot
+                                let updatedUsualSpot = usualSpot.isEmpty ? currentUserProfile.usualSpot : usualSpot
                                 let updatedBio = bio.isEmpty ? currentUserProfile.bio : bio
 
                                 let updatedUser = try await UserProfileManager.shared.updateProfile(
                                     name: updatedName,
                                     UTR: updatedUTR,
                                     USTA: updatedUSTA,
-                                    favoriteSpot: updatedFavoriteSpot,
+                                    usualSpot: updatedUsualSpot,
                                     bio: updatedBio
                                 )
                                 
                                 self.name = updatedUser.displayName ?? name
                                 self.UTR = updatedUTR
                                 self.USTA = updatedUSTA
-                                self.favoriteSpot = updatedFavoriteSpot
+                                self.usualSpot = updatedUsualSpot
                                 self.bio = updatedBio
                                 
                                 isEditingProfile = false
@@ -147,6 +164,7 @@ struct EditProfileSection: View {
                             .background(Color.blue)
                             .cornerRadius(10)
                     }
+                    .disabled(isSaveDisabled)
                 }
                 .padding(.vertical)
             }

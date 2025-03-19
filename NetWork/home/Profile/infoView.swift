@@ -12,6 +12,7 @@ struct infoView: View {
     var body: some View {
         HStack {
             Label(viewModel.usualSpot ?? "Usual Spot", systemImage: "mappin.circle.fill")
+
                 .foregroundColor(.gray)
                 
             Label("age", systemImage: "person.fill")

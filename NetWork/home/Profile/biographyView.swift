@@ -14,7 +14,7 @@ struct BiographyView: View {
     var body: some View {
         VStack {
             //
-            Text(viewModel.bio ?? "Biography")
+            Text(viewModel.bio ?? "No Biography Set") //gets the bio from profileViewModel
                 .padding()
                 .font(.system(size: 15))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -23,12 +23,7 @@ struct BiographyView: View {
                         .stroke(Color.gray, lineWidth: 1)
                 )
                 .padding(.horizontal, 20)
-                .foregroundColor(.black)
-        }
-        .onAppear {
-            Task {
-                await viewModel.fetchUserProfile()
-            }
+                //.foregroundColor(.black)
         }
     }
 }

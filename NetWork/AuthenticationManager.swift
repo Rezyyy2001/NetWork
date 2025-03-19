@@ -52,7 +52,7 @@ final class AuthenticationManager { // for firebase authentication logic
             "birthday": birthday.map { Timestamp(date: $0) } ?? NSNull(), // Convert Date to Timestamp
             "UTR": 0.0,
             "USTA": 0.0,
-            "Bio": "",
+            "bio": "",
             "usualSpot": usualSpot
             
         ]
@@ -65,10 +65,13 @@ final class AuthenticationManager { // for firebase authentication logic
         return AuthDataResultModel(user: authDataResult.user) // if authentication is successful, return user details
     }
     func signOut() throws {
-        try Auth.auth().signOut() // calls signOut
+        try Auth.auth().signOut() // calls firebase signOut method
     }
     func getAuthenticatedUser() async throws -> AuthDataResultModel? { // function to check if there is a user signed in
-        return Auth.auth().currentUser.map { AuthDataResultModel(user: $0) } // to check user first before displaying UI elements
+        guard let user = Auth.auth().currentUser else {
+            throw NSError(domain: "Authentication", code: 401, userInfo: [NSLocalizedDescriptionKey: "No authenticated user"])
+        }
+        return AuthDataResultModel(user: user) // to check user first before displaying UI elements
     }
     func updateDisplayName(newName: String) async throws { // ensures there is a user before updating the name
         guard let user = Auth.auth().currentUser else {

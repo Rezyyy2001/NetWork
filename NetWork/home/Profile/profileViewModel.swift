@@ -19,19 +19,13 @@ final class ProfileViewModel: ObservableObject {
     @Published var bio: String? = nil
     @Published var usualSpot: String? = nil
 
-    func start() async {
-        do {
-            user = try await AuthenticationManager.shared.getAuthenticatedUser() // what updates the user
-        } catch {
-            errorMessage = "Failed to fetch user: \(error.localizedDescription)"
-        }
-    }
-    
+     
     // This fetches the updated @Published properties
     func fetchUserProfile() async {
         do {
             let (userData, fetchedUTR, fetchedUSTA, fetchedBio, fetchedUsualSpot) = try await AuthenticationManager.shared.getUserProfile()
             
+            //stores the retrieved data in @Published var
             self.user = userData
             self.utr = fetchedUTR
             self.usta = fetchedUSTA
@@ -39,7 +33,7 @@ final class ProfileViewModel: ObservableObject {
             self.usualSpot = fetchedUsualSpot
         
         } catch {
-            print("rez error")
+            self.errorMessage = "Failed to fetch profile: \(error.localizedDescription)"
         }
     }
 }

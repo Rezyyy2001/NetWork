@@ -22,33 +22,24 @@ struct headerView: View {
                     .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
             
             VStack(alignment: .leading) {
-                if let user = viewModel.user { // If signed in display name
-                    Text(user.displayName ?? "Username not set")
-                        .bold()
-                } else {
-                    Text("Loading Name...")
-                        .bold()
-                }
-                // If utr is not nil then go one decimal place
-                /*
-                Text("UTR: \(viewModel.utr != nil ? String(format: "%.1f", viewModel.utr!) : "")")
-                Text("USTA: \(viewModel.usta != nil ? String(format: "%.1f", viewModel.usta!) : "")")
-                    */
+                Text(viewModel.user?.displayName ?? "Username not set")
+                    .bold()
+                
+                //TODO: UTR should be a Float for two decimal points
+                
                 if let utr = viewModel.utr {
-                    Text("UTR: \(String(format: "%.1f", utr))")
+                    Text("UTR: \(utr, specifier: "%.01f")") //specifies the detail of one decimal point
                 }
+                
                 if let usta = viewModel.usta {
-                    Text("UTR: \(String(format: "%.1f", usta))") 
+                    Text("USTA: \(usta, specifier: "%.1f")")
                 }
             }
             .padding(.leading, 5)
             Spacer()
         }
         .padding(.horizontal, 20)
-        // Runs fetchuserProfile as soon as headerView is opened
-        .task {
-            await viewModel.fetchUserProfile()
-        }
+        
     }
 }
 

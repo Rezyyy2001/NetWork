@@ -18,10 +18,13 @@ public struct SettingsView: View {
     @State private var usualSpot: String = ""
     @State private var bio: String = ""
 
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
+
     public var body: some View {
         NavigationStack {
             List {
-                // Edit Profile Section
+                // the $ allows those variables to change in editProfileSection
                 EditProfileSection(
                     isEditingProfile: $isEditingProfile,
                     name: $name,
@@ -34,11 +37,14 @@ public struct SettingsView: View {
                 // Sign Out Section
                 Section {
                     Button(role: .destructive) {
-                        do {
-                            try AuthenticationManager.shared.signOut()
-                            authState.isAuthenticated = false
-                        } catch {
-                            print("Error signing out: \(error.localizedDescription)")
+                        Task {
+                            do {
+                                try AuthenticationManager.shared.signOut()
+                                authState.isAuthenticated = false
+                            } catch {
+                                errorMessage = "Error signing out: \(error.localizedDescription)"
+                                showErrorAlert = true
+                            }
                         }
                     } label: {
                         HStack {
@@ -52,9 +58,7 @@ public struct SettingsView: View {
 
                 // Cancel Button Section
                 Section {
-                    Button(action: {
-                        dismiss()
-                    }) {
+                    Button(action: { dismiss() }) {
                         HStack {
                             Image(systemName: "xmark.circle")
                                 .foregroundColor(.blue)
@@ -65,9 +69,32 @@ public struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
+            .alert("Error", isPresented: $showErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(errorMessage)
+            }
+            .task {
+                await loadUserProfile()
+            }
+        }
+    }
+
+    private func loadUserProfile() async {
+        do {
+            let (userData, fetchedUTR, fetchedUSTA, fetchedBio, fetchedUsualSpot) = try await AuthenticationManager.shared.getUserProfile()
+            name = userData.displayName ?? ""
+            UTR = fetchedUTR ?? 0.0
+            USTA = fetchedUSTA ?? 0.0
+            bio = fetchedBio ?? ""
+            usualSpot = fetchedUsualSpot ?? ""
+        } catch {
+            errorMessage = "Failed to load profile: \(error.localizedDescription)"
+            showErrorAlert = true
         }
     }
 }
+
 #Preview {
     NavigationStack {
         SettingsView()

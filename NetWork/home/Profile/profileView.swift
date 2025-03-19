@@ -8,7 +8,7 @@
 import SwiftUI
     
 struct profileView: View {
-    @StateObject private var viewModel = ProfileViewModel() // @stateObject rebuilds whenever profileViewModel changes
+    @StateObject private var viewModel = ProfileViewModel() //observes profileViewModel
     //@State private var showSettings = false
 
     var body: some View {
@@ -35,9 +35,12 @@ struct profileView: View {
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView()
         }
+        //This whole block of code is to keep the data updated
         .task {
-            await viewModel.start() //await because we use await for when calling async functions
-        }                           //try is for throw functions
+            if viewModel.user == nil {
+                await viewModel.fetchUserProfile()
+            }
+        }
     }
 }
 

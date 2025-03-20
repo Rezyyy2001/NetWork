@@ -166,7 +166,7 @@ public struct EditProfileSection: View {
                             .cornerRadius(10)
                     }
                     .buttonStyle(PlainButtonStyle()) // Prevents default button padding
-                    //.contentShape(Rectangle()) // Ensures only the button’s visible content is tappable
+                    .contentShape(Rectangle()) // Ensures only the button’s visible content is tappable
                     .disabled(isSaveDisabled)
                 }
                 .padding(.vertical)

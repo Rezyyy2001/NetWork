@@ -17,9 +17,18 @@ public struct SettingsView: View {
     @State private var USTA: Double = 0.0
     @State private var usualSpot: String = ""
     @State private var bio: String = ""
+    @State private var age: Int = 0
 
     @State private var showErrorAlert = false
     @State private var errorMessage = ""
+    
+    // turns timestamp to int
+    private func calculateAge(from timestamp: TimeInterval) -> Int {
+        let birthDate = Date(timeIntervalSince1970: timestamp)
+        let calendar = Calendar.current
+        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
+        return ageComponents.year ?? 0
+    }
 
     public var body: some View {
         NavigationStack {
@@ -82,12 +91,14 @@ public struct SettingsView: View {
 
     private func loadUserProfile() async {
         do {
-            let (userData, fetchedUTR, fetchedUSTA, fetchedBio, fetchedUsualSpot) = try await AuthenticationManager.shared.getUserProfile()
+            let (userData, fetchedUTR, fetchedUSTA, fetchedBio, fetchedUsualSpot, fetchedBirthday) = try await AuthenticationManager.shared.getUserProfile()
             name = userData.displayName ?? ""
             UTR = fetchedUTR ?? 0.0
             USTA = fetchedUSTA ?? 0.0
             bio = fetchedBio ?? ""
             usualSpot = fetchedUsualSpot ?? ""
+            age = calculateAge(from: fetchedBirthday)
+            
         } catch {
             errorMessage = "Failed to load profile: \(error.localizedDescription)"
             showErrorAlert = true

@@ -49,7 +49,7 @@ final class AuthenticationManager { // for firebase authentication logic
             "name": name,
             "email": email,
             "uid": user.uid,
-            "birthday": birthday.map { Timestamp(date: $0) } ?? NSNull(), // Convert Date to Timestamp
+            "birthday": birthday.map { Timestamp(date: $0) } ?? NSNull(), // birthday field as a timestamp
             "UTR": 0.0,
             "USTA": 0.0,
             "bio": "",
@@ -87,7 +87,7 @@ final class AuthenticationManager { // for firebase authentication logic
             .document(user.uid)
             .updateData(["name": newName])
     }
-    func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?, String?, String?) {
+    func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?, String?, String?, TimeInterval) {
         guard let user = Auth.auth().currentUser else { // checks if user is signedIn
             throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
         }
@@ -98,8 +98,8 @@ final class AuthenticationManager { // for firebase authentication logic
         let USTA = document.data()?["USTA"] as? Double
         let bio = document.data()?["bio"] as? String
         let usualSpot = document.data()?["usualSpot"] as? String
+        let birthday = Double((document.data()?["birthday"] as? Timestamp)?.seconds ?? 0) // fetches birthday from firestore
         
-        return (AuthDataResultModel(user: user, bio: bio, usualSpot: usualSpot), UTR, USTA, bio, usualSpot)
-        
+        return (AuthDataResultModel(user: user, bio: bio, usualSpot: usualSpot), UTR, USTA, bio, usualSpot, birthday)
     }
 }

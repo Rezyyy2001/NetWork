@@ -4,6 +4,7 @@
 //
 //  Created by Rezka Yuspi on 1/31/25.
 //
+
 import SwiftUI
 
 struct infoView: View {
@@ -15,7 +16,7 @@ struct infoView: View {
 
                 .foregroundColor(.gray)
                 
-            Label("age", systemImage: "person.fill")
+            Label("\(viewModel.age)", systemImage: "person.fill")
                 .foregroundColor(.gray)
         }
         .padding(.horizontal, 40)

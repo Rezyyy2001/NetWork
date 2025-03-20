@@ -20,6 +20,18 @@ final class UserProfileManager {
         let USTA: Double
         let usualSpot: String
         let bio: String
+        let birthday: Date?
+        
+        var age: Int? {
+                guard let birthday = birthday else { return nil }
+                return calculateAge(from: birthday)
+        }
+        
+        private func calculateAge(from birthdate: Date) -> Int {
+                let calendar = Calendar.current
+                let ageComponents = calendar.dateComponents([.year], from: birthdate, to: Date())
+                return ageComponents.year ?? 0
+        }
     }
 
     // Update profile information in Firebase Auth and Firestore
@@ -58,13 +70,17 @@ final class UserProfileManager {
         guard let data = document.data() else {
             throw NSError(domain: "User profile not found.", code: 404, userInfo: nil)
         }
+        
+        let timestamp = data["birthday"] as? Timestamp
+        let birthday = timestamp?.dateValue()
 
         return UserProfile(
             name: data["name"] as? String ?? "",
             UTR: data["UTR"] as? Double ?? 0.0,
             USTA: data["USTA"] as? Double ?? 0.0,
             usualSpot: data["usualSpot"] as? String ?? "",
-            bio: data["bio"] as? String ?? ""
+            bio: data["bio"] as? String ?? "",
+            birthday: birthday
         )
     }
 

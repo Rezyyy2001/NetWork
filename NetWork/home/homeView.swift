@@ -14,7 +14,7 @@ struct homeView: View {
         ("figure.tennis", "Friends"),
         ("globe", "Local"),
         ("plus.app", "Post"),
-        ("hand.wave", "Services"),
+        ("magnifyingglass", "Search"),
         ("person", "Profile")
     ]
     
@@ -35,7 +35,7 @@ struct homeView: View {
                 } else if tabselection == 3 {
                     postView()
                 } else if tabselection == 4 {
-                    serviceView()
+                    searchView()
                 } else if tabselection == 5 {
                     profileView()
                 }

@@ -97,7 +97,7 @@ struct CustomTabView: View {
                     ("figure.tennis", "Friends"),
                     ("globe", "Local"),
                     ("plus.app", "Post"),
-                    ("hand.wave", "Services"),
+                    ("hand.wave", "Seach"),
                     ("person", "Profile")
                 ]
     )

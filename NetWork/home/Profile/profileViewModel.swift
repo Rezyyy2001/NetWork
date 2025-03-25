@@ -46,4 +46,6 @@ final class ProfileViewModel: ObservableObject {
         let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
         return ageComponents.year ?? 0
     }
+    
 }
+

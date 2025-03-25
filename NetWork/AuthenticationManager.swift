@@ -47,6 +47,7 @@ final class AuthenticationManager { // for firebase authentication logic
         
         let userData: [String: Any] = [ // dictionary of user details
             "name": name,
+            "name_lowercased": name.lowercased(),
             "email": email,
             "uid": user.uid,
             "birthday": birthday.map { Timestamp(date: $0) } ?? NSNull(), // birthday field as a timestamp

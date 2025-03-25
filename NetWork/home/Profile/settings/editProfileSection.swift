@@ -70,6 +70,8 @@ public struct EditProfileSection: View {
                             .foregroundColor(.gray)
                         TextField("First Last", text: $name)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .autocorrectionDisabled()
+                            .autocapitalization(.none)
                     }
 
                     HStack {

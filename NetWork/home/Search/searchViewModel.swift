@@ -17,11 +17,12 @@ class searchViewModel: ObservableObject {
     func searchUsers() {
         
         let db = Firestore.firestore() // references firestore for queries
+        let searchLowercased = searchText.lowercased()
         
         db.collection("users") // looks into the collection users
         
-            .whereField("name", isGreaterThanOrEqualTo: searchText) // looking for users with strings equal or greater than the searchText
-            .whereField("name", isLessThanOrEqualTo: searchText + "\u{f8ff}") // Ensures partial matches
+            .whereField("name_lowercased", isGreaterThanOrEqualTo: searchLowercased) // looking for users with strings equal or greater than the searchText
+            .whereField("name_lowercased", isLessThanOrEqualTo: searchLowercased + "\u{f8ff}") // Ensures partial matches
             .getDocuments { snapshot, error in // gets the doc
                 if let error = error {
                     print("Error fetching users: \(error.localizedDescription)")

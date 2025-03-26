@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-@MainActor // All properties update on the main thread by default
+//@MainActor // All properties update on the main thread by default
            // DispatchQueue.main.async is uneccessary
-final class ProfileViewModel: ObservableObject {
+
+final class ProfileViewModel: ObservableObject, userProfileDataProvider {
     @Published var showSettings = false // Moved UI state to ViewModel
     @Published var errorMessage: String? = nil // For error handling
     
@@ -19,6 +20,10 @@ final class ProfileViewModel: ObservableObject {
     @Published var bio: String? = nil
     @Published var usualSpot: String? = nil
     @Published var age: Int = 0
+    
+    var name: String {
+        user?.displayName ?? "Unknown"
+    }
      
     // This fetches the updated @Published properties
     func fetchUserProfile() async {
@@ -46,6 +51,4 @@ final class ProfileViewModel: ObservableObject {
         let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
         return ageComponents.year ?? 0
     }
-    
 }
-

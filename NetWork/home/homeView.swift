@@ -19,14 +19,11 @@ struct homeView: View {
     ]
     
     var body: some View {
-     
         ZStack {
-            //Color(red: 30/255, green: 143/255, blue: 213/255)
             Color(.white)
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-            
                 Spacer()
                 if tabselection == 1 {
                     friendsView()
@@ -35,7 +32,7 @@ struct homeView: View {
                 } else if tabselection == 3 {
                     postView()
                 } else if tabselection == 4 {
-                    searchView()
+                    searchView() 
                 } else if tabselection == 5 {
                     profileView()
                 }
@@ -50,3 +47,4 @@ struct homeView: View {
 #Preview {
     homeView()
 }
+

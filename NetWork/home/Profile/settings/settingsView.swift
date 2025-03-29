@@ -31,62 +31,62 @@ public struct SettingsView: View {
     }
 
     public var body: some View {
-        NavigationStack {
-            List {
-                // the $ allows those variables to change in editProfileSection
-                EditProfileSection(
-                    isEditingProfile: $isEditingProfile,
-                    name: $name,
-                    UTR: $UTR,
-                    USTA: $USTA,
-                    usualSpot: $usualSpot,
-                    bio: $bio
-                )
+     
+        List {
+            // the $ allows those variables to change in editProfileSection
+            EditProfileSection(
+                isEditingProfile: $isEditingProfile,
+                name: $name,
+                UTR: $UTR,
+                USTA: $USTA,
+                usualSpot: $usualSpot,
+                bio: $bio
+            )
 
-                // Sign Out Section
-                Section {
-                    Button(role: .destructive) {
-                        Task {
-                            do {
-                                try AuthenticationManager.shared.signOut()
-                                authState.isAuthenticated = false
-                            } catch {
-                                errorMessage = "Error signing out: \(error.localizedDescription)"
-                                showErrorAlert = true
-                            }
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "rectangle.portrait.and.arrow.forward")
-                                .foregroundColor(.red)
-                            Text("Sign Out")
-                                .foregroundColor(.red)
+            // Sign Out Section
+            Section {
+                Button(role: .destructive) {
+                    Task {
+                        do {
+                            try AuthenticationManager.shared.signOut()
+                            authState.isAuthenticated = false
+                        } catch {
+                            errorMessage = "Error signing out: \(error.localizedDescription)"
+                            showErrorAlert = true
                         }
                     }
-                }
-
-                // Cancel Button Section
-                Section {
-                    Button(action: { dismiss() }) {
-                        HStack {
-                            Image(systemName: "xmark.circle")
-                                .foregroundColor(.blue)
-                            Text("Cancel")
-                                .foregroundColor(.blue)
-                        }
+                } label: {
+                    HStack {
+                        Image(systemName: "rectangle.portrait.and.arrow.forward")
+                            .foregroundColor(.red)
+                        Text("Sign Out")
+                            .foregroundColor(.red)
                     }
                 }
             }
-            .navigationTitle("Settings")
-            .alert("Error", isPresented: $showErrorAlert) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(errorMessage)
-            }
-            .task {
-                await loadUserProfile()
+
+            // Cancel Button Section
+            Section {
+                Button(action: { dismiss() }) {
+                    HStack {
+                        Image(systemName: "xmark.circle")
+                            .foregroundColor(.blue)
+                        Text("Cancel")
+                            .foregroundColor(.blue)
+                    }
+                }
             }
         }
+        .navigationTitle("Settings")
+        .alert("Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(errorMessage)
+        }
+        .task {
+            await loadUserProfile()
+        }
+        
     }
 
     private func loadUserProfile() async {
@@ -107,7 +107,5 @@ public struct SettingsView: View {
 }
 
 #Preview {
-    NavigationStack {
-        SettingsView()
-    }
+    SettingsView()
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct userProfileView: View {
     @StateObject private var viewModel: userProfileViewModel
-    @Environment(\.presentationMode) var presentationMode // To control navigation stack
+    @Environment(\.dismiss) private var dismiss
     
     init(userID: String) {
         _viewModel = StateObject(wrappedValue: userProfileViewModel(userID: userID))
@@ -38,7 +38,8 @@ struct userProfileView: View {
             //custom back button
             ToolbarItem (placement: .navigationBarLeading) {
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    print("Back button tapped")
+                    dismiss()
                 }) {
                     Image(systemName: "arrow.backward")
                         .foregroundColor(.blue) // Customize the icon color

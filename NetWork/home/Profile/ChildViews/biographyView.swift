@@ -29,9 +29,8 @@ struct BiographyView: View {
 }
 
 #Preview {
-    NavigationStack {
-        profileView()
-    }
+    profileView()
+
 }
 
 

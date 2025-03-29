@@ -45,7 +45,5 @@ struct profileView: View {
 }
 
 #Preview {
-    NavigationStack {
-        profileView()
-    }
+    profileView()
 }

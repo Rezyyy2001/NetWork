@@ -24,7 +24,5 @@ struct infoView: View {
 }
 
 #Preview {
-    NavigationStack {
-        profileView()
-    }
+    profileView()
 }

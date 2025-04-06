@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct headerView: View {
-    @ObservedObject var viewModel: ProfileViewModel // @ObservedObject because needs to update whenever profileViewModel changes
+struct HeaderView<T: userProfileDataProvider & ObservableObject>: View {
+    @ObservedObject var viewModel: T // @ObservedObject because needs to update whenever profileViewModel changes
     
     var body: some View {
         
@@ -22,7 +22,7 @@ struct headerView: View {
                     .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
             
             VStack(alignment: .leading) {
-                Text(viewModel.user?.displayName ?? "Username not set")
+                Text(viewModel.name)
                     .bold()
                 
                 //TODO: UTR should be a Float for two decimal points
@@ -43,6 +43,8 @@ struct headerView: View {
     }
 }
 
+/*
 #Preview {
     headerView(viewModel: ProfileViewModel())
 }
+*/

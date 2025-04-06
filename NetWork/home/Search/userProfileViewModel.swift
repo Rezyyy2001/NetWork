@@ -16,6 +16,8 @@ class userProfileViewModel: ObservableObject, userProfileDataProvider {
     @Published var usualSpot: String? = "Unknown location."
     @Published var utr: Double? = 0.0
     @Published var usta: Double? = 0.0
+    @Published var age: Int = 0
+    
     
     private let userID: String
     private let db = Firestore.firestore()
@@ -47,7 +49,16 @@ class userProfileViewModel: ObservableObject, userProfileDataProvider {
                 self.usualSpot = data["usualSpot"] as? String ?? "Unknown location."
                 self.utr = data["UTR"] as? Double ?? 0.0
                 self.usta = data["USTA"] as? Double ?? 0.0
+                
+                if let timestamp = data["birthdate"] as? Timestamp {
+                    self.age = self.calculateAge(from: timestamp.dateValue())
+                }
             }
         }
+    }
+    private func calculateAge(from birthdate: Date) -> Int {
+        let calendar = Calendar.current
+        let ageComponents = calendar.dateComponents([.year], from: birthdate, to: Date())
+        return ageComponents.year ?? 0
     }
 }

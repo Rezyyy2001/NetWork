@@ -14,4 +14,5 @@ protocol userProfileDataProvider {
     var usualSpot: String? { get }
     var utr: Double? { get }
     var usta: Double? { get }
+    var age: Int { get }
 }

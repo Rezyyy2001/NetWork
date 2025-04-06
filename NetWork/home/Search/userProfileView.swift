@@ -17,17 +17,7 @@ struct userProfileView: View {
     
     var body: some View {
         VStack {
-            Text("Name: \(viewModel.name)")
-                .font(.title)
-                .bold()
-                .padding()
-            
-            Text("Bio: \(viewModel.bio ?? "No bio set")")
-                .padding()
-            
-            Text("Usual Spot: \(viewModel.usualSpot ?? "No Spot set")")
-            
-            
+            HeaderView(viewModel: viewModel)
                 .padding()
             
             Spacer()

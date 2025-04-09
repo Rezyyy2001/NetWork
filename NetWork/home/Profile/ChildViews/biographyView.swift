@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct BiographyView: View {
-    @ObservedObject var viewModel: ProfileViewModel
+struct BiographyView<T: userProfileDataProvider & ObservableObject>: View {
+    @ObservedObject var viewModel: T
     
 
     var body: some View {

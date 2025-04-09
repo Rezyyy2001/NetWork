@@ -18,9 +18,10 @@ struct userProfileView: View {
     var body: some View {
         VStack {
             HeaderView(viewModel: viewModel)
-                .padding()
-            
+            InfoView(viewModel: viewModel)
+            BiographyView(viewModel: viewModel)
             Spacer()
+            
         }
         //.navigationTitle("User Profile")
         .navigationBarBackButtonHidden(true)

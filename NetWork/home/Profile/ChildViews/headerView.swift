@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct HeaderView<T: userProfileDataProvider & ObservableObject>: View {
+struct HeaderView<T: userProfileDataProvider & ObservableObject>: View { // HeaderView can work with both viewModels
     @ObservedObject var viewModel: T // @ObservedObject because needs to update whenever profileViewModel changes
-    
+                                    // T is a generic type placeholder to work with any viewModel, gives the properties
     var body: some View {
         
         HStack {
@@ -22,7 +22,7 @@ struct HeaderView<T: userProfileDataProvider & ObservableObject>: View {
                     .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
             
             VStack(alignment: .leading) {
-                Text(viewModel.name)
+                Text(viewModel.name) // takes var name from protocal
                     .bold()
                 
                 //TODO: UTR should be a Float for two decimal points

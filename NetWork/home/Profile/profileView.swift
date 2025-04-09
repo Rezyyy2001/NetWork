@@ -16,7 +16,7 @@ struct profileView: View {
         VStack{
             // This is where all the child views will stack up 
             HeaderView(viewModel: viewModel)
-            infoView(viewModel: viewModel)
+            InfoView(viewModel: viewModel)
             BiographyView(viewModel: viewModel)
             Spacer()
             

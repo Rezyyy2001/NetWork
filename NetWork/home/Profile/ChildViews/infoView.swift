@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct infoView: View {
-    @ObservedObject var viewModel: ProfileViewModel
+struct InfoView<T: userProfileDataProvider & ObservableObject>: View {
+    @ObservedObject var viewModel: T
     
     var body: some View {
         HStack {

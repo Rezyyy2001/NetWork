@@ -15,6 +15,7 @@ final class ProfileViewModel: ObservableObject, userProfileDataProvider {
     @Published var errorMessage: String? = nil // For error handling
     
     @Published var user: AuthDataResultModel? = nil // stores the authenticated user's data
+    
     @Published var utr: Double? = nil
     @Published var usta: Double? = nil
     @Published var bio: String? = nil
@@ -25,7 +26,7 @@ final class ProfileViewModel: ObservableObject, userProfileDataProvider {
         user?.displayName ?? "Unknown"
     }
      
-    // This fetches the updated @Published properties
+    // This fetches the updated @Published properties from authentiction manager
     func fetchUserProfile() async {
         do {
             let (userData, fetchedUTR, fetchedUSTA, fetchedBio, fetchedUsualSpot, birthday) = try await AuthenticationManager.shared.getUserProfile()
@@ -36,19 +37,19 @@ final class ProfileViewModel: ObservableObject, userProfileDataProvider {
             self.usta = fetchedUSTA
             self.bio = fetchedBio
             self.usualSpot = fetchedUsualSpot
-            self.age = calculateAge(from: birthday) //stores age
             
-        
+            if let birthdate = birthday {
+                self.age = calculateAge(from: birthdate)
+            }
         } catch {
             self.errorMessage = "Failed to fetch profile: \(error.localizedDescription)"
         }
     }
-    
+     
     // converst timestamp to int
-    private func calculateAge(from timestamp: TimeInterval) -> Int {
-        let birthDate = Date(timeIntervalSince1970: timestamp)
+    private func calculateAge(from birthdate: Date) -> Int {
         let calendar = Calendar.current
-        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
+        let ageComponents = calendar.dateComponents([.year], from: birthdate, to: Date())
         return ageComponents.year ?? 0
     }
 }

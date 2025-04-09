@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 class userProfileViewModel: ObservableObject, userProfileDataProvider {
     
-    //@Published var name: String = "Loading..."
+    // userProfileDataProvider ensures that the properties are the correct type
     @Published var displayName: String = "Loading..."
     @Published var bio: String? = "No bio available."
     @Published var usualSpot: String? = "Unknown location."
@@ -30,7 +30,7 @@ class userProfileViewModel: ObservableObject, userProfileDataProvider {
         self.userID = userID
         fetchUserProfile()
     }
-    
+     
     func fetchUserProfile() {
         db.collection("users").document(userID).getDocument { snapshot, error in
             if let error = error {
@@ -50,7 +50,7 @@ class userProfileViewModel: ObservableObject, userProfileDataProvider {
                 self.utr = data["UTR"] as? Double ?? 0.0
                 self.usta = data["USTA"] as? Double ?? 0.0
                 
-                if let timestamp = data["birthdate"] as? Timestamp {
+                if let timestamp = data["birthday"] as? Timestamp {
                     self.age = self.calculateAge(from: timestamp.dateValue())
                 }
             }

@@ -88,7 +88,7 @@ final class AuthenticationManager { // for firebase authentication logic
             .document(user.uid)
             .updateData(["name": newName])
     }
-    func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?, String?, String?, TimeInterval) {
+    func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?, String?, String?, Date?) {
         guard let user = Auth.auth().currentUser else { // checks if user is signedIn
             throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
         }
@@ -99,7 +99,7 @@ final class AuthenticationManager { // for firebase authentication logic
         let USTA = document.data()?["USTA"] as? Double
         let bio = document.data()?["bio"] as? String
         let usualSpot = document.data()?["usualSpot"] as? String
-        let birthday = Double((document.data()?["birthday"] as? Timestamp)?.seconds ?? 0) // fetches birthday from firestore
+        let birthday = (document.data()?["birthday"] as? Timestamp)?.dateValue() // fetches birthday from firestore
         
         return (AuthDataResultModel(user: user, bio: bio, usualSpot: usualSpot), UTR, USTA, bio, usualSpot, birthday)
     }

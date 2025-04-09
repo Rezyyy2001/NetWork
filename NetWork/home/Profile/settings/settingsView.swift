@@ -23,10 +23,9 @@ public struct SettingsView: View {
     @State private var errorMessage = ""
     
     // turns timestamp to int
-    private func calculateAge(from timestamp: TimeInterval) -> Int {
-        let birthDate = Date(timeIntervalSince1970: timestamp)
+    private func calculateAge(from birthdate: Date) -> Int {
         let calendar = Calendar.current
-        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
+        let ageComponents = calendar.dateComponents([.year], from: birthdate, to: Date())
         return ageComponents.year ?? 0
     }
 
@@ -97,7 +96,10 @@ public struct SettingsView: View {
             USTA = fetchedUSTA ?? 0.0
             bio = fetchedBio ?? ""
             usualSpot = fetchedUsualSpot ?? ""
-            age = calculateAge(from: fetchedBirthday)
+            
+            if let birthday = fetchedBirthday {
+                age = calculateAge(from: birthday)
+            }
             
         } catch {
             errorMessage = "Failed to load profile: \(error.localizedDescription)"

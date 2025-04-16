@@ -20,6 +20,7 @@ struct userProfileView: View {
             HeaderView(viewModel: viewModel)
             InfoView(viewModel: viewModel)
             BiographyView(viewModel: viewModel)
+            friendButtonView(targetUserID: viewModel.uid)
             Spacer()
             
         }

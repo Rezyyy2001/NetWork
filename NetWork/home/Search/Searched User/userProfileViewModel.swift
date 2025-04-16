@@ -22,6 +22,10 @@ class userProfileViewModel: ObservableObject, userProfileDataProvider {
     private let userID: String
     private let db = Firestore.firestore()
     
+    var uid: String {
+        userID
+    }
+    
     var name: String {
         displayName
     }

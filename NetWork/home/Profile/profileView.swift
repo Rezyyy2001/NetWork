@@ -9,7 +9,6 @@ import SwiftUI
     
 struct profileView: View {
     @StateObject private var viewModel = ProfileViewModel() //observes profileViewModel
-    //@State private var showSettings = false
 
     var body: some View {
         
@@ -24,6 +23,14 @@ struct profileView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
+                    viewModel.showFriendRequests = true
+                } label: {
+                    Image(systemName: "person.crop.circle.badge.questionmark")
+                        .font(.headline)
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
                     viewModel.showSettings = true
                 } label: {
                     Image(systemName: "slider.horizontal.3")
@@ -32,6 +39,9 @@ struct profileView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .sheet(isPresented: $viewModel.showFriendRequests) {
+            friendInboxView()
+        }
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView()
         }

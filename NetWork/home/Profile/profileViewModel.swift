@@ -12,6 +12,7 @@ import SwiftUI
 
 final class ProfileViewModel: ObservableObject, userProfileDataProvider {
     @Published var showSettings = false // Moved UI state to ViewModel
+    @Published var showFriendRequests = false
     @Published var errorMessage: String? = nil // For error handling
     
     @Published var user: AuthDataResultModel? = nil // stores the authenticated user's data

@@ -18,9 +18,17 @@ class userProfileViewModel: ObservableObject, userProfileDataProvider {
     @Published var usta: Double? = 0.0
     @Published var age: Int = 0
     
-    
+    @Published var friendshipStatus: friendshipStatus = .none
+
     private let userID: String
     private let db = Firestore.firestore()
+    
+    enum friendshipStatus: String {
+        case none
+        case sent
+        case recieved
+        case friends
+    }
     
     var uid: String {
         userID

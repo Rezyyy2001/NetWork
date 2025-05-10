@@ -11,6 +11,7 @@ struct userProfileView: View {
     @StateObject private var viewModel: userProfileViewModel
     @Environment(\.dismiss) private var dismiss
     
+    
     init(userID: String) {
         _viewModel = StateObject(wrappedValue: userProfileViewModel(userID: userID))
     }
@@ -22,23 +23,19 @@ struct userProfileView: View {
             BiographyView(viewModel: viewModel)
             friendButtonView(targetUserID: viewModel.uid)
             Spacer()
-            
         }
-        //.navigationTitle("User Profile")
-        .navigationBarBackButtonHidden(true)
         .toolbar {
-            //custom back button
             ToolbarItem (placement: .navigationBarLeading) {
                 Button(action: {
-                    print("Back button tapped")
                     dismiss()
                 }) {
                     Image(systemName: "arrow.backward")
                         .foregroundColor(.blue) // Customize the icon color
-                        .font(.title) // Adjust the size of the back arrow
+                        .font(.title) // Adjust the size of the back arrow 
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

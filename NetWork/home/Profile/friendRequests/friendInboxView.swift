@@ -8,32 +8,43 @@
 import SwiftUI
 
 struct friendInboxView: View {
+    @Environment(\.dismiss) private var dismiss // to dismiss the sheet
     @StateObject private var viewModel = friendInboxViewModel()
     @State private var selectedUser: userStub?
-
+    
     var body: some View {
-        VStack {
-            // Friend Requests List
-            List(viewModel.stubs) { stub in
-                StubView(user: stub) {
-                    selectedUser = stub // Store selected user
+        NavigationStack {
+            VStack(alignment: .leading) {
+                // Back Button
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "arrow.backward")
+                        .font(.title2)
+                        .foregroundColor(.blue)
+                        .padding(.leading)
+                        .padding(.top)
                 }
-                .listRowBackground(Color.clear) // Ensures it doesn’t apply default background
+                
+                Text("Friend Requests")
+                    .font(.largeTitle)
+                    .padding(.horizontal)
+                
+                List(viewModel.stubs) { stub in
+                    StubView(user: stub) {
+                        selectedUser = stub
+                    }
+                    .listRowBackground(Color.clear)
+                }
+                .listStyle(PlainListStyle())
+                Spacer()
             }
-            .listStyle(PlainListStyle())
-            .navigationTitle("Friend Requests")
+            .navigationDestination(item: $selectedUser) { user in
+                userProfileView(userID: user.id)
+            }
             .onAppear {
-                viewModel.fetchPendingRequests() // Fetch data on appear
+                viewModel.fetchPendingRequests()
             }
         }
-        .navigationDestination(item: $selectedUser) { user in
-            userProfileView(userID: user.id) // Navigate to userProfileView
-                .onAppear {
-                    print("Navigating to userProfileView for \(user.id)")
-                }
-        }
-        .navigationBarBackButtonHidden(true)
     }
 }
-
-

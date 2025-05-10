@@ -51,7 +51,8 @@ final class UserProfileManager {
             "UTR": UTR,
             "USTA": USTA,
             "usualSpot": usualSpot,
-            "bio": bio
+            "bio": bio,
+            "name_lowercased": name.lowercased(),
         ]
         try await Firestore.firestore().collection("users").document(user.uid).updateData(userData)
 

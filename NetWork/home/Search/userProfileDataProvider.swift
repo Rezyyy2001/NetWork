@@ -19,4 +19,5 @@ protocol userProfileDataProvider {
     var utr: Double? { get }
     var usta: Double? { get }
     var age: Int { get }
+    var uid: String { get }
 }

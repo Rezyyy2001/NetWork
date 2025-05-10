@@ -30,60 +30,64 @@ public struct SettingsView: View {
     }
 
     public var body: some View {
-     
-        List {
-            // the $ allows those variables to change in editProfileSection
-            EditProfileSection(
-                isEditingProfile: $isEditingProfile,
-                name: $name,
-                UTR: $UTR,
-                USTA: $USTA,
-                usualSpot: $usualSpot,
-                bio: $bio
-            )
-
-            // Sign Out Section
-            Section {
-                Button(role: .destructive) {
-                    Task {
-                        do {
-                            try AuthenticationManager.shared.signOut()
-                            authState.isAuthenticated = false
-                        } catch {
-                            errorMessage = "Error signing out: \(error.localizedDescription)"
-                            showErrorAlert = true
+        VStack (alignment: .leading) {
+            Button(action: {
+                dismiss()
+            }) {
+                Image(systemName: "arrow.backward")
+                    .font(.title2)
+                    .foregroundColor(.blue)
+                    .padding(.leading)
+                    .padding(.top)
+            }
+            Text("Settings")
+                .font(.largeTitle)
+                .padding(.horizontal)
+            
+            
+            List {
+                // the $ allows those variables to change in editProfileSection
+                EditProfileSection(
+                    isEditingProfile: $isEditingProfile,
+                    name: $name,
+                    UTR: $UTR,
+                    USTA: $USTA,
+                    usualSpot: $usualSpot,
+                    bio: $bio
+                )
+                
+                
+                // Sign Out Section
+                Section {
+                    Button(role: .destructive) {
+                        Task {
+                            do {
+                                try AuthenticationManager.shared.signOut()
+                                authState.isAuthenticated = false
+                            } catch {
+                                errorMessage = "Error signing out: \(error.localizedDescription)"
+                                showErrorAlert = true
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "rectangle.portrait.and.arrow.forward")
+                                .foregroundColor(.red)
+                            Text("Sign Out")
+                                .foregroundColor(.red)
                         }
                     }
-                } label: {
-                    HStack {
-                        Image(systemName: "rectangle.portrait.and.arrow.forward")
-                            .foregroundColor(.red)
-                        Text("Sign Out")
-                            .foregroundColor(.red)
-                    }
                 }
             }
-
-            // Cancel Button Section
-            Section {
-                Button(action: { dismiss() }) {
-                    HStack {
-                        Image(systemName: "xmark.circle")
-                            .foregroundColor(.blue)
-                        Text("Cancel")
-                            .foregroundColor(.blue)
-                    }
-                }
+            .navigationTitle("Settings")
+            .alert("Error", isPresented: $showErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(errorMessage)
             }
-        }
-        .navigationTitle("Settings")
-        .alert("Error", isPresented: $showErrorAlert) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(errorMessage)
-        }
-        .task {
-            await loadUserProfile()
+            .task {
+                await loadUserProfile()
+            }
         }
         
     }

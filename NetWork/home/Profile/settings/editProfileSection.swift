@@ -177,13 +177,3 @@ public struct EditProfileSection: View {
     }
 }
 
-#Preview {
-    EditProfileSection(
-        isEditingProfile: .constant(false),
-        name: .constant("John Doe"),
-        UTR: .constant(5.0),
-        USTA: .constant(3.5),
-        usualSpot: .constant("Central Park"),
-        bio: .constant("Love playing tennis!")
-    )
-}

@@ -13,6 +13,8 @@ final class ProfileViewModel: ObservableObject, userProfileDataProvider {
     // UI State
     @Published var showSettings = false
     @Published var showFriendRequests = false
+    @Published var showMessageView = false
+    
     @Published var errorMessage: String? = nil
 
     // Auth info

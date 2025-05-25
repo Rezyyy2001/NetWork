@@ -23,9 +23,17 @@ struct profileView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
+                    viewModel.showMessageView = true
+                } label: {
+                    Image(systemName: "message")
+                        .font(.headline)
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
                     viewModel.showFriendRequests = true
                 } label: {
-                    Image(systemName: "person.crop.circle.badge.questionmark")
+                    Image(systemName: "tray")
                         .font(.headline)
                 }
             }
@@ -38,7 +46,11 @@ struct profileView: View {
                 }
             }
         }
+        
         .navigationBarBackButtonHidden(true)
+        .sheet(isPresented: $viewModel.showMessageView) {
+            messageView(currentUserID: viewModel.user?.uid ?? "")
+        }
         .sheet(isPresented: $viewModel.showFriendRequests) {
             friendInboxView()
         }

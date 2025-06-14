@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InfoView<T: userProfileDataProvider & ObservableObject>: View {
+struct InfoView<T: UserProfileDataProvider & ObservableObject>: View {
     @ObservedObject var viewModel: T
     
     var body: some View {
@@ -24,5 +24,5 @@ struct InfoView<T: userProfileDataProvider & ObservableObject>: View {
 }
 
 #Preview {
-    profileView()
+    ProfileView()
 }

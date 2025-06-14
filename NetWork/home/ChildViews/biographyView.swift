@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BiographyView<T: userProfileDataProvider & ObservableObject>: View {
+struct BiographyView<T: UserProfileDataProvider & ObservableObject>: View {
     @ObservedObject var viewModel: T
     
 
@@ -29,7 +29,7 @@ struct BiographyView<T: userProfileDataProvider & ObservableObject>: View {
 }
 
 #Preview {
-    profileView()
+    ProfileView()
 
 }
 

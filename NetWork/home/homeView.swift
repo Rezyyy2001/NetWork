@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct homeView: View {
+struct HomeView: View {
     @State private var tabselection = 1
     
     let homeTabItems: [(image: String, title: String)] = [
@@ -26,15 +26,15 @@ struct homeView: View {
             VStack {
                 Spacer()
                 if tabselection == 1 {
-                    friendsView()
+                    FriendsView()
                 } else if tabselection == 2 {
-                    localView()
+                    LocalView()
                 } else if tabselection == 3 {
-                    postView()
+                    PostView()
                 } else if tabselection == 4 {
-                    searchView() 
+                    SearchView() 
                 } else if tabselection == 5 {
-                    profileView()
+                    ProfileView()
                 }
                 Spacer()
                 CustomTabView(tabSelection: $tabselection, items: homeTabItems)
@@ -45,6 +45,6 @@ struct homeView: View {
 }
 
 #Preview {
-    homeView()
+    HomeView()
 }
 

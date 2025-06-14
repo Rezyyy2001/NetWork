@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct friendsView: View {
+struct FriendsView: View {
     var body: some View {
         Text("Friends View")
             .navigationBarBackButtonHidden(true)
@@ -15,5 +15,5 @@ struct friendsView: View {
 }
 
 #Preview {
-    friendsView()
+    FriendsView()
 }

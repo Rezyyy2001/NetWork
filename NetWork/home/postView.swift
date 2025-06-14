@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct postView: View {
+struct PostView: View {
     var body: some View {
         Text("Post View")
             .navigationBarBackButtonHidden(true)
@@ -15,5 +15,5 @@ struct postView: View {
 }
 
 #Preview {
-    postView()
+    PostView()
 }

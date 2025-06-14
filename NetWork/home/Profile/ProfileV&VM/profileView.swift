@@ -7,9 +7,9 @@
 
 import SwiftUI
     
-struct profileView: View {
+struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel() //observes profileViewModel
-
+    
     var body: some View {
         
         VStack{
@@ -49,10 +49,10 @@ struct profileView: View {
         
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $viewModel.showMessageView) {
-            messageView(currentUserID: viewModel.user?.uid ?? "")
+            MessageListView(currentUserID: viewModel.user?.uid ?? "")
         }
         .sheet(isPresented: $viewModel.showFriendRequests) {
-            friendInboxView()
+            FriendInboxView()
         }
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView()
@@ -67,5 +67,5 @@ struct profileView: View {
 }
 
 #Preview {
-    profileView()
+    ProfileView()
 }

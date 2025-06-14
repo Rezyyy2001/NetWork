@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 
-class userProfileViewModel: ObservableObject, userProfileDataProvider {
+class UserProfileViewModel: ObservableObject, UserProfileDataProvider {
     
     // userProfileDataProvider ensures that the properties are the correct type
     @Published var displayName: String = "Loading..."

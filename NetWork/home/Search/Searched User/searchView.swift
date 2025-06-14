@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct searchView: View {
-    @StateObject var viewModel = searchViewModel() // creates an instance of serachViewModel
+struct SearchView: View {
+    @StateObject var viewModel = SearchViewModel() // creates an instance of serachViewModel
     
-    @State private var selectedUser: userStub?  // Track selected user
+    @State private var selectedUser: UserStub?  // Track selected user
     //@State private var isShowingProfile = false // Control navigation
     
 
@@ -56,7 +56,7 @@ struct searchView: View {
         }
         .padding(.top, 10)
         .navigationDestination(item: $selectedUser) { user in
-            userProfileView(userID: user.id) // Navigate on selection
+            UserProfileView(userID: user.id) // Navigate on selection
                 .onAppear {
                     print("Navigating to userProfileView for \(user.id)")
                 }

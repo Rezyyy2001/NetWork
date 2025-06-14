@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct localView: View {
+struct LocalView: View {
     var body: some View {
         Text("Local View")
             .navigationBarBackButtonHidden(true)
@@ -15,5 +15,5 @@ struct localView: View {
 }
 
 #Preview {
-    localView()
+    LocalView()
 }

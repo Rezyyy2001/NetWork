@@ -74,7 +74,7 @@ struct SignupView: View {
                 }
                 .padding(.top, 24)
                 .navigationDestination(isPresented: $viewModel.showHomeView) { // calls viewModel.showHomeView as true
-                    homeView() // if true navigates to homeView
+                    HomeView() // if true navigates to homeView
                 }
             }
             .padding()

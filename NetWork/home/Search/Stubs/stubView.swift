@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StubView: View {
-    let user: userStub
+    let user: UserStub
     var onTap: () -> Void = {}
 
     var body: some View {
@@ -34,6 +34,6 @@ struct StubView: View {
 }
 
 #Preview {
-    StubView(user: userStub(uid: "123", displayName: "Tezuka Kunimitzu"))
+    StubView(user: UserStub(uid: "123", displayName: "Tezuka Kunimitzu"))
         .padding()
 }

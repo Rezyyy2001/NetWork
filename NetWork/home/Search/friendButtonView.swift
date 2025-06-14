@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
 
-struct friendButtonView: View {
+struct FriendButtonView: View {
     let targetUserID: String // ID of the person being viewed
     
     @State private var friendshipStatus: String? = nil

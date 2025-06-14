@@ -8,7 +8,7 @@
 import Foundation
 
 // Just a data model
-struct userStub: Identifiable, Hashable, Decodable {
+struct UserStub: Identifiable, Hashable, Decodable {
     
     let id: String  // Conforms to Identifiable for SwiftUI lists
     let displayName: String?
@@ -19,7 +19,7 @@ struct userStub: Identifiable, Hashable, Decodable {
     }
     
     // Implement the equality check based on 'id' (or any other unique property)
-    static func == (lhs: userStub, rhs: userStub) -> Bool {
+    static func == (lhs: UserStub, rhs: UserStub) -> Bool {
         return lhs.id == rhs.id
     }
     

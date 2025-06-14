@@ -8,10 +8,10 @@
 import SwiftUI
 import FirebaseFirestore
 
-class searchViewModel: ObservableObject {
+class SearchViewModel: ObservableObject {
     
     @Published var searchText: String = "" // The string that is entered in the search bar
-    @Published var searchResults: [userStub] = [] // spits back an array of userStubs matching the searchText string
+    @Published var searchResults: [UserStub] = [] // spits back an array of userStubs matching the searchText string
 
     // searches users in firestore database
     func searchUsers() {
@@ -34,7 +34,7 @@ class searchViewModel: ObservableObject {
                     let data = doc.data()
                     let name = data["name"] as? String
                     let uid = doc.documentID
-                    return userStub(uid: uid, displayName: name)
+                    return UserStub(uid: uid, displayName: name)
                 } ?? [] // if snapshot is empty return empty array
             }
     }

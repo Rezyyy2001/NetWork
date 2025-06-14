@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct friendInboxView: View {
+struct FriendInboxView: View {
     @Environment(\.dismiss) private var dismiss // to dismiss the sheet
-    @StateObject private var viewModel = friendInboxViewModel()
-    @State private var selectedUser: userStub?
+    @StateObject private var viewModel = FriendInboxViewModel()
+    @State private var selectedUser: UserStub?
     
     var body: some View {
         NavigationStack {
@@ -40,7 +40,7 @@ struct friendInboxView: View {
                 Spacer()
             }
             .navigationDestination(item: $selectedUser) { user in
-                userProfileView(userID: user.id)
+                UserProfileView(userID: user.id)
             }
             .onAppear {
                 viewModel.fetchPendingRequests()

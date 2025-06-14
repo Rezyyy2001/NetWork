@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct signOutButton: View {
+struct SignOutButton: View {
     var signOutAction: () -> Void
 
     var body: some View {

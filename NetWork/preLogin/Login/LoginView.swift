@@ -38,7 +38,7 @@ struct LoginView: View {
                 }
                 .padding(.top, 24)
                 .navigationDestination(isPresented: $viewModel.showHomeView) { // navigates to homeView
-                    homeView()
+                    HomeView()
                 }
             
             }

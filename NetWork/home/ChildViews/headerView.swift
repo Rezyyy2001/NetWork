@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HeaderView<T: userProfileDataProvider & ObservableObject>: View { // HeaderView can work with both viewModels
+struct HeaderView<T: UserProfileDataProvider & ObservableObject>: View { // HeaderView can work with both viewModels
     @ObservedObject var viewModel: T // @ObservedObject because needs to update whenever profileViewModel changes
                                     // T is a generic type placeholder to work with any viewModel, gives the properties
     var body: some View {

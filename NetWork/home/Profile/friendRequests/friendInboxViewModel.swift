@@ -10,8 +10,8 @@ import FirebaseFirestore
 import FirebaseAuth
 
 @MainActor
-class friendInboxViewModel: ObservableObject {
-    @Published var stubs: [userStub] = []
+class FriendInboxViewModel: ObservableObject {
+    @Published var stubs: [UserStub] = []
 
     private let db = Firestore.firestore()
     
@@ -36,7 +36,7 @@ class friendInboxViewModel: ObservableObject {
     }
 
     private func fetchStubs(for userIDs: [String]) {
-        var loadedStubs: [userStub] = []
+        var loadedStubs: [UserStub] = []
         let group = DispatchGroup()
 
         for id in userIDs {
@@ -46,7 +46,7 @@ class friendInboxViewModel: ObservableObject {
 
                 guard let data = docSnapshot?.data() else { return }
 
-                let stub = userStub(
+                let stub = UserStub(
                     uid: id,
                     displayName: data["name"] as? String ?? "Unknown"
                 )

@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct userProfileView: View {
-    @StateObject private var viewModel: userProfileViewModel
+struct UserProfileView: View {
+    @StateObject private var viewModel: UserProfileViewModel
     @Environment(\.dismiss) private var dismiss
     
     
     init(userID: String) {
-        _viewModel = StateObject(wrappedValue: userProfileViewModel(userID: userID))
+        _viewModel = StateObject(wrappedValue: UserProfileViewModel(userID: userID))
     }
     
     var body: some View {
@@ -21,7 +21,7 @@ struct userProfileView: View {
             HeaderView(viewModel: viewModel)
             InfoView(viewModel: viewModel)
             BiographyView(viewModel: viewModel)
-            friendButtonView(targetUserID: viewModel.uid)
+            FriendButtonView(targetUserID: viewModel.uid)
             Spacer()
         }
         .toolbar {
@@ -40,5 +40,5 @@ struct userProfileView: View {
 }
 
 #Preview {
-    userProfileView(userID: "9qVSt63nrjaqiBm79ZNoOxM7AFd2")
+    UserProfileView(userID: "9qVSt63nrjaqiBm79ZNoOxM7AFd2")
 }

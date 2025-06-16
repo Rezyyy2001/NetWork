@@ -10,7 +10,7 @@ import FirebaseFirestore
 import FirebaseAuth
 
 @MainActor
-class FriendInboxViewModel: ObservableObject {
+final class FriendInboxViewModel: ObservableObject {
     @Published var stubs: [UserStub] = []
 
     private let db = Firestore.firestore()

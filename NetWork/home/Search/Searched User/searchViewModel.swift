@@ -8,7 +8,8 @@
 import SwiftUI
 import FirebaseFirestore
 
-class SearchViewModel: ObservableObject {
+@MainActor
+final class SearchViewModel: ObservableObject {
     
     @Published var searchText: String = "" // The string that is entered in the search bar
     @Published var searchResults: [UserStub] = [] // spits back an array of userStubs matching the searchText string

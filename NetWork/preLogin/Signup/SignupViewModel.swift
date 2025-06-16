@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseAuth
 
+@MainActor
 final class SignupViewModel: ObservableObject { // observableObject allows the changes to properties
     @Published var email = ""
     @Published var password = ""

@@ -9,7 +9,8 @@ import FirebaseFirestore
 import Foundation
 import SwiftUI
 
-class MessageListViewModel: ObservableObject { // Allows the class to notify views when it changes
+@MainActor
+final class MessageListViewModel: ObservableObject { // Allows the class to notify views when it changes
     @Published var friends: [UserStub] = []
     private let db = Firestore.firestore()
 
@@ -18,7 +19,10 @@ class MessageListViewModel: ObservableObject { // Allows the class to notify vie
         // filters through friendships that are accepted
         db.collection("friendships") // Queires friendship collection
             .whereField("status", isEqualTo: "accepted")
+        
             .getDocuments { snapshot, error in
+            //.getDocuments { [weak self] snapshot, error in
+            
                 guard let documents = snapshot?.documents, error == nil else { return } // error handles documents
 
                 var friendIDs: [String] = []
@@ -73,3 +77,6 @@ class MessageListViewModel: ObservableObject { // Allows the class to notify vie
     }
 }
 
+/// This shouldnt be a retain cycle because the self does not own the closure. Firebase owns the closure and once it gets to the document it deallocates successfully.
+/// The dispatch group is necssary because we are doing multiple async calls to each friend ID and the view updates when it all is finished.
+/// group.enter and group.leave basically tells you when the async starts and finishes then tells the view to update.

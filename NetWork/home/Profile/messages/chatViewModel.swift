@@ -8,7 +8,8 @@
 import Foundation
 import FirebaseFirestore
 
-class ChatViewModel: ObservableObject {
+@MainActor
+final class ChatViewModel: ObservableObject {
     @Published var messages: [Message] = []
     @Published var newMessage = ""
 

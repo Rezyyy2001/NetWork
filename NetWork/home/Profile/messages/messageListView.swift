@@ -11,13 +11,14 @@ import SwiftUI
 struct MessageListView: View {
     
     let currentUserID: String
+    
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = MessageListViewModel() // watches for updates
     @State private var selectedUser: UserStub? // to check who is clicked
 
-    init(currentUserID: String, viewModel: MessageListViewModel = MessageListViewModel()) {
+    init(currentUserID: String) {
             self.currentUserID = currentUserID
-            _viewModel = StateObject(wrappedValue: viewModel)
+            _viewModel = StateObject(wrappedValue: MessageListViewModel())
     }
     
     var body: some View {
@@ -54,19 +55,6 @@ struct MessageListView: View {
             }
         }
     }
-}
-#Preview {
-    let mockViewModel: MessageListViewModel = {
-        let vm = MessageListViewModel()
-        vm.friends = [
-            UserStub(uid: "1", displayName: "Alice Johnson"),
-            UserStub(uid: "2", displayName: "Bob Smith"),
-            UserStub(uid: "3", displayName: "Charlie Rose")
-        ]
-        return vm
-    }()
-
-    return MessageListView(currentUserID: "previewUser123", viewModel: mockViewModel)
 }
 
 

@@ -119,9 +119,10 @@ public struct EditProfileSection: View {
                     }
 
                     VStack(alignment: .leading) {
-                        TextEditor(text: $bio)
-                            .frame(width: 300, height: 100)
+                        TextField("Hint", text: $bio, axis: .vertical)
+                            .frame(width: 300)
                             .padding(10)
+                            .lineLimit(100)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 5)
                                     .stroke(Color.gray, lineWidth: 1)

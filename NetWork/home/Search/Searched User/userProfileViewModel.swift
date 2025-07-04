@@ -70,8 +70,6 @@ final class UserProfileViewModel: ObservableObject, UserProfileDataProvider {
         }
     }
     private func calculateAge(from birthdate: Date) -> Int {
-        let calendar = Calendar.current
-        let ageComponents = calendar.dateComponents([.year], from: birthdate, to: Date())
-        return ageComponents.year ?? 0
+        Calendar.current.dateComponents([.year], from: birthdate, to: Date()).year ?? 0
     }
 }

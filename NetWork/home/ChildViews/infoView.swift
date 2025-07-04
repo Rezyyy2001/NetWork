@@ -19,7 +19,7 @@ struct InfoView<T: UserProfileDataProvider & ObservableObject>: View {
             Label("\(viewModel.age)", systemImage: "person.fill")
                 .foregroundColor(.gray)
         }
-        .padding(.horizontal, 40)
+        //.padding(.horizontal, 40)
     }
 }
 

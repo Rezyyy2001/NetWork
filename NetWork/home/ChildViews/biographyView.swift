@@ -22,7 +22,7 @@ struct BiographyView<T: UserProfileDataProvider & ObservableObject>: View {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.gray, lineWidth: 1)
                 )
-                .padding(.horizontal, 20)
+                //.padding(.horizontal, 20)
                 //.foregroundColor(.black)
         }
     }

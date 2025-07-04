@@ -19,10 +19,7 @@ struct HomeView: View {
     ]
     
     var body: some View {
-        ZStack {
-            Color(.white)
-                .edgesIgnoringSafeArea(.all)
-            
+        ZStack(alignment: .bottom) {
             VStack {
                 Spacer()
                 if tabselection == 1 {
@@ -36,11 +33,17 @@ struct HomeView: View {
                 } else if tabselection == 5 {
                     ProfileView()
                 }
-                Spacer()
-                CustomTabView(tabSelection: $tabselection, items: homeTabItems)
             }
-            .padding(.bottom)
+            .frame(maxHeight: .infinity)
+            .padding(12)
+            
+            CustomTabView(tabSelection: $tabselection, items: homeTabItems)
         }
+        .frame(maxHeight: .infinity)
+        .background(
+            Color(.white)
+                .edgesIgnoringSafeArea(.all)
+        )
     }
 }
 

@@ -41,7 +41,7 @@ struct HeaderView<T: UserProfileDataProvider & ObservableObject>: View { // Head
             FriendCountView(userID: viewModel.uid)
             Spacer()
         }
-        .padding(.horizontal, 20)
+        //.padding(.horizontal, 20)
         
     }
 }

@@ -24,6 +24,8 @@ struct UserProfileView: View {
             FriendButtonView(targetUserID: viewModel.uid)
             Spacer()
         }
+        .padding(.horizontal, 2)
+        .ignoresSafeArea(.container, edges: .horizontal)
         .toolbar {
             ToolbarItem (placement: .navigationBarLeading) {
                 Button(action: {

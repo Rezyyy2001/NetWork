@@ -20,6 +20,7 @@ struct ProfileView: View {
             Spacer()
             
         }
+        .padding(.horizontal, 9)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {

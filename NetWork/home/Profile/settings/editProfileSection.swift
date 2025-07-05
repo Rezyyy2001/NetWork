@@ -119,7 +119,7 @@ public struct EditProfileSection: View {
                     }
 
                     VStack(alignment: .leading) {
-                        TextField("Hint", text: $bio, axis: .vertical)
+                        TextField("Biography", text: $bio, axis: .vertical)
                             .frame(width: 300)
                             .padding(10)
                             .lineLimit(100)

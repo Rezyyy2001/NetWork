@@ -12,6 +12,13 @@ struct PostView: View {
     @State private var extraInfo: String = ""
     @State private var numberOfPeople: Int = 1
     @State private var selectedDate = Date()
+    @State private var hasEdited: Bool = false
+    
+    @State private var extraInfoExample: String = """
+    e.g. Looking to hit with 3.5+
+    e.g. Looking to hit for 2 hours
+    e.g. Looking to play a match
+    """
 
     var body: some View {
         NavigationView {
@@ -26,8 +33,23 @@ struct PostView: View {
 
                     // Extra Info
                     GroupBox(label: Label("Extra Info", systemImage: "info.circle")) {
-                        TextField("e.g. Looking for 3.5+ players", text: $extraInfo)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        ZStack(alignment: .topLeading) {
+                            if extraInfo.isEmpty {
+                                Text(extraInfoExample)
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 12)
+                            }
+                            
+                            TextEditor(text: $extraInfoExample)
+                                .frame(minHeight: 100)
+                                .padding(4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                                )
+                                .font(.body)
+                        }
                     }
 
                     // Number of People
@@ -48,13 +70,13 @@ struct PostView: View {
                     Button(action: {
                         // Handle post logic
                         print("Location: \(location)")
-                        print("Extra Info: \(extraInfo)")
+                        print("Extra Info: \(extraInfoExample)")
                         print("Looking for \(numberOfPeople) player(s)")
                         print("Time: \(selectedDate)")
                     }) {
                         Text("Post")
                             .fontWeight(.bold)
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: 100)
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)

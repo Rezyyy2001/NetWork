@@ -38,11 +38,13 @@ public struct EditProfileSection: View {
     @State private var alertMessage = ""
     
     private let usualSpotCharacterLimit = 25
-    private let bioCharacterLimit = 150
+    //private let bioCharacterLimit = 150
     
     var isSaveDisabled: Bool {
-        usualSpot.count > usualSpotCharacterLimit || bio.count > bioCharacterLimit
+        usualSpot.count > usualSpotCharacterLimit
     }
+    
+    //TODO: Tie the API to this view, allowing the user to pick their usual spot
 
     public var body: some View {
         Section {
@@ -118,16 +120,31 @@ public struct EditProfileSection: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
 
-                    VStack(alignment: .leading) {
-                        TextField("Biography", text: $bio, axis: .vertical)
-                            .frame(width: 300)
-                            .padding(10)
-                            .lineLimit(100)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Color.gray, lineWidth: 1)
-                            )
-                            .font(.system(size: 15))
+                    VStack(alignment: .leading, spacing: 5) {
+//                        ZStack(alignment: .topLeading) {
+//                            if bio.isEmpty {
+//                                Text("Write a short bio about yourself")
+//                                    .foregroundColor(.gray)
+//                                    .padding(.top, 8)
+//                                    .padding(.horizontal, 14)
+//                                  
+//                            }
+//                            TextEditor(text: $bio)
+//                                .frame(width: 300, height: 100)
+//                                .padding(.horizontal, 10)
+//                                .overlay(
+//                                    RoundedRectangle(cornerRadius: 5)
+//                                        .stroke(Color.gray, lineWidth: 1)
+//                                )
+//                                .font(.system(size: 17))
+//                        }
+                        LimitedLineTextEditor(
+                            text: $bio,
+                            placeholder: "Write a short bio about yourself",
+                            lineLimit: 11
+                        )
+                        .frame(width: 300)
+
                     }
 
                     Button(action: {

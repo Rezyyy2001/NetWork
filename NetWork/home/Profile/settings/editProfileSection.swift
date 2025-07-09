@@ -121,23 +121,6 @@ public struct EditProfileSection: View {
                     }
 
                     VStack(alignment: .leading, spacing: 5) {
-//                        ZStack(alignment: .topLeading) {
-//                            if bio.isEmpty {
-//                                Text("Write a short bio about yourself")
-//                                    .foregroundColor(.gray)
-//                                    .padding(.top, 8)
-//                                    .padding(.horizontal, 14)
-//                                  
-//                            }
-//                            TextEditor(text: $bio)
-//                                .frame(width: 300, height: 100)
-//                                .padding(.horizontal, 10)
-//                                .overlay(
-//                                    RoundedRectangle(cornerRadius: 5)
-//                                        .stroke(Color.gray, lineWidth: 1)
-//                                )
-//                                .font(.system(size: 17))
-//                        }
                         LimitedLineTextEditor(
                             text: $bio,
                             placeholder: "Write a short bio about yourself",

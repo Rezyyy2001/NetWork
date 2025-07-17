@@ -126,7 +126,7 @@ public struct EditProfileSection: View {
                             placeholder: "Write a short bio about yourself",
                             lineLimit: 11
                         )
-                        .frame(width: 300)
+                        .frame(width: 325)
 
                     }
 

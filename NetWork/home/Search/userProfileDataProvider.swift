@@ -7,11 +7,9 @@
 
 import Foundation
 
-@MainActor
 // if a struct or class conforms to userProfileDataProvider, it must follow these methods or properties.
-
 // so if a struct conforms to userProfileDataProvider, name needs to be a string, bio needs to be an optional string, etc
-
+@MainActor
 protocol UserProfileDataProvider {
     var name: String { get }
     var bio: String? { get }

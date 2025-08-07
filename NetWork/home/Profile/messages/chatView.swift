@@ -49,6 +49,8 @@ struct ChatView: View {
             }
 
             Divider()
+            
+// TODO: we need to make it so that you are able to hit enter and make a new line in the chat box
 
             // adds input field and binds text to viewModel.newMessage
             HStack {
@@ -67,5 +69,3 @@ struct ChatView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-

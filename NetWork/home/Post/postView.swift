@@ -13,8 +13,6 @@ struct PostView: View {
     @State private var numberOfPeople: Int = 1
     @State private var selectedDate = Date()
     @State private var hasEdited: Bool = false
-    
-    
 
     var body: some View {
         NavigationView {
@@ -32,7 +30,7 @@ struct PostView: View {
                         LimitedLineTextEditor(
                             text: $extraInfo,
                             placeholder: "What are you looking for in this hitting session?",
-                            lineLimit: 11
+                            lineLimit: 13
                         )
                     }
 

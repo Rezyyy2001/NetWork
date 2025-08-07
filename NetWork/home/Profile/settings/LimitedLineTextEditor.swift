@@ -22,6 +22,14 @@ struct LimitedLineTextEditor: View {
                 .frame(height: lineHeight * CGFloat(max(4, min(lineCount(text), lineLimit))))
                 .font(.custom("Monaco", size: 14))
                 .scrollDisabled(true)
+                .onChange(of: text) { oldValue, newValue in
+                    let currentLines = lineCount(newValue)
+                    if currentLines <= lineLimit {
+                        lastValidText = newValue
+                    } else {
+                        text = lastValidText
+                    }
+                }
                 .overlay(
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(Color.gray, lineWidth: 1)
@@ -56,3 +64,5 @@ struct LimitedLineTextEditor: View {
 /// There was an issue with how i first approached making a placeholder for the texteditor. I got it to work initially with editProfileSection but when I tried to reuse it in postView the placeholder would not show.
 /// Initially thought that maybe it was because of the public of private class causeing the issue which was not the case. Got rid of the GroupBox which was also not the case. ScrollView which was also not the case.
 /// Made it look exactly like editProfileSection and it still did not show the placeholder. Deduced that it had something to do with the Navigation hierarchy and the ZStack which messed up the ordering of the ZStack.
+///
+/// The main fix was the textEditor being layered so that it can keep track of the text being empty or not. The overlay does not always work so we got rid of it and made the placeholder and the TextEditor te same layout.

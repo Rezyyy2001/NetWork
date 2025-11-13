@@ -50,7 +50,7 @@ final class MessageListViewModel: ObservableObject { // Allows the class to noti
     private func fetchUserStubs(from ids: [String]) {
         guard !ids.isEmpty else { return } // error handling no id
 
-        let group = DispatchGroup() // used to wait for all assync fetches to finish
+        let group = DispatchGroup() // used to wait for all async fetches to finish
         var stubs: [UserStub] = [] // list of userStubs
 
         for id in ids {

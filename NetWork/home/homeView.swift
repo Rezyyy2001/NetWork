@@ -19,31 +19,30 @@ struct HomeView: View {
     ]
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack {
-                Spacer()
-                if tabselection == 1 {
-                    FriendsView()
-                } else if tabselection == 2 {
-                    LocalView()
-                } else if tabselection == 3 {
-                    PostView()
-                } else if tabselection == 4 {
-                    SearchView() 
-                } else if tabselection == 5 {
-                    ProfileView()
+        VStack {
+            ZStack(alignment: .bottom) {
+                VStack {
+                    if tabselection == 1 {
+                        FriendsView()
+                    } else if tabselection == 2 {
+                        LocalView()
+                    } else if tabselection == 3 {
+                        PostView()
+                    } else if tabselection == 4 {
+                        SearchView()
+                    } else if tabselection == 5 {
+                        ProfileView()
+                    }
                 }
+                
+                CustomTabView(tabSelection: $tabselection, items: homeTabItems)
             }
-            .frame(maxHeight: .infinity)
-            .padding(12)
-            
-            CustomTabView(tabSelection: $tabselection, items: homeTabItems)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                Color(.white)
+                    .edgesIgnoringSafeArea(.all)
+            )
         }
-        .frame(maxHeight: .infinity)
-        .background(
-            Color(.white)
-                .edgesIgnoringSafeArea(.all)
-        )
     }
 }
 

@@ -11,7 +11,6 @@ struct UserProfileView: View {
     @StateObject private var viewModel: UserProfileViewModel
     @Environment(\.dismiss) private var dismiss
     
-    
     init(userID: String) {
         _viewModel = StateObject(wrappedValue: UserProfileViewModel(userID: userID))
     }

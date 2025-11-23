@@ -6,21 +6,22 @@
 //
 
 import SwiftUI
-    
+
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel() //observes profileViewModel
     
     var body: some View {
         
-        VStack{
-            // This is where all the child views will stack up 
+        VStack {
+            // This is where all the child views will stack up
             HeaderView(viewModel: viewModel)
             InfoView(viewModel: viewModel)
             BiographyView(viewModel: viewModel)
             Spacer()
             
         }
-        .padding(.horizontal, 9)
+        .padding(.horizontal, 2)
+        .ignoresSafeArea(.container, edges: .horizontal)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -49,6 +50,8 @@ struct ProfileView: View {
         }
         
         .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        
         .sheet(isPresented: $viewModel.showMessageView) {
             MessageListView(currentUserID: viewModel.user?.uid ?? "")
         }

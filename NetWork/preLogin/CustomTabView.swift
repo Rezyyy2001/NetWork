@@ -14,30 +14,11 @@ struct CustomTabView: View {
     
     let items: [(image: String, title: String)]
     
-    private var tabBarOffset: CGFloat { // for the signupLoginView tab and the homeView tab
-        items.count <= 2 ? 80 : UIScreen.main.bounds.height - 80
-    }
-    
-    private var capsuleWidth: CGFloat { // layout for 2 tabs
-        if items.count <= 2 {
-            return 300
-        } else {
-            return CGFloat(items.count) * 80
-        }
-    }
-    
-    private var indicatorWidth: CGFloat { // the blue underline change for each tab
-        if items.count <= 2 {
-            return capsuleWidth / CGFloat(items.count)
-        } else {
-            return capsuleWidth / CGFloat(items.count) * 0.9
-        }
-    }
-    
     var body: some View {
         ZStack {
             Capsule()
-                .frame(width: capsuleWidth, height: 80)
+                .frame(maxWidth: .infinity)
+                .frame(height: 80)
                 .foregroundColor(Color(.secondarySystemBackground))
                 .shadow(radius: 4)
             
@@ -55,7 +36,8 @@ struct CustomTabView: View {
                             
                             if index + 1 == tabSelection {
                                 Capsule()
-                                    .frame(width: indicatorWidth, height: 8)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 8)
                                     .foregroundColor(.blue)
                                     
                                     .matchedGeometryEffect(id: "SelectedTabId", in: animationNamespace)
@@ -63,17 +45,20 @@ struct CustomTabView: View {
 
                             } else {
                                 Capsule()
-                                    .frame(width: indicatorWidth, height: 8)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 8)
                                     .foregroundColor(.clear)
                                     .offset(y: 3)
                             }
                         }
                         .foregroundColor(index + 1 == tabSelection ? .blue : .gray)
-                        .frame(maxWidth: indicatorWidth)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 8)
                     }
                 }
             }
             .frame(height: 80)
+            .frame(maxWidth: .infinity)
             .clipShape(Capsule())
         }
         .padding(.horizontal)

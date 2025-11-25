@@ -11,7 +11,7 @@ struct LocalView: View {
     var body: some View {
         ZStack {
             Color.blue.opacity(0.2).ignoresSafeArea()
-            floatingSheet()
+            floatingCard()
         
         }
         .navigationBarBackButtonHidden(true)

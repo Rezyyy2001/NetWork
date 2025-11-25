@@ -9,9 +9,14 @@ import SwiftUI
 
 struct LocalView: View {
     var body: some View {
-        Text("Local View")
-            .navigationBarBackButtonHidden(true)
+        ZStack {
+            Color.blue.opacity(0.2).ignoresSafeArea()
+            floatingSheet()
+        
+        }
+        .navigationBarBackButtonHidden(true)
     }
+        
 }
 
 #Preview {

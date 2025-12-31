@@ -42,7 +42,9 @@ final class MessageListViewModel: ObservableObject { // Allows the class to noti
                 }
 
                 // feeds friendID to fetchUserStub
-                self.fetchUserStubs(from: friendIDs)
+                Task { @MainActor in
+                    self.fetchUserStubs(from: friendIDs)
+                }
             }
     }
 

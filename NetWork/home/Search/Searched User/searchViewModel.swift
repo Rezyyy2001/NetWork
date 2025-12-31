@@ -31,12 +31,14 @@ final class SearchViewModel: ObservableObject {
                 }
                 
                 // converts the data in the snapshot into userStubs
-                self.searchResults = snapshot?.documents.compactMap { doc in
-                    let data = doc.data()
-                    let name = data["name"] as? String
-                    let uid = doc.documentID
-                    return UserStub(uid: uid, displayName: name)
-                } ?? [] // if snapshot is empty return empty array
+                Task { @MainActor in
+                    self.searchResults = snapshot?.documents.compactMap { doc in
+                        let data = doc.data()
+                        let name = data["name"] as? String
+                        let uid = doc.documentID
+                        return UserStub(uid: uid, displayName: name)
+                    } ?? [] // if snapshot is empty return empty array
+                }
             }
     }
 }

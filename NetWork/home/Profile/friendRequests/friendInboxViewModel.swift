@@ -31,7 +31,9 @@ final class FriendInboxViewModel: ObservableObject {
                     $0.data()["userID1"] as? String
                 } ?? []
 
-                self.fetchStubs(for: senderIDs)
+                Task { @MainActor in
+                    self.fetchStubs(for: senderIDs)
+                }
             }
     }
 

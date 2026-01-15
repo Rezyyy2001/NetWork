@@ -50,11 +50,9 @@ struct PostView: View {
 
                 // Post Button
                 Button(action: {
-                    // Handle post logic
-                    print("Location: \(location)")
-                    print("Extra Info: \(extraInfo)")
-                    print("Looking for \(numberOfPeople) player(s)")
-                    print("Time: \(selectedDate)")
+                    googlePlacesAPI.searchTennisCourt(query: location)
+                    // rest of the output
+
                 }) {
                     Text("Post")
                         .fontWeight(.bold)

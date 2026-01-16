@@ -17,64 +17,83 @@ struct PostView: View {
     var body: some View {
         
         ScrollView {
-            VStack(spacing: 0) {
+            VStack(spacing: 20) {
                 
                 // Location
-                GroupBox(label: Label("Where will you be hitting?", systemImage: "mappin.and.ellipse")) {
-                    TextField("e.g. Foss Park, Somerville", text: $location)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                        .padding(10)
 
-                // Extra Info
-                GroupBox(label: Label("Extra Info", systemImage: "info.circle")) {
-                    LimitedLineTextEditor(
-                        text: $extraInfo,
-                        placeholder: "What are you looking for in this hitting session?",
-                        lineLimit: 13
-                    )
+                    TextField("Where are you hitting?", text: $location)
+                        .autocorrectionDisabled()
+                        .autocapitalization(.none)
                 }
-
-                // Number of People
-                GroupBox(label: Label("How many people?", systemImage: "person.3.fill")) {
-                    Stepper(value: $numberOfPeople, in: 1...10) {
-                        Text("\(numberOfPeople) player\(numberOfPeople > 1 ? "s" : "")")
-                            .fontWeight(.medium)
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
+                
+                // Recents implementation
+                VStack(alignment: .leading) {
+                    Text("Recents")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+        
+                // HStack with players and date
+                HStack {
+                    // Number of players: The value on the left looks awkward, too much space.
+                    VStack {
+                        Text("Players")
+                            .font(.headline)
+                        
+                        Stepper(value: $numberOfPeople, in: 1...10) {
+                            Text("\(numberOfPeople)")
+                        }
+                    }
+                    
+                    // Date
+                    VStack {
+                        Text("Time")
+                            .font(.headline)
+                        DatePicker(
+                            "",
+                            selection: $selectedDate,
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
+                        .labelsHidden()
                     }
                 }
-
-                // Preferred Time
-                GroupBox(label: Label("Preferred Time", systemImage: "calendar.badge.clock")) {
-                    DatePicker("Select time", selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
-                        .datePickerStyle(.compact)
-                }
-
-                // Post Button
-                Button(action: {
-                    googlePlacesAPI.searchTennisCourt(query: location)
-                    // rest of the output
-
-                }) {
-                    Text("Post")
-                        .fontWeight(.bold)
-                        .frame(maxWidth: 100)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                }
-                .padding()
+                
+                LimitedLineTextEditor(
+                    text: $extraInfo,
+                    placeholder: "What are you looking for in this session?",
+                    lineLimit: 13
+                )
+                
             }
-            .frame(maxHeight: .infinity)
-            .padding(.bottom)
-            .navigationTitle("New Hitting Post")
-            .navigationBarBackButtonHidden(true)
+            .padding(.horizontal)
+            // Post Button
+            Button(action: {
+                googlePlacesAPI.searchTennisCourt(query: location)
+                // rest of the output
+
+            }) {
+                Text("Post")
+                    .fontWeight(.bold)
+                    .frame(maxWidth: 100)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+            }
+            .padding()
         }
-        .frame(maxHeight: .infinity)
+//        .frame(maxHeight: .infinity)
+        .padding(.bottom)
+        .navigationTitle("New Hit")
+        .navigationBarBackButtonHidden(true)
+        
     }
-
 }
-
-
 
 #Preview {
     PostView()

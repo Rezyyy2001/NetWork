@@ -16,7 +16,7 @@ struct ContentView: View {
                 Color.green
                     .ignoresSafeArea()
                 Button(action: { showLoginSignupView = true}) { //this button shows the LoginSignupView
-                    tennisCourt()
+                    TennisCourt()
                         .stroke(Color.white, lineWidth: 4)
                         .background(Color(red: 30/255, green: 143/255, blue: 213/255))
                         .frame(width: 300, height: 650)
@@ -38,7 +38,7 @@ struct ContentView: View {
     }
 }
 
-struct tennisCourt: Shape { // defines the tennis court layout
+struct TennisCourt: Shape { // defines the tennis court layout
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let serviceLineDepth: CGFloat = 150

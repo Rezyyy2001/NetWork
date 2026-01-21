@@ -33,11 +33,13 @@ struct PostView: View {
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
                 
                 // Recents implementation
-                VStack(alignment: .leading) {
+                HStack (spacing: 2) {
                     Text("Recents")
+                    Image(systemName: "chevron.right")
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-        
+                .bold()
+            
                 // HStack with players and date
                 HStack {
                     // Number of players: The value on the left looks awkward, too much space.

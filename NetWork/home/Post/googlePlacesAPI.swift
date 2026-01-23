@@ -9,6 +9,7 @@ import Foundation
 
 struct googlePlacesAPI {
     // key: AIzaSyDtNooh32BlGSCmGhgwxnrzCh-8OhU7sZ4
+    // switch API key 
     
     static func searchTennisCourt(query: String) {
         let apiKey = "AIzaSyDtNooh32BlGSCmGhgwxnrzCh-8OhU7sZ4"
@@ -36,12 +37,32 @@ struct googlePlacesAPI {
                return
            }
             
-           if let jsonString = String(data: data, encoding: .utf8) {
-               print(jsonString)
-           }
+            do {
+                let decoded = try JSONDecoder().decode(TextSearchResponse.self, from: data)
+                for place in decoded.results {
+                    print("Name:", place.name)
+                    print("Address:", place.formatted_address ?? "N/A")
+                    print("---")
+                }
+            } catch {
+                print("Decoding error:", error)
+            }
         }.resume()
     }
-    
 }
 
+// Decodable
 
+struct TextSearchResponse: Decodable {
+    let results: [PlaceResult]
+}
+
+struct PlaceResult: Decodable {
+    let name: String
+    let formatted_address: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case formatted_address = "formatted_address"
+    }
+}

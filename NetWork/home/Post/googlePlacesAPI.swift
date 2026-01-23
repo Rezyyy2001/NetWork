@@ -42,6 +42,7 @@ struct googlePlacesAPI {
                 for place in decoded.results {
                     print("Name:", place.name)
                     print("Address:", place.formatted_address ?? "N/A")
+                    print("Place ID:", place.id)
                     print("---")
                 }
             } catch {
@@ -57,11 +58,13 @@ struct TextSearchResponse: Decodable {
     let results: [PlaceResult]
 }
 
-struct PlaceResult: Decodable {
+struct PlaceResult: Decodable, Identifiable {
+    let id: String
     let name: String
     let formatted_address: String?
     
     enum CodingKeys: String, CodingKey {
+        case id = "place_id"
         case name
         case formatted_address = "formatted_address"
     }

@@ -12,7 +12,7 @@ struct googlePlacesAPI {
     // switch API key 
     
     static func searchTennisCourt(query: String) {
-        let apiKey = "AIzaSyDtNooh32BlGSCmGhgwxnrzCh-8OhU7sZ4"
+        let apiKey = "AIzaSyCj6kFpwsGmw1tYJ4yEpy0APApzSwWOthE"
 
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
         
@@ -26,6 +26,7 @@ struct googlePlacesAPI {
             return
         }
         
+        // dataTask is asynchronous
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
                print("Error:", error)
@@ -54,15 +55,20 @@ struct googlePlacesAPI {
 
 // Decodable
 
+// We put the results into an array
 struct TextSearchResponse: Decodable {
     let results: [PlaceResult]
 }
 
-struct PlaceResult: Decodable, Identifiable {
+// We define what the array is and what it contains
+// Codable so it can go from JSON to swift and swift to JSON
+// Identifiable to make it a list
+struct PlaceResult: Codable, Identifiable {
     let id: String
     let name: String
     let formatted_address: String?
     
+    // Coding keys to map JSON names to swift properties
     enum CodingKeys: String, CodingKey {
         case id = "place_id"
         case name

@@ -8,11 +8,9 @@
 import Foundation
 
 struct googlePlacesAPI {
-    // key: AIzaSyDtNooh32BlGSCmGhgwxnrzCh-8OhU7sZ4
-    // switch API key 
     
     static func searchTennisCourt(query: String) {
-        let apiKey = "AIzaSyCj6kFpwsGmw1tYJ4yEpy0APApzSwWOthE"
+        let apiKey = Secrets.googleAPIKey
 
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
         

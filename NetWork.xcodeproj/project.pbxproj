@@ -11,6 +11,8 @@
 		5B62A98D2D381F8400FDC7B0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5B62A98C2D381F8400FDC7B0 /* FirebaseFirestore */; };
 		5B7A6C882D0A7CDF004824B0 /* Article.md in Resources */ = {isa = PBXBuildFile; fileRef = 5B7A6C872D0A7CDF004824B0 /* Article.md */; };
 		5B80943B2CBDA184007AE322 /* CustomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B80943A2CBDA184007AE322 /* CustomTabView.swift */; };
+		5B9579242F355DBB00EDC584 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 5B9579232F355DBB00EDC584 /* Secrets.xcconfig */; };
+		5B9579282F355F0100EDC584 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9579272F355EFD00EDC584 /* Secrets.swift */; };
 		5B9BEB222CC092E200C80747 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9BEB212CC092E200C80747 /* InputView.swift */; };
 		5B9BEB262CC6099A00C80747 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9BEB252CC6099A00C80747 /* LoginView.swift */; };
 		5BB551E42D4966AB003F9D1E /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB551E32D4966A2003F9D1E /* SignupView.swift */; };
@@ -30,6 +32,9 @@
 		5B292D3B2D19253A001E0FDB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		5B7A6C872D0A7CDF004824B0 /* Article.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Article.md; sourceTree = "<group>"; };
 		5B80943A2CBDA184007AE322 /* CustomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabView.swift; sourceTree = "<group>"; };
+		5B9579232F355DBB00EDC584 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		5B9579252F355E6000EDC584 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B9579272F355EFD00EDC584 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		5B9BEB212CC092E200C80747 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 		5B9BEB252CC6099A00C80747 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		5BB551E32D4966A2003F9D1E /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
@@ -103,6 +108,9 @@
 		5BD056892C968C0900E6DADA = {
 			isa = PBXGroup;
 			children = (
+				5B9579272F355EFD00EDC584 /* Secrets.swift */,
+				5B9579252F355E6000EDC584 /* Info.plist */,
+				5B9579232F355DBB00EDC584 /* Secrets.xcconfig */,
 				5BD056942C968C0900E6DADA /* NetWork */,
 				5BC98D122CF6740D00D9A485 /* Frameworks */,
 				5BD056932C968C0900E6DADA /* Products */,
@@ -205,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5BD0569D2C968C0C00E6DADA /* Preview Assets.xcassets in Resources */,
+				5B9579242F355DBB00EDC584 /* Secrets.xcconfig in Resources */,
 				5B7A6C882D0A7CDF004824B0 /* Article.md in Resources */,
 				5BD0569A2C968C0C00E6DADA /* Assets.xcassets in Resources */,
 				5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */,
@@ -219,6 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5BB551E72D4966DB003F9D1E /* SignupViewModel.swift in Sources */,
+				5B9579282F355F0100EDC584 /* Secrets.swift in Sources */,
 				5B9BEB262CC6099A00C80747 /* LoginView.swift in Sources */,
 				5BC98D162CF80F9900D9A485 /* AuthenticationManager.swift in Sources */,
 				5BD056982C968C0900E6DADA /* ContentView.swift in Sources */,
@@ -236,6 +246,7 @@
 /* Begin XCBuildConfiguration section */
 		5BD0569E2C968C0C00E6DADA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B9579232F355DBB00EDC584 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -299,6 +310,7 @@
 		};
 		5BD0569F2C968C0C00E6DADA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B9579232F355DBB00EDC584 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -363,7 +375,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NetWork/Preview Content\"";
 				DEVELOPMENT_TEAM = B2AFZ5HCFB;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -392,7 +405,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NetWork/Preview Content\"";
 				DEVELOPMENT_TEAM = B2AFZ5HCFB;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

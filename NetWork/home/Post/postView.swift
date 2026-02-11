@@ -44,12 +44,12 @@ struct PostView: View {
                 HStack {
                     // Number of players: The value on the left looks awkward, too much space.
                     VStack {
-                        Text("Players")
+                        Text("Players \(numberOfPeople)")
                             .font(.headline)
-                        
                         Stepper(value: $numberOfPeople, in: 1...10) {
-                            Text("\(numberOfPeople)")
+                            
                         }
+                        .labelsHidden()
                     }
                     
                     // Date

@@ -15,52 +15,16 @@ final class FriendInboxViewModel: ObservableObject {
 
     private let db = Firestore.firestore()
     
+    private let service = FriendInboxService()
+    
     func fetchPendingRequests() {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
-
-        db.collection("friendships")
-            .whereField("userID2", isEqualTo: currentUserID)
-            .whereField("status", isEqualTo: "pending")
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error fetching friend requests: \(error.localizedDescription)")
-                    return
-                }
-
-                let senderIDs = snapshot?.documents.compactMap {
-                    $0.data()["userID1"] as? String
-                } ?? []
-
-                Task { @MainActor in
-                    self.fetchStubs(for: senderIDs)
-                }
-            }
-    }
-
-    private func fetchStubs(for userIDs: [String]) {
-        var loadedStubs: [UserStub] = []
-        let group = DispatchGroup()
-
-        for id in userIDs {
-            group.enter()
-            db.collection("users").document(id).getDocument { docSnapshot, error in
-                defer { group.leave() }
-
-                guard let data = docSnapshot?.data() else { return }
-
-                let stub = UserStub(
-                    uid: id,
-                    displayName: data["name"] as? String ?? "Unknown"
-                )
-
-                loadedStubs.append(stub)
-            }
-        }
-
-        group.notify(queue: .main) {
-            self.stubs = loadedStubs
+        
+        Task {
+            self.stubs = await service.fetchPendingRequests(for: currentUserID)
         }
     }
 }
+
 
 

@@ -32,7 +32,7 @@ final class FriendInboxService {
 
         for id in userIDs {
             guard let doc = try? await db.collection("users").document(id).getDocument(), let data = doc.data()
-                    else { continue }
+            else { continue }
             
             let stub = UserStub(uid: id, displayName: data["name"] as? String ?? "Unknown")
             loadedStubs.append(stub)

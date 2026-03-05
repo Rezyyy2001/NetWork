@@ -12,8 +12,6 @@ import FirebaseAuth
 @MainActor
 final class FriendInboxViewModel: ObservableObject {
     @Published var stubs: [UserStub] = []
-
-    private let db = Firestore.firestore()
     
     private let service = FriendInboxService()
     
@@ -25,6 +23,3 @@ final class FriendInboxViewModel: ObservableObject {
         }
     }
 }
-
-
-

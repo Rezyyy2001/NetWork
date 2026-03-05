@@ -10,6 +10,7 @@ import FirebaseAuth
 
 @MainActor
 final class LoginViewModel: ObservableObject { // allows SwiftUI views to observe changes to its properties
+    
     @Published var email = ""
     @Published var password = ""
     @Published var isLoading = false

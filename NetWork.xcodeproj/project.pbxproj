@@ -7,50 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B292D3C2D19253A001E0FDB /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B292D3B2D19253A001E0FDB /* LoginViewModel.swift */; };
 		5B62A98D2D381F8400FDC7B0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5B62A98C2D381F8400FDC7B0 /* FirebaseFirestore */; };
 		5B7A6C882D0A7CDF004824B0 /* Article.md in Resources */ = {isa = PBXBuildFile; fileRef = 5B7A6C872D0A7CDF004824B0 /* Article.md */; };
-		5B80943B2CBDA184007AE322 /* CustomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B80943A2CBDA184007AE322 /* CustomTabView.swift */; };
-		5B9579242F355DBB00EDC584 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 5B9579232F355DBB00EDC584 /* Secrets.xcconfig */; };
 		5B9579282F355F0100EDC584 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9579272F355EFD00EDC584 /* Secrets.swift */; };
-		5B9BEB222CC092E200C80747 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9BEB212CC092E200C80747 /* InputView.swift */; };
-		5B9BEB262CC6099A00C80747 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9BEB252CC6099A00C80747 /* LoginView.swift */; };
-		5BB551E42D4966AB003F9D1E /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB551E32D4966A2003F9D1E /* SignupView.swift */; };
-		5BB551E72D4966DB003F9D1E /* SignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB551E62D4966CF003F9D1E /* SignupViewModel.swift */; };
-		5BB552252D49A483003F9D1E /* LoginSignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB552242D49A47A003F9D1E /* LoginSignupView.swift */; };
 		5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */; };
 		5BC98D112CF5AD0F00D9A485 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D102CF5AD0F00D9A485 /* FirebaseAnalytics */; };
 		5BC98D142CF6740D00D9A485 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D132CF6740D00D9A485 /* FirebaseAuth */; };
-		5BC98D162CF80F9900D9A485 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC98D152CF80F9900D9A485 /* AuthenticationManager.swift */; };
-		5BD056962C968C0900E6DADA /* NetWorkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD056952C968C0900E6DADA /* NetWorkApp.swift */; };
-		5BD056982C968C0900E6DADA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD056972C968C0900E6DADA /* ContentView.swift */; };
 		5BD0569A2C968C0C00E6DADA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BD056992C968C0C00E6DADA /* Assets.xcassets */; };
 		5BD0569D2C968C0C00E6DADA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BD0569C2C968C0C00E6DADA /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5B292D3B2D19253A001E0FDB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		5B7A6C872D0A7CDF004824B0 /* Article.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Article.md; sourceTree = "<group>"; };
-		5B80943A2CBDA184007AE322 /* CustomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabView.swift; sourceTree = "<group>"; };
 		5B9579232F355DBB00EDC584 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		5B9579252F355E6000EDC584 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B9579272F355EFD00EDC584 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
-		5B9BEB212CC092E200C80747 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
-		5B9BEB252CC6099A00C80747 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		5BB551E32D4966A2003F9D1E /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
-		5BB551E62D4966CF003F9D1E /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
-		5BB552242D49A47A003F9D1E /* LoginSignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSignupView.swift; sourceTree = "<group>"; };
 		5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5BC98D152CF80F9900D9A485 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		5BD056922C968C0900E6DADA /* NetWork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetWork.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5BD056952C968C0900E6DADA /* NetWorkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorkApp.swift; sourceTree = "<group>"; };
-		5BD056972C968C0900E6DADA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5BD056992C968C0C00E6DADA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5BD0569C2C968C0C00E6DADA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		5B9BEB2E2CCD8CD700C80747 /* home */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = home; sourceTree = "<group>"; };
+		5B8F2A942F56120C005435A8 /* Model */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Model; sourceTree = "<group>"; };
+		5B8F2A962F561220005435A8 /* View */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = View; sourceTree = "<group>"; };
+		5B8F2A972F561229005435A8 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,37 +48,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5BB551792D3861DC003F9D1E /* preLogin */ = {
-			isa = PBXGroup;
-			children = (
-				5BB551E52D4966BF003F9D1E /* Signup */,
-				5BB5519B2D446F9F003F9D1E /* Login */,
-				5B80943A2CBDA184007AE322 /* CustomTabView.swift */,
-				5BD056972C968C0900E6DADA /* ContentView.swift */,
-				5B9BEB212CC092E200C80747 /* InputView.swift */,
-			);
-			path = preLogin;
-			sourceTree = "<group>";
-		};
-		5BB5519B2D446F9F003F9D1E /* Login */ = {
-			isa = PBXGroup;
-			children = (
-				5B292D3B2D19253A001E0FDB /* LoginViewModel.swift */,
-				5B9BEB252CC6099A00C80747 /* LoginView.swift */,
-				5BB552242D49A47A003F9D1E /* LoginSignupView.swift */,
-			);
-			path = Login;
-			sourceTree = "<group>";
-		};
-		5BB551E52D4966BF003F9D1E /* Signup */ = {
-			isa = PBXGroup;
-			children = (
-				5BB551E32D4966A2003F9D1E /* SignupView.swift */,
-				5BB551E62D4966CF003F9D1E /* SignupViewModel.swift */,
-			);
-			path = Signup;
-			sourceTree = "<group>";
-		};
 		5BC98D122CF6740D00D9A485 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,10 +58,10 @@
 		5BD056892C968C0900E6DADA = {
 			isa = PBXGroup;
 			children = (
+				5BD056942C968C0900E6DADA /* NetWork */,
 				5B9579272F355EFD00EDC584 /* Secrets.swift */,
 				5B9579252F355E6000EDC584 /* Info.plist */,
 				5B9579232F355DBB00EDC584 /* Secrets.xcconfig */,
-				5BD056942C968C0900E6DADA /* NetWork */,
 				5BC98D122CF6740D00D9A485 /* Frameworks */,
 				5BD056932C968C0900E6DADA /* Products */,
 				5B7A6C872D0A7CDF004824B0 /* Article.md */,
@@ -129,13 +79,12 @@
 		5BD056942C968C0900E6DADA /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
-				5BD056952C968C0900E6DADA /* NetWorkApp.swift */,
-				5BC98D152CF80F9900D9A485 /* AuthenticationManager.swift */,
-				5BB551792D3861DC003F9D1E /* preLogin */,
-				5B9BEB2E2CCD8CD700C80747 /* home */,
 				5BD056992C968C0C00E6DADA /* Assets.xcassets */,
 				5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */,
 				5BD0569B2C968C0C00E6DADA /* Preview Content */,
+				5B8F2A972F561229005435A8 /* ViewModel */,
+				5B8F2A962F561220005435A8 /* View */,
+				5B8F2A942F56120C005435A8 /* Model */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -164,7 +113,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				5B9BEB2E2CCD8CD700C80747 /* home */,
+				5B8F2A942F56120C005435A8 /* Model */,
+				5B8F2A962F561220005435A8 /* View */,
+				5B8F2A972F561229005435A8 /* ViewModel */,
 			);
 			name = NetWork;
 			productName = NetWork;
@@ -179,7 +130,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					5BD056912C968C0900E6DADA = {
 						CreatedOnToolsVersion = 15.4;
@@ -213,7 +164,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5BD0569D2C968C0C00E6DADA /* Preview Assets.xcassets in Resources */,
-				5B9579242F355DBB00EDC584 /* Secrets.xcconfig in Resources */,
 				5B7A6C882D0A7CDF004824B0 /* Article.md in Resources */,
 				5BD0569A2C968C0C00E6DADA /* Assets.xcassets in Resources */,
 				5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */,
@@ -227,17 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BB551E72D4966DB003F9D1E /* SignupViewModel.swift in Sources */,
 				5B9579282F355F0100EDC584 /* Secrets.swift in Sources */,
-				5B9BEB262CC6099A00C80747 /* LoginView.swift in Sources */,
-				5BC98D162CF80F9900D9A485 /* AuthenticationManager.swift in Sources */,
-				5BD056982C968C0900E6DADA /* ContentView.swift in Sources */,
-				5B9BEB222CC092E200C80747 /* InputView.swift in Sources */,
-				5BB552252D49A483003F9D1E /* LoginSignupView.swift in Sources */,
-				5BB551E42D4966AB003F9D1E /* SignupView.swift in Sources */,
-				5B292D3C2D19253A001E0FDB /* LoginViewModel.swift in Sources */,
-				5BD056962C968C0900E6DADA /* NetWorkApp.swift in Sources */,
-				5B80943B2CBDA184007AE322 /* CustomTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +220,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B2AFZ5HCFB;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -303,6 +244,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -344,6 +286,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B2AFZ5HCFB;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -360,6 +303,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -373,7 +317,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NetWork/Preview Content\"";
-				DEVELOPMENT_TEAM = B2AFZ5HCFB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
@@ -403,7 +346,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NetWork/Preview Content\"";
-				DEVELOPMENT_TEAM = B2AFZ5HCFB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;

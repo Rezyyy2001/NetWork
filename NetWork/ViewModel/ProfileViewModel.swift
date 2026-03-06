@@ -52,16 +52,14 @@ final class ProfileViewModel: ObservableObject, UserProfileDataProvider {
             self.usualSpot = fetchedUsualSpot
 
             if let birthdate = birthday {
-                self.age = calculateAge(from: birthdate)
+                self.age = birthdate.age
             }
         } catch {
             self.errorMessage = "Failed to fetch profile: \(error.localizedDescription)"
         }
     }
-
-    private func calculateAge(from birthdate: Date) -> Int {
-        Calendar.current.dateComponents([.year], from: birthdate, to: Date()).year ?? 0
-    }
 }
+
+
 
 

@@ -14,7 +14,7 @@ struct BiographyView<T: UserProfileDataProvider & ObservableObject>: View {
     var body: some View {
         VStack {
             //
-            Text(viewModel.bio ?? "No Biography Set") //gets the bio from profileViewModel
+            Text(viewModel.bio ?? "No Biography Set") //gets the bio from CurrentUserProfileViewModel
                 .padding()
                 .font(.system(size: 15))
                 .frame(maxWidth: .infinity, alignment: .leading)

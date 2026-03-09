@@ -1,5 +1,5 @@
 //
-//  userProfileManager.swift
+//  CurrentUserService.swift
 //  NetWork
 //
 //  Created by Rezka Yuspi on 2/10/25.
@@ -9,12 +9,12 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-final class UserProfileManager {
+final class CurrentUserService {
     
-    static let shared = UserProfileManager()
+    static let shared = CurrentUserService()
     init() {}
     
-    struct UserProfile {
+    struct CurrentUserProfile {
         let name: String
         let UTR: Double
         let USTA: Double
@@ -62,7 +62,7 @@ final class UserProfileManager {
     }
 
     // Fetch user profile data from Firestore
-    func fetchUserProfile() async throws -> UserProfile {
+    func fetchUserProfile() async throws -> CurrentUserProfile {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
@@ -75,7 +75,7 @@ final class UserProfileManager {
         let timestamp = data["birthday"] as? Timestamp
         let birthday = timestamp?.dateValue()
 
-        return UserProfile(
+        return CurrentUserProfile(
             name: data["name"] as? String ?? "",
             UTR: data["UTR"] as? Double ?? 0.0,
             USTA: data["USTA"] as? Double ?? 0.0,

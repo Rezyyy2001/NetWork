@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct UserProfileView: View {
-    @StateObject private var viewModel: UserProfileViewModel
+    @StateObject private var viewModel: OtherUserProfileViewModel
     @Environment(\.dismiss) private var dismiss
     
     init(userID: String) {
-        _viewModel = StateObject(wrappedValue: UserProfileViewModel(userID: userID))
+        _viewModel = StateObject(wrappedValue: OtherUserProfileViewModel(userID: userID))
     }
     
     var body: some View {

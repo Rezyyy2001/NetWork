@@ -133,7 +133,7 @@ public struct EditProfileSection: View {
                     Button(action: {
                         Task {
                             do {
-                                let currentUserProfile = try await UserProfileManager.shared.fetchUserProfile()
+                                let currentUserProfile = try await CurrentUserService.shared.fetchUserProfile()
                                 
                                 let updatedName = name.isEmpty ? currentUserProfile.name : name
                                 let updatedUTR = UTR == 0 ? currentUserProfile.UTR : UTR
@@ -141,7 +141,7 @@ public struct EditProfileSection: View {
                                 let updatedUsualSpot = usualSpot.isEmpty ? currentUserProfile.usualSpot : usualSpot
                                 let updatedBio = bio.isEmpty ? currentUserProfile.bio : bio
 
-                                let updatedUser = try await UserProfileManager.shared.updateProfile(
+                                let updatedUser = try await CurrentUserService.shared.updateProfile(
                                     name: updatedName,
                                     UTR: updatedUTR,
                                     USTA: updatedUSTA,

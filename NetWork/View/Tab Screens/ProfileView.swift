@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @StateObject private var viewModel = ProfileViewModel() //observes profileViewModel
+    @StateObject private var viewModel = CurrentUserProfileViewModel() //observes CurrentUserProfileViewModel
     
     var body: some View {
         
@@ -64,7 +64,7 @@ struct ProfileView: View {
         //This whole block of code is to keep the data updated
         .task {
             if viewModel.user == nil {
-                await viewModel.fetchUserProfile()
+                await viewModel.fetchCurrentUserProfile()
             }
         }
     }

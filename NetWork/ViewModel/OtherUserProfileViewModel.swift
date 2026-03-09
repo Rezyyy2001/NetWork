@@ -1,5 +1,5 @@
 //
-//  userProfileViewModel.swift
+//  OtherUserProfileViewModel.swift
 //  NetWork
 //
 //  Created by Rezka Yuspi on 3/25/25.
@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 @MainActor
-final class UserProfileViewModel: ObservableObject, UserProfileDataProvider {
+final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider {
     
     // userProfileDataProvider ensures that the properties are the correct type
     @Published var displayName: String = "Loading..."

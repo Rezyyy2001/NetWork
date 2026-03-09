@@ -1,5 +1,5 @@
 //
-//  profileViewModel.swift
+//  CurrentUserProfileViewModel.swift
 //  NetWork
 //
 //  Created by Rezka Yuspi on 1/29/25.
@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 @MainActor
-final class ProfileViewModel: ObservableObject, UserProfileDataProvider {
+final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvider {
     // UI State
     @Published var showSettings = false
     @Published var showFriendRequests = false
@@ -34,13 +34,13 @@ final class ProfileViewModel: ObservableObject, UserProfileDataProvider {
     init() {
         if let currentUser = Auth.auth().currentUser {
             self.uid = currentUser.uid
-            Task { await fetchUserProfile() }
+            Task { await fetchCurrentUserProfile() }
         } else {
             self.errorMessage = "No user logged in."
         }
     }
 
-    func fetchUserProfile() async {
+    func fetchCurrentUserProfile() async {
         do {
             let (userData, fetchedUTR, fetchedUSTA, fetchedBio, fetchedUsualSpot, birthday) =
                 try await AuthenticationManager.shared.getUserProfile()

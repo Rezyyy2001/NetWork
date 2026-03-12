@@ -13,26 +13,6 @@ final class CurrentUserService {
     
     static let shared = CurrentUserService()
     init() {}
-    
-    struct CurrentUserProfile {
-        let name: String
-        let UTR: Double
-        let USTA: Double
-        let usualSpot: String
-        let bio: String
-        let birthday: Date?
-        
-        var age: Int? {
-                guard let birthday = birthday else { return nil }
-                return calculateAge(from: birthday)
-        }
-        
-        private func calculateAge(from birthdate: Date) -> Int {
-                let calendar = Calendar.current
-                let ageComponents = calendar.dateComponents([.year], from: birthdate, to: Date())
-                return ageComponents.year ?? 0
-        }
-    }
 
     // Update profile information in Firebase Auth and Firestore
     func updateProfile(name: String, UTR: Double, USTA: Double, usualSpot: String, bio: String) async throws -> User {
@@ -62,7 +42,7 @@ final class CurrentUserService {
     }
 
     // Fetch user profile data from Firestore
-    func fetchUserProfile() async throws -> CurrentUserProfile {
+    func fetchUserProfile() async throws -> UserProfile {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
@@ -75,7 +55,7 @@ final class CurrentUserService {
         let timestamp = data["birthday"] as? Timestamp
         let birthday = timestamp?.dateValue()
 
-        return CurrentUserProfile(
+        return UserProfile(
             name: data["name"] as? String ?? "",
             UTR: data["UTR"] as? Double ?? 0.0,
             USTA: data["USTA"] as? Double ?? 0.0,

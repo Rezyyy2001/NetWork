@@ -11,6 +11,8 @@ import FirebaseFirestore
 @MainActor
 final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider {
     
+    private let service = OtherUserProfileService()
+    
     // userProfileDataProvider ensures that the properties are the correct type
     @Published var displayName: String = "Loading..."
     @Published var bio: String? = "No bio available."
@@ -20,9 +22,10 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
     @Published var age: Int = 0
     
     @Published var friendshipStatus: friendshipStatus = .none
+    
+    @Published var errorMessage: String? = nil
 
     private let userID: String
-    private let db = Firestore.firestore()
     
     enum friendshipStatus: String {
         case none
@@ -41,35 +44,25 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
     
     init(userID: String) {
         self.userID = userID
-        fetchUserProfile()
+        fetchUserProfile(for: userID)
     }
      
-    func fetchUserProfile() {
-        db.collection("users").document(userID).getDocument { snapshot, error in
-            if let error = error {
-                print("Error fetching user data: \(error.localizedDescription)")
-                return
-            }
-            
-            guard let data = snapshot?.data() else {
-                print("No data found for user \(self.userID)")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.displayName = data["name"] as? String ?? "Unknown"
-                self.bio = data["bio"] as? String ?? "No bio available."
-                self.usualSpot = data["usualSpot"] as? String ?? "Unknown location."
-                self.utr = data["UTR"] as? Double ?? 0.0
-                self.usta = data["USTA"] as? Double ?? 0.0
+    func fetchUserProfile(for userID: String) {
+        Task {
+            do {
+                let profile = try await service.fetchUserProfile(userID: userID)
                 
-                if let timestamp = data["birthday"] as? Timestamp {
-                    self.age = self.calculateAge(from: timestamp.dateValue())
+                self.displayName = profile.name
+                self.bio = profile.bio
+                self.usualSpot = profile.usualSpot
+                self.utr = profile.UTR
+                self.usta = profile.USTA
+                if let birthday = profile.birthday {
+                    self.age = birthday.age
                 }
+            } catch {
+                self.errorMessage = "Could not find user"
             }
         }
-    }
-    private func calculateAge(from birthdate: Date) -> Int {
-        Calendar.current.dateComponents([.year], from: birthdate, to: Date()).year ?? 0
     }
 }

@@ -74,33 +74,4 @@ final class AuthenticationManager { // for firebase authentication logic
         }
         return AuthDataResultModel(user: user) // to check user first before displaying UI elements
     }
-    func updateDisplayName(newName: String) async throws { // ensures there is a user before updating the name
-        guard let user = Auth.auth().currentUser else {
-            throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
-        }
-        
-        let changeRequest = user.createProfileChangeRequest() // updates the users firebase authentication profile name
-        changeRequest.displayName = newName
-        try await changeRequest.commitChanges()
-        
-        try await Firestore.firestore() // firestore will also get updated
-            .collection("users")
-            .document(user.uid)
-            .updateData(["name": newName])
-    }
-    func getUserProfile() async throws -> (AuthDataResultModel, Double?, Double?, String?, String?, Date?) {
-        guard let user = Auth.auth().currentUser else { // checks if user is signedIn
-            throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)
-        }
-        let userRef = Firestore.firestore().collection("users").document(user.uid) // fetches the data in users collection
-        let document = try await userRef.getDocument() // fetches the document data
-        
-        let UTR = document.data()?["UTR"] as? Double 
-        let USTA = document.data()?["USTA"] as? Double
-        let bio = document.data()?["bio"] as? String
-        let usualSpot = document.data()?["usualSpot"] as? String
-        let birthday = (document.data()?["birthday"] as? Timestamp)?.dateValue() // fetches birthday from firestore
-        
-        return (AuthDataResultModel(user: user, bio: bio, usualSpot: usualSpot), UTR, USTA, bio, usualSpot, birthday)
-    }
 }

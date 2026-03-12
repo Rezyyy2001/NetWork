@@ -10,6 +10,10 @@ import FirebaseAuth
 
 @MainActor
 final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvider {
+    
+    
+    private let service = CurrentUserService()
+    
     // UI State
     @Published var showSettings = false
     @Published var showFriendRequests = false
@@ -17,20 +21,20 @@ final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvid
     @Published var errorMessage: String? = nil
 
     // Auth info
-    @Published var user: AuthDataResultModel? = nil
     @Published var uid: String = ""
 
     // Profile data
-    @Published var utr: Double? = nil
-    @Published var usta: Double? = nil
-    @Published var bio: String? = nil
-    @Published var usualSpot: String? = nil
+    @Published var displayName: String = "Loading..."
+    @Published var bio: String? = "No bio available."
+    @Published var usualSpot: String? = "Unknown location."
+    @Published var utr: Double? = 0.0
+    @Published var usta: Double? = 0.0
     @Published var age: Int = 0
-
+    
     var name: String {
-        user?.displayName ?? "Unknown"
+        displayName
     }
-
+    
     init() {
         if let currentUser = Auth.auth().currentUser {
             self.uid = currentUser.uid
@@ -42,20 +46,18 @@ final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvid
 
     func fetchCurrentUserProfile() async {
         do {
-            let (userData, fetchedUTR, fetchedUSTA, fetchedBio, fetchedUsualSpot, birthday) =
-                try await AuthenticationManager.shared.getUserProfile()
-
-            self.user = userData
-            self.utr = fetchedUTR
-            self.usta = fetchedUSTA
-            self.bio = fetchedBio
-            self.usualSpot = fetchedUsualSpot
-
-            if let birthdate = birthday {
-                self.age = birthdate.age
+            let profile = try await service.fetchUserProfile()
+            
+            self.displayName = profile.name
+            self.bio = profile.bio
+            self.usualSpot = profile.usualSpot
+            self.utr = profile.UTR
+            self.usta = profile.USTA
+            if let birthday = profile.birthday {
+                self.age = birthday.age
             }
         } catch {
-            self.errorMessage = "Failed to fetch profile: \(error.localizedDescription)"
+            self.errorMessage = "Could not find user"
         }
     }
 }

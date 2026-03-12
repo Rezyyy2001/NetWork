@@ -94,17 +94,15 @@ public struct SettingsView: View {
 
     private func loadUserProfile() async {
         do {
-            let (userData, fetchedUTR, fetchedUSTA, fetchedBio, fetchedUsualSpot, fetchedBirthday) = try await AuthenticationManager.shared.getUserProfile()
-            name = userData.displayName ?? ""
-            UTR = fetchedUTR ?? 0.0
-            USTA = fetchedUSTA ?? 0.0
-            bio = fetchedBio ?? ""
-            usualSpot = fetchedUsualSpot ?? ""
-            
-            if let birthday = fetchedBirthday {
-                age = calculateAge(from: birthday)
+            let profile = try await CurrentUserService.shared.fetchUserProfile()
+            name = profile.name
+            UTR = profile.UTR
+            USTA = profile.USTA
+            bio = profile.bio ?? ""
+            usualSpot = profile.usualSpot ?? ""
+            if let birthday = profile.birthday {
+                age = birthday.age
             }
-            
         } catch {
             errorMessage = "Failed to load profile: \(error.localizedDescription)"
             showErrorAlert = true

@@ -53,7 +53,7 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
         
         .sheet(isPresented: $viewModel.showMessageView) {
-            MessageListView(currentUserID: viewModel.user?.uid ?? "")
+            MessageListView(currentUserID: viewModel.uid ?? "")
         }
         .sheet(isPresented: $viewModel.showFriendRequests) {
             FriendInboxView()
@@ -63,9 +63,7 @@ struct ProfileView: View {
         }
         //This whole block of code is to keep the data updated
         .task {
-            if viewModel.user == nil {
-                await viewModel.fetchCurrentUserProfile()
-            }
+            await viewModel.fetchCurrentUserProfile()
         }
     }
 }

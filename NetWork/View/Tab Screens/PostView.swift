@@ -10,11 +10,7 @@ import SwiftUI
 struct PostView: View {
     
     @StateObject private var viewModel = PostViewModel()
-//    @State private var location: String = ""
-//    @State private var extraInfo: String = ""
-//    @State private var numberOfPeople: Int = 1
-//    @State private var selectedDate = Date()
-
+    
     var body: some View {
         
         ScrollView {

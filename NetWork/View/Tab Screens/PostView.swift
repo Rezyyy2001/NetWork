@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct PostView: View {
-    @State private var location: String = ""
-    @State private var extraInfo: String = ""
-    @State private var numberOfPeople: Int = 1
-    @State private var selectedDate = Date()
-    @State private var hasEdited: Bool = false
+    
+    @StateObject private var viewModel = PostViewModel()
+//    @State private var location: String = ""
+//    @State private var extraInfo: String = ""
+//    @State private var numberOfPeople: Int = 1
+//    @State private var selectedDate = Date()
 
     var body: some View {
         
@@ -25,7 +26,7 @@ struct PostView: View {
                         .foregroundColor(.gray)
                         .padding(10)
 
-                    TextField("Where are you hitting?", text: $location)
+                    TextField("Where are you hitting?", text: $viewModel.location)
                         .autocorrectionDisabled()
                         .autocapitalization(.none)
                 }
@@ -44,9 +45,9 @@ struct PostView: View {
                 HStack {
                     // Number of players: The value on the left looks awkward, too much space.
                     VStack {
-                        Text("Players \(numberOfPeople)")
+                        Text("Players \(viewModel.numberOfPeople)")
                             .font(.headline)
-                        Stepper(value: $numberOfPeople, in: 1...10) {
+                        Stepper(value: $viewModel.numberOfPeople, in: 1...10) {
                             
                         }
                         .labelsHidden()
@@ -58,7 +59,7 @@ struct PostView: View {
                             .font(.headline)
                         DatePicker(
                             "",
-                            selection: $selectedDate,
+                            selection: $viewModel.selectedDate,
                             displayedComponents: [.date, .hourAndMinute]
                         )
                         .labelsHidden()
@@ -66,7 +67,7 @@ struct PostView: View {
                 }
                 
                 LimitedLineTextEditor(
-                    text: $extraInfo,
+                    text: $viewModel.extraInfo,
                     placeholder: "What are you looking for in this session?",
                     lineLimit: 13
                 )
@@ -75,7 +76,7 @@ struct PostView: View {
             .padding(.horizontal)
             // Post Button
             Button(action: {
-                googlePlacesAPI.searchTennisCourt(query: location)
+                viewModel.post()
                 // rest of the output
 
             }) {
@@ -89,14 +90,9 @@ struct PostView: View {
             }
             .padding()
         }
-//        .frame(maxHeight: .infinity)
         .padding(.bottom)
         .navigationTitle("New Hit")
         .navigationBarBackButtonHidden(true)
         
     }
-}
-
-#Preview {
-    PostView()
 }

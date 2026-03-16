@@ -11,24 +11,8 @@ public struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var authState: AuthState
 
-    @State private var isEditingProfile: Bool = false
-    @State private var name: String = ""
-    @State private var UTR: Double = 0.0
-    @State private var USTA: Double = 0.0
-    @State private var usualSpot: String = ""
-    @State private var bio: String = ""
-    @State private var age: Int = 0
-
-    @State private var showErrorAlert = false
-    @State private var errorMessage = ""
+    @StateObject private var viewModel = SettingsViewModel()
     
-    // turns timestamp to int
-    private func calculateAge(from birthdate: Date) -> Int {
-        let calendar = Calendar.current
-        let ageComponents = calendar.dateComponents([.year], from: birthdate, to: Date())
-        return ageComponents.year ?? 0
-    }
-
     public var body: some View {
         VStack (alignment: .leading) {
             Button(action: {
@@ -47,28 +31,13 @@ public struct SettingsView: View {
             
             List {
                 // the $ allows those variables to change in editProfileSection
-                EditProfileSection(
-                    isEditingProfile: $isEditingProfile,
-                    name: $name,
-                    UTR: $UTR,
-                    USTA: $USTA,
-                    usualSpot: $usualSpot,
-                    bio: $bio
-                )
-                
+                EditProfileSection(viewModel: viewModel)
                 
                 // Sign Out Section
                 Section {
                     Button(role: .destructive) {
-                        Task {
-                            do {
-                                try AuthenticationManager.shared.signOut()
-                                authState.isAuthenticated = false
-                            } catch {
-                                errorMessage = "Error signing out: \(error.localizedDescription)"
-                                showErrorAlert = true
-                            }
-                        }
+                        viewModel.signOut()
+                        authState.isAuthenticated = false
                     } label: {
                         HStack {
                             Image(systemName: "rectangle.portrait.and.arrow.forward")
@@ -80,36 +49,15 @@ public struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
-            .alert("Error", isPresented: $showErrorAlert) {
+            .alert("Error", isPresented: $viewModel.showErrorAlert) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(errorMessage)
+                Text(viewModel.errorMessage)
             }
             .task {
-                await loadUserProfile()
+                await viewModel.fetchCurrentUserProfile()
             }
-        }
-        
-    }
-
-    private func loadUserProfile() async {
-        do {
-            let profile = try await CurrentUserService.shared.fetchUserProfile()
-            name = profile.name
-            UTR = profile.UTR
-            USTA = profile.USTA
-            bio = profile.bio ?? ""
-            usualSpot = profile.usualSpot ?? ""
-            if let birthday = profile.birthday {
-                age = birthday.age
-            }
-        } catch {
-            errorMessage = "Failed to load profile: \(error.localizedDescription)"
-            showErrorAlert = true
         }
     }
 }
 
-#Preview {
-    SettingsView()
-}

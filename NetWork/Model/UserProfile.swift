@@ -12,8 +12,8 @@ struct UserProfile {
     let name: String
     let UTR: Double
     let USTA: Double
-    let usualSpot: String
-    let bio: String
+    let usualSpot: String?
+    let bio: String?
     let birthday: Date?
     
     var age: Int? {

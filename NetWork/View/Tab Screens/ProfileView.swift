@@ -53,7 +53,7 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
         
         .sheet(isPresented: $viewModel.showMessageView) {
-            MessageListView(currentUserID: viewModel.uid ?? "")
+            MessageListView(currentUserID: viewModel.uid)
         }
         .sheet(isPresented: $viewModel.showFriendRequests) {
             FriendInboxView()

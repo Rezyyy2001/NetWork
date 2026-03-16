@@ -15,7 +15,7 @@ final class CurrentUserService {
     init() {}
 
     // Update profile information in Firebase Auth and Firestore
-    func updateProfile(name: String, UTR: Double, USTA: Double, usualSpot: String, bio: String) async throws -> User {
+    func updateProfile(name: String, UTR: Double, USTA: Double, usualSpot: String, bio: String) async throws {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
@@ -35,10 +35,7 @@ final class CurrentUserService {
             "name_lowercased": name.lowercased(),
         ]
         try await Firestore.firestore().collection("users").document(user.uid).updateData(userData)
-
-        // Reload the user to ensure updated data is reflected
-        try await user.reload()
-        return Auth.auth().currentUser!
+    
     }
 
     // Fetch user profile data from Firestore

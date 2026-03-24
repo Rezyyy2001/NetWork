@@ -21,19 +21,10 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
     @Published var usta: Double? = 0.0
     @Published var age: Int = 0
     
-    @Published var friendshipStatus: friendshipStatus = .none
-    
     @Published var errorMessage: String? = nil
 
     private let userID: String
-    
-    enum friendshipStatus: String {
-        case none
-        case sent
-        case recieved
-        case friends
-    }
-    
+
     var uid: String {
         userID
     }

@@ -13,7 +13,7 @@ import FirebaseAuth
 final class FriendInboxViewModel: ObservableObject {
     @Published var stubs: [UserStub] = []
     
-    private let service = FriendInboxService()
+    private let service = FriendService()
     
     func fetchPendingRequests() {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }

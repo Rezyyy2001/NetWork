@@ -13,7 +13,7 @@ final class FriendCountViewModel: ObservableObject {
     @Published var friendCount: Int = 0
     @Published var errorMessage: String?
     
-    private let service = FriendCountService()
+    private let service = FriendService()
     
     var userID: String
     

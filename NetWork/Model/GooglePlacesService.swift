@@ -1,5 +1,5 @@
 //
-//  googlePlacesAPI.swift
+//  GooglePlacesService.swift
 //  NetWork
 //
 //  Created by Rezka Yuspi on 1/11/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct googlePlacesAPI {
+struct GooglePlacesService {
     
     static func searchTennisCourt(query: String) {
         let apiKey = Secrets.googleAPIKey

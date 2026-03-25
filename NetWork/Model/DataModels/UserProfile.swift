@@ -9,6 +9,7 @@ import Swift
 import Foundation
 
 struct UserProfile {
+    
     let name: String
     let UTR: Double
     let USTA: Double

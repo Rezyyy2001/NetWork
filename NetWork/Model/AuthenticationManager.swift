@@ -9,28 +9,6 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-struct AuthDataResultModel { // variables that store user info
-    let displayName: String?
-    let uid: String
-    let email: String?
-    let bio: String?
-    let usualSpot: String?
-    
-
-    init(user: User, bio: String? = nil, usualSpot: String? = nil) { // extracts user info from firebase
-        self.displayName = user.displayName
-        self.uid = user.uid
-        self.email = user.email
-        self.bio = bio
-        self.usualSpot = usualSpot
-
-
-        
-        //self.photoUrl = user.photoURL?.absoluteString
-    }
-}
-
-
 final class AuthenticationManager { // for firebase authentication logic
     
     static let shared = AuthenticationManager() // ensures only one instance is used
@@ -67,11 +45,5 @@ final class AuthenticationManager { // for firebase authentication logic
     }
     func signOut() throws {
         try Auth.auth().signOut() // calls firebase signOut method
-    }
-    func getAuthenticatedUser() async throws -> AuthDataResultModel? { // function to check if there is a user signed in
-        guard let user = Auth.auth().currentUser else {
-            throw NSError(domain: "Authentication", code: 401, userInfo: [NSLocalizedDescriptionKey: "No authenticated user"])
-        }
-        return AuthDataResultModel(user: user) // to check user first before displaying UI elements
     }
 }

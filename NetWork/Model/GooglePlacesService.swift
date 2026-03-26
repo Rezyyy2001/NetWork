@@ -24,7 +24,6 @@ struct GooglePlacesService {
             return []
         }
         
-        // dataTask is asynchronous
         let (data, _) = try await URLSession.shared.data(from: url)
         let decoded = try JSONDecoder().decode(TextSearchResponse.self, from: data)
         for place in decoded.results {

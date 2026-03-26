@@ -9,7 +9,7 @@ import Foundation
 
 struct GooglePlacesService {
     
-    static func searchTennisCourt(query: String) {
+    static func searchTennisCourt(query: String) async throws -> [PlaceResult] {
         let apiKey = Secrets.googleAPIKey
 
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
@@ -21,32 +21,18 @@ struct GooglePlacesService {
         
         guard let url = URL(string: urlString) else {
             print("Bad URL")
-            return
+            return []
         }
         
         // dataTask is asynchronous
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            if let error = error {
-               print("Error:", error)
-               return
-           }
-
-           guard let data = data else {
-               print("No data")
-               return
-           }
-            
-            do {
-                let decoded = try JSONDecoder().decode(TextSearchResponse.self, from: data)
-                for place in decoded.results {
-                    print("Name:", place.name)
-                    print("Address:", place.formatted_address ?? "N/A")
-                    print("Place ID:", place.id)
-                    print("---")
-                }
-            } catch {
-                print("Decoding error:", error)
-            }
-        }.resume()
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let decoded = try JSONDecoder().decode(TextSearchResponse.self, from: data)
+        for place in decoded.results {
+            print("Name:", place.name)
+            print("Address:", place.formatted_address ?? "N/A")
+            print("Place ID:", place.id)
+            print("---")
+        }
+        return decoded.results
     }
 }

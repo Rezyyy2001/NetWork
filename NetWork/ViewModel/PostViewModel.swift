@@ -16,6 +16,6 @@ final class PostViewModel: ObservableObject {
     @Published var selectedDate = Date()
     
     func post() {
-        googlePlacesAPI.searchTennisCourt(query: location)
+        GooglePlacesService.searchTennisCourt(query: location)
     }
 }

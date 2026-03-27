@@ -34,13 +34,12 @@ final class SignupViewModel: ObservableObject { // observableObject allows the c
         isLoading = true // indicates onging signUp process
         Task {
             do {
-                let userData = try await AuthenticationManager.shared.signUp(name: name, email: email, password: password, birthday: birthday, usualSpot: usualSpot) // calls signUp
-                print("Account created successfully: \(userData.uid)")
+                try await AuthenticationManager.shared.signUp(name: name, email: email, password: password, birthday: birthday, usualSpot: usualSpot)
+                try await CurrentUserService.shared.createUserProfile(name: name, email: email, birthday: birthday, usualSpot: usualSpot)
                 isLoading = false
                 showHomeView = true // after account created shows home view
             } catch {
                 errorMessage = error.localizedDescription
-                print("Error signing up: \(error)")
                 isLoading = false
             }
         }

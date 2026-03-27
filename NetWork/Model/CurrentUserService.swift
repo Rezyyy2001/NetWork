@@ -61,6 +61,26 @@ final class CurrentUserService {
             birthday: birthday
         )
     }
+    
+    func createUserProfile(name: String, email: String, birthday: Date?, usualSpot: String) async throws {
 
+        guard let user = Auth.auth().currentUser else {
+            throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
+        }
+        
+        let userData: [String: Any] = [ // dictionary of user details
+            "name": name,
+            "name_lowercased": name.lowercased(),
+            "email": email,
+            "uid": user.uid,
+            "birthday": birthday.map { Timestamp(date: $0) } ?? NSNull(), // birthday field as a timestamp
+            "UTR": 0.0,
+            "USTA": 0.0,
+            "bio": "",
+            "usualSpot": usualSpot
+            
+        ]
+        try await Firestore.firestore().collection("users").document(user.uid).setData(userData)
+    }
 }
 

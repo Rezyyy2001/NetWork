@@ -22,9 +22,8 @@ final class AuthenticationManager { // for firebase authentication logic
         changeRequest.displayName = name
         try await changeRequest.commitChanges() // saves changes
     }
-    func signIn(email: String, password: String) async throws -> AuthDataResultModel {
-        let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password) // calls firebase signIn method
-        return AuthDataResultModel(user: authDataResult.user) // if authentication is successful, return user details
+    func signIn(email: String, password: String) async throws {
+        try await Auth.auth().signIn(withEmail: email, password: password) // calls firebase signIn method
     }
     func signOut() throws {
         try Auth.auth().signOut() // calls firebase signOut method

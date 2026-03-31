@@ -13,7 +13,7 @@ import SwiftUI
 final class MessageListViewModel: ObservableObject {
     @Published var friends: [UserStub] = []
     
-    private let service = MessageListService()
+    private let service = FriendService()
     
     func fetchFriends(for currentUserID: String) {
         Task {

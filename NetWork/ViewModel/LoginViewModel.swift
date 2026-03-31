@@ -22,19 +22,14 @@ final class LoginViewModel: ObservableObject { // allows SwiftUI views to observ
             errorMessage = "Email and Password cannot be empty."
             return
         }
-        
         isLoading = true
-        
         do {
-            let userData = try await AuthenticationManager.shared.signIn(email: email, password: password) // checks to see if userdata for log in matches
-            print("Successfully logged in: \(userData.uid)")
+            try await AuthenticationManager.shared.signIn(email: email, password: password) // checks to see if userdata for log in matches
             isLoading = false
             showHomeView = true // Trigger navigation
         } catch {
             errorMessage = error.localizedDescription
-            print("Error signing in: \(error)")
             isLoading = false // resets the isLoading
         }
     }
 }
-

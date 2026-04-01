@@ -5,11 +5,10 @@
 //  Created by Rezka Yuspi on 3/5/26.
 //
 
-import SwiftUI
 import Firebase
 
 final class SearchService {
-    let db = Firestore.firestore() // references firestore for queries
+    private let db = Firestore.firestore() // references firestore for queries
     
     func searchUsers(matching searchText: String) async -> [UserStub] {
         let searchLowercased = searchText.lowercased()

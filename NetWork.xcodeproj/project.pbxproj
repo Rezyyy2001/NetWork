@@ -14,7 +14,6 @@
 		5BC98D112CF5AD0F00D9A485 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D102CF5AD0F00D9A485 /* FirebaseAnalytics */; };
 		5BC98D142CF6740D00D9A485 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D132CF6740D00D9A485 /* FirebaseAuth */; };
 		5BD0569A2C968C0C00E6DADA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BD056992C968C0C00E6DADA /* Assets.xcassets */; };
-		5BD0569D2C968C0C00E6DADA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BD0569C2C968C0C00E6DADA /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,13 +24,15 @@
 		5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5BD056922C968C0900E6DADA /* NetWork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetWork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BD056992C968C0C00E6DADA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		5BD0569C2C968C0C00E6DADA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		5B8F2A942F56120C005435A8 /* Model */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Model; sourceTree = "<group>"; };
-		5B8F2A962F561220005435A8 /* View */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = View; sourceTree = "<group>"; };
-		5B8F2A972F561229005435A8 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
+		5B8F2CC92F7C9995005435A8 /* Preview Content */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Preview Content"; sourceTree = "<group>"; };
+		5B8F2CCB2F7DB702005435A8 /* App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = App; sourceTree = "<group>"; };
+		5B8F2CCD2F7DB72A005435A8 /* Core */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Core; sourceTree = "<group>"; };
+		5B8F2CCE2F7DB72F005435A8 /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
+		5B8F2CDD2F7DBFF9005435A8 /* Reusables */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Reusables; sourceTree = "<group>"; };
+		5B8F2CE22F7DC02F005435A8 /* Local */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Local; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,22 +80,16 @@
 		5BD056942C968C0900E6DADA /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
+				5B8F2CE22F7DC02F005435A8 /* Local */,
+				5B8F2CCD2F7DB72A005435A8 /* Core */,
+				5B8F2CCB2F7DB702005435A8 /* App */,
+				5B8F2CCE2F7DB72F005435A8 /* Features */,
 				5BD056992C968C0C00E6DADA /* Assets.xcassets */,
 				5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */,
-				5BD0569B2C968C0C00E6DADA /* Preview Content */,
-				5B8F2A972F561229005435A8 /* ViewModel */,
-				5B8F2A962F561220005435A8 /* View */,
-				5B8F2A942F56120C005435A8 /* Model */,
+				5B8F2CC92F7C9995005435A8 /* Preview Content */,
+				5B8F2CDD2F7DBFF9005435A8 /* Reusables */,
 			);
 			path = NetWork;
-			sourceTree = "<group>";
-		};
-		5BD0569B2C968C0C00E6DADA /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				5BD0569C2C968C0C00E6DADA /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -113,9 +108,12 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				5B8F2A942F56120C005435A8 /* Model */,
-				5B8F2A962F561220005435A8 /* View */,
-				5B8F2A972F561229005435A8 /* ViewModel */,
+				5B8F2CC92F7C9995005435A8 /* Preview Content */,
+				5B8F2CCB2F7DB702005435A8 /* App */,
+				5B8F2CCD2F7DB72A005435A8 /* Core */,
+				5B8F2CCE2F7DB72F005435A8 /* Features */,
+				5B8F2CDD2F7DBFF9005435A8 /* Reusables */,
+				5B8F2CE22F7DC02F005435A8 /* Local */,
 			);
 			name = NetWork;
 			productName = NetWork;
@@ -163,7 +161,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BD0569D2C968C0C00E6DADA /* Preview Assets.xcassets in Resources */,
 				5B7A6C882D0A7CDF004824B0 /* Article.md in Resources */,
 				5BD0569A2C968C0C00E6DADA /* Assets.xcassets in Resources */,
 				5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */,

@@ -61,11 +61,10 @@ struct PostView: View {
                         .labelsHidden()
                     }
                 }
-                
-                LimitedLineTextEditor(
+                CustomTextbox(
                     text: $viewModel.extraInfo,
                     placeholder: "What are you looking for in this session?",
-                    lineLimit: 13
+                    characterLimit: 130
                 )
                 
             }

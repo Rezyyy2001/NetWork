@@ -32,7 +32,6 @@
 		5B8F2CCD2F7DB72A005435A8 /* Core */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Core; sourceTree = "<group>"; };
 		5B8F2CCE2F7DB72F005435A8 /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
 		5B8F2CDD2F7DBFF9005435A8 /* Reusables */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Reusables; sourceTree = "<group>"; };
-		5B8F2CE22F7DC02F005435A8 /* Local */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Local; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +79,6 @@
 		5BD056942C968C0900E6DADA /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
-				5B8F2CE22F7DC02F005435A8 /* Local */,
 				5B8F2CCD2F7DB72A005435A8 /* Core */,
 				5B8F2CCB2F7DB702005435A8 /* App */,
 				5B8F2CCE2F7DB72F005435A8 /* Features */,
@@ -113,7 +111,6 @@
 				5B8F2CCD2F7DB72A005435A8 /* Core */,
 				5B8F2CCE2F7DB72F005435A8 /* Features */,
 				5B8F2CDD2F7DBFF9005435A8 /* Reusables */,
-				5B8F2CE22F7DC02F005435A8 /* Local */,
 			);
 			name = NetWork;
 			productName = NetWork;

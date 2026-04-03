@@ -91,12 +91,12 @@ public struct EditProfileSection: View {
                     }
 
                     VStack(alignment: .leading, spacing: 5) {
-                        LimitedLineTextEditor(
+                        CustomTextbox(
                             text: $viewModel.bio,
                             placeholder: "Write a short bio about yourself",
-                            lineLimit: 11
+                            characterLimit: 300
                         )
-                        .frame(width: 325)
+                        //.frame(width: 325)
 
                     }
 

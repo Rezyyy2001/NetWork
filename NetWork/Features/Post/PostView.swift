@@ -64,7 +64,7 @@ struct PostView: View {
                 CustomTextbox(
                     text: $viewModel.extraInfo,
                     placeholder: "What are you looking for in this session?",
-                    characterLimit: 130
+                    characterLimit: 150
                 )
                 
             }

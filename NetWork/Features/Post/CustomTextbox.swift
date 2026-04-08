@@ -22,10 +22,20 @@ struct CustomTextbox: View {
                 
                     // Enforces character limit
                     .onChange(of: text) { oldValue, newValue in
-                        if newValue.count > characterLimit {
-                            text = String(newValue.prefix(characterLimit))
+                        var updated = newValue
+                        if updated.count > characterLimit {
+                            updated = String(updated.prefix(characterLimit))
                         }
+                        if updated.hasPrefix("\n") {
+                            updated = String(updated.dropFirst())
+                        }
+                        updated = updated.replacingOccurrences(of: "\n\n", with: "\n")
+                        updated = updated.replacingOccurrences(of: "  ", with: " ")
+                        updated = updated.replacingOccurrences(of: "\n \n", with: "\n")
+                        text = updated
+                        
                     }
+                
                     .overlay(
                         Group {
                             if text.isEmpty {

@@ -14,10 +14,22 @@ final class PostViewModel: ObservableObject {
     @Published var extraInfo: String = ""
     @Published var numberOfPeople: Int = 1
     @Published var selectedDate = Date()
+    @Published var errorMessage: String?
+    
+    @Published var suggestions: [PlaceSuggestion] = []
     
     func post() {
         Task {
             try await GooglePlacesService.searchTennisCourt(query: location)
+        }
+    }
+    func autocomplete() {
+        Task {
+            do {
+                suggestions = try await GooglePlacesService.autocomplete(input: location)
+            } catch {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 }

@@ -25,9 +25,17 @@ struct PostView: View {
                     TextField("Where are you hitting?", text: $viewModel.location)
                         .autocorrectionDisabled()
                         .autocapitalization(.none)
+                        .onChange(of: viewModel.location) { oldValue, newValue in
+                            viewModel.autocomplete()
+                        }
                 }
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
+                
+                List(viewModel.suggestions) { suggestion in
+                    Text(suggestion.description)
+                }
+                
                 
                 // Recents implementation
                 HStack (spacing: 2) {

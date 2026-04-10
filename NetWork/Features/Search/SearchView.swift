@@ -53,7 +53,6 @@ struct SearchView: View {
                 .listRowBackground(Color.clear) // Ensures it doesn’t apply default background
             }
             .listStyle(PlainListStyle())
-            .listStyle(PlainListStyle())
         }
         .padding(.top, 10)
         .navigationDestination(item: $selectedUser) { user in

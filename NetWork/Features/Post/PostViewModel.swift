@@ -32,4 +32,8 @@ final class PostViewModel: ObservableObject {
             }
         }
     }
+    func selectSuggestion(_ suggestion: PlaceSuggestion) {
+        location = suggestion.description
+        suggestions = []
+    }
 }

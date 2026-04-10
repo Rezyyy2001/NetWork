@@ -11,6 +11,8 @@ struct PostView: View {
     
     @StateObject private var viewModel = PostViewModel()
     
+    @State private var places: PlaceSuggestion?
+    
     var body: some View {
         
         ScrollView {
@@ -32,8 +34,12 @@ struct PostView: View {
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
                 
-                List(viewModel.suggestions) { suggestion in
-                    Text(suggestion.description)
+                VStack {
+                    ForEach(viewModel.suggestions) { suggestion in
+                        PlaceSuggestionView(suggestion: suggestion) {
+                            viewModel.selectSuggestion(suggestion)
+                        }
+                    }
                 }
                 
                 

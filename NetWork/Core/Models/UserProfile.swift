@@ -6,7 +6,7 @@
 //
 
 import Swift
-import Foundation
+import Firebase
 
 struct UserProfile {
     
@@ -21,4 +21,19 @@ struct UserProfile {
             guard let birthday = birthday else { return nil }
             return birthday.age
     }
+    
+    static func from(_ data: [String: Any]) -> UserProfile {
+        let timestamp = data["birthday"] as? Timestamp
+        
+        return UserProfile(
+            name: data["name"] as? String ?? "",
+            UTR: data["UTR"] as? Double ?? 0.0,
+            USTA: data["USTA"] as? Double ?? 0.0,
+            usualSpot: data["usualSpot"] as? String ?? "",
+            bio: data["bio"] as? String ?? "",
+            birthday: timestamp?.dateValue()
+        )
+    }
 }
+
+

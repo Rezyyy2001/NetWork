@@ -49,17 +49,7 @@ final class CurrentUserService {
             throw NSError(domain: "User profile not found.", code: 404, userInfo: nil)
         }
         
-        let timestamp = data["birthday"] as? Timestamp
-        let birthday = timestamp?.dateValue()
-
-        return UserProfile(
-            name: data["name"] as? String ?? "",
-            UTR: data["UTR"] as? Double ?? 0.0,
-            USTA: data["USTA"] as? Double ?? 0.0,
-            usualSpot: data["usualSpot"] as? String ?? "",
-            bio: data["bio"] as? String ?? "",
-            birthday: birthday
-        )
+        return UserProfile.from(data)
     }
     
     func createUserProfile(name: String, email: String, birthday: Date?, usualSpot: String) async throws {

@@ -8,5 +8,5 @@
 import SwiftUI
 
 class AuthState: ObservableObject {
-    @Published var isAuthenticated: Bool = true
+    @Published var isAuthenticated: Bool = false
 }

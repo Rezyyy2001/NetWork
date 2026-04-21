@@ -38,6 +38,7 @@ public struct SettingsView: View {
                     Button(role: .destructive) {
                         viewModel.signOut()
                         authState.isAuthenticated = false
+                        dismiss() // So the exit seems seemliss
                     } label: {
                         HStack {
                             Image(systemName: "rectangle.portrait.and.arrow.forward")

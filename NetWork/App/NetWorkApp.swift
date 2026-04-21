@@ -15,8 +15,13 @@ struct NetWorkApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(authState)
+            if authState.isAuthenticated {
+                HomeView()
+            } else {
+                ContentView()
+                    .environmentObject(authState)
+                    .id(UUID()) // when authState switches, it also switches the view to contentView with a new unique id
+            }
         }
     }
 }

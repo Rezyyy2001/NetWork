@@ -5,9 +5,9 @@
 //  Created by Rezka Yuspi on 3/5/26.
 //
 
-import Firebase
+@preconcurrency import Firebase
 
-final class SearchService {
+final class SearchService: Sendable {
     private let db = Firestore.firestore() // references firestore for queries
     
     func searchUsers(matching searchText: String) async -> [UserStub] {

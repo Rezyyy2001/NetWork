@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseFirestore
+@preconcurrency import FirebaseFirestore
 
 @MainActor
 final class ChatViewModel: ObservableObject {

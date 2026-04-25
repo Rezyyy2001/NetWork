@@ -9,7 +9,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-final class AuthenticationManager { // for firebase authentication logic
+final class AuthenticationManager: Sendable { // for firebase authentication logic
     
     static let shared = AuthenticationManager() // ensures only one instance is used
     private init() {} // prevents other parts of the app from creating an instance ... saves memory

@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import Firebase
+@preconcurrency import Firebase
 
-final class OtherUserProfileService {
+final class OtherUserProfileService: Sendable {
     private let db = Firestore.firestore()
     
     func fetchUserProfile(userID: String) async throws -> UserProfile {

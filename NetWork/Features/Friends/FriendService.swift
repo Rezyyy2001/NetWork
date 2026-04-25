@@ -6,10 +6,10 @@
 //
 
 import Foundation
-import FirebaseFirestore
+@preconcurrency import FirebaseFirestore
 import FirebaseAuth
 
-final class FriendService {
+final class FriendService: Sendable {
     private let db = Firestore.firestore()
     
     func fetchPendingRequests(for currentUserID: String) async -> [UserStub] {

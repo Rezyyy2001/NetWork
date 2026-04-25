@@ -9,7 +9,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-final class CurrentUserService {
+final class CurrentUserService: Sendable {
     
     static let shared = CurrentUserService()
     init() {}

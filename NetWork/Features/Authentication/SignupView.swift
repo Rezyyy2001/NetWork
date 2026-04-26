@@ -18,13 +18,17 @@ struct SignupView: View {
                           title: "Name",
                           placeholder: "First Last")
                 .autocapitalization(.words)
+                .disableAutocorrection(true)
                 .frame(width: UIScreen.main.bounds.width - 200, height: 50)
                 
-                VStack(alignment: .leading, spacing: 8) { // binds date to viewModel.birthday
+                VStack(alignment: .center, spacing: 8) { // binds date to viewModel.birthday
                     Text("Birthday")
                         .foregroundColor(.green)
                         .fontWeight(.semibold)
                         .font(.system(size: 13))
+                    
+                    let minYear = Calendar.current.date(from: DateComponents(year: 1900))!
+                    
                     DatePicker(
                         "",
                         selection: Binding(
@@ -36,7 +40,7 @@ struct SignupView: View {
                                 }
                             }
                         ),
-                        in: ...Date(), // any date up to todays date
+                        in: minYear...Date(), // any date up to todays date
                         displayedComponents: [.date]
                     )
                     .labelsHidden()

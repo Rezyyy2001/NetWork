@@ -20,13 +20,4 @@ final class MessageListViewModel: ObservableObject {
             self.friends = await service.fetchFriends(for: currentUserID)
         }
     }
-    
-    func palindromeCheck(string: String) -> Bool {
-        let reversedString = String(string.reversed())
-        if string == reversedString {
-            return true
-        } else {
-            return false
-        }
-    }
 }

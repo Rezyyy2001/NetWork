@@ -20,4 +20,13 @@ final class MessageListViewModel: ObservableObject {
             self.friends = await service.fetchFriends(for: currentUserID)
         }
     }
+    
+    func myRandomFunc() {
+        Task {
+            for i in 0...100 {
+                try? await Task.sleep(for: .seconds(3))
+                print("Test: \(i)")
+            }
+        }
+    }
 }

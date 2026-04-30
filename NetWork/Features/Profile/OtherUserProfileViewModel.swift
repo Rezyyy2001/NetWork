@@ -33,6 +33,7 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
         displayName
     }
     
+    // Needs an init to know what user to fetch
     init(userID: String) {
         self.userID = userID
         fetchUserProfile(for: userID)

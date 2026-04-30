@@ -24,8 +24,7 @@ final class ChatViewModel: ObservableObject {
         self.conversationID = service.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.
         listenForMessages()
     }
-
-    // do we need this, works as intentded without it
+    
     deinit {
         listener?.remove()
     }

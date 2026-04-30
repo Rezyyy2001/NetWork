@@ -12,7 +12,7 @@ import FirebaseAuth
 final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvider {
     
     
-    private let service = CurrentUserService()
+    private let service = CurrentUserService.shared
     
     // UI State
     @Published var showSettings = false

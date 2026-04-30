@@ -21,7 +21,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var showErrorAlert = false
     @Published var errorMessage = ""
     
-    private let service = CurrentUserService()
+    private let service = CurrentUserService.shared
     
     func fetchCurrentUserProfile() async {
         do {

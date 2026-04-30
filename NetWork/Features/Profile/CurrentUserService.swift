@@ -12,7 +12,7 @@ import FirebaseFirestore
 final class CurrentUserService: Sendable {
     
     static let shared = CurrentUserService()
-    init() {}
+    private init() {}
 
     // Update profile information in Firebase Auth and Firestore
     func updateProfile(name: String, UTR: Double, USTA: Double, usualSpot: String, bio: String) async throws {

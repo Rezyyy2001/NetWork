@@ -11,6 +11,7 @@ import SwiftUI
 struct ChatView: View {
     let currentUserID: String
     let otherUser: UserStub
+    @Environment(\.dismiss) private var dismiss
 
     @StateObject private var viewModel: ChatViewModel // keeps the VM alive across renders
 
@@ -51,6 +52,7 @@ struct ChatView: View {
             Divider()
             
 // TODO: we need to make it so that you are able to hit enter and make a new line in the chat box
+// TODO: The text box needs to expand for the new line
 
             // adds input field and binds text to viewModel.newMessage
             HStack {
@@ -67,5 +69,11 @@ struct ChatView: View {
         }
         .navigationTitle(otherUser.displayName ?? "Chat")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem (placement: .navigationBarLeading) {
+                BackButton(padded: false)
+            }
+        }
     }
 }

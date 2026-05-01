@@ -15,19 +15,11 @@ public struct SettingsView: View {
     
     public var body: some View {
         VStack (alignment: .leading) {
-            Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "arrow.backward")
-                    .font(.title2)
-                    .foregroundColor(.blue)
-                    .padding(.leading)
-                    .padding(.top)
-            }
+            BackButton()
+
             Text("Settings")
                 .font(.largeTitle)
                 .padding(.horizontal)
-            
             
             List {
                 // the $ allows those variables to change in editProfileSection

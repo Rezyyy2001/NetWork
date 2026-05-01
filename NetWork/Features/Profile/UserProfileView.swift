@@ -27,13 +27,7 @@ struct UserProfileView: View {
         .ignoresSafeArea(.container, edges: .horizontal)
         .toolbar {
             ToolbarItem (placement: .navigationBarLeading) {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "arrow.backward")
-                        .foregroundColor(.blue) // Customize the icon color
-                        .font(.title) // Adjust the size of the back arrow 
-                }
+                BackButton(padded: false)
             }
         }
         .navigationBarBackButtonHidden(true)

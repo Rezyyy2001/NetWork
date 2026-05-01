@@ -8,23 +8,13 @@
 import SwiftUI
 
 struct FriendInboxView: View {
-    @Environment(\.dismiss) private var dismiss // to dismiss the sheet
     @StateObject private var viewModel = FriendInboxViewModel()
     @State private var selectedUser: UserStub?
     
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                // Back Button
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "arrow.backward")
-                        .font(.title2)
-                        .foregroundColor(.blue)
-                        .padding(.leading)
-                        .padding(.top)
-                }
+                BackButton()
                 
                 Text("Friend Requests")
                     .font(.largeTitle)

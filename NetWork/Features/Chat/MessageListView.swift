@@ -11,8 +11,7 @@ import SwiftUI
 struct MessageListView: View {
     
     let currentUserID: String
-    
-    @Environment(\.dismiss) private var dismiss
+
     @StateObject private var viewModel = MessageListViewModel() // watches for updates
     @State private var selectedUser: UserStub? // to check who is clicked
 
@@ -24,15 +23,7 @@ struct MessageListView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "arrow.backward")
-                        .font(.title2)
-                        .foregroundColor(.blue)
-                        .padding(.leading)
-                        .padding(.top)
-                }
+                BackButton()
                 
                 Text("Messages")
                     .font(.largeTitle)

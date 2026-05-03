@@ -38,20 +38,12 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
         self.userID = userID
         fetchUserProfile(for: userID)
     }
-     
+
     func fetchUserProfile(for userID: String) {
         Task {
             do {
                 let profile = try await service.fetchUserProfile(userID: userID)
-                
-                self.displayName = profile.name
-                self.bio = profile.bio
-                self.usualSpot = profile.usualSpot
-                self.utr = profile.UTR
-                self.usta = profile.USTA
-                if let birthday = profile.birthday {
-                    self.age = birthday.age
-                }
+                apply(profile)
             } catch {
                 self.errorMessage = "Could not find user"
             }

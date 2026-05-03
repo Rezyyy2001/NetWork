@@ -22,7 +22,7 @@ struct HeaderView<T: UserProfileDataProvider & ObservableObject>: View { // Head
                     .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
             
             VStack(alignment: .leading) {
-                Text(viewModel.name) // takes var name from protocal
+                Text(viewModel.displayName) // takes var name from protocal
                     .bold()
                 
                 //TODO: UTR should be a Float for two decimal points

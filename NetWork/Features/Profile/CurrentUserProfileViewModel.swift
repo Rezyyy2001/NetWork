@@ -11,7 +11,6 @@ import FirebaseAuth
 @MainActor
 final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvider {
     
-    
     private let service = CurrentUserService.shared
     
     // UI State
@@ -47,21 +46,9 @@ final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvid
     func fetchCurrentUserProfile() async {
         do {
             let profile = try await service.fetchUserProfile()
-            
-            self.displayName = profile.name
-            self.bio = profile.bio
-            self.usualSpot = profile.usualSpot
-            self.utr = profile.UTR
-            self.usta = profile.USTA
-            if let birthday = profile.birthday {
-                self.age = birthday.age
-            }
+            apply(profile)
         } catch {
             self.errorMessage = "Could not find user"
         }
     }
 }
-
-
-
-

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5B62A98D2D381F8400FDC7B0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5B62A98C2D381F8400FDC7B0 /* FirebaseFirestore */; };
-		5B7A6C882D0A7CDF004824B0 /* Article.md in Resources */ = {isa = PBXBuildFile; fileRef = 5B7A6C872D0A7CDF004824B0 /* Article.md */; };
 		5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */; };
 		5BC98D112CF5AD0F00D9A485 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D102CF5AD0F00D9A485 /* FirebaseAnalytics */; };
 		5BC98D142CF6740D00D9A485 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D132CF6740D00D9A485 /* FirebaseAuth */; };
@@ -16,7 +15,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5B7A6C872D0A7CDF004824B0 /* Article.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Article.md; sourceTree = "<group>"; };
 		5B9579232F355DBB00EDC584 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		5B9579252F355E6000EDC584 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -61,7 +59,6 @@
 				5B9579232F355DBB00EDC584 /* Secrets.xcconfig */,
 				5BC98D122CF6740D00D9A485 /* Frameworks */,
 				5BD056932C968C0900E6DADA /* Products */,
-				5B7A6C872D0A7CDF004824B0 /* Article.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -155,7 +152,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B7A6C882D0A7CDF004824B0 /* Article.md in Resources */,
 				5BD0569A2C968C0C00E6DADA /* Assets.xcassets in Resources */,
 				5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */,
 			);

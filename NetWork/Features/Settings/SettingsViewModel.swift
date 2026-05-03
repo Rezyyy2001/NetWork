@@ -8,33 +8,28 @@
 import Foundation
 
 @MainActor
-final class SettingsViewModel: ObservableObject {
+final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
     
     @Published var isEditingProfile: Bool = false
-    @Published var name: String = ""
-    @Published var UTR: Double = 0.0
-    @Published var USTA: Double = 0.0
-    @Published var usualSpot: String = ""
-    @Published var bio: String = ""
+    
+    @Published var displayName: String = ""
+    @Published var utr: Double? = 0.0
+    @Published var usta: Double? = 0.0
+    @Published var usualSpot: String? = nil
+    @Published var bio: String? = nil
     @Published var age: Int = 0
+    
+    @Published var uid: String = ""
     
     @Published var showErrorAlert = false
     @Published var errorMessage = ""
     
     private let service = CurrentUserService.shared
-    
+
     func fetchCurrentUserProfile() async {
         do {
             let profile = try await service.fetchUserProfile()
-            
-            self.name = profile.name
-            self.bio = profile.bio ?? ""
-            self.usualSpot = profile.usualSpot ?? ""
-            self.UTR = profile.UTR
-            self.USTA = profile.USTA
-            if let birthday = profile.birthday {
-                self.age = birthday.age
-            }
+            apply(profile)
         } catch {
             self.errorMessage = "Could not find user"
         }
@@ -53,11 +48,11 @@ final class SettingsViewModel: ObservableObject {
     func saveProfile() async {
         do {
             try await service.updateProfile(
-                name: name,
-                UTR: UTR,
-                USTA: USTA,
-                usualSpot: usualSpot,
-                bio: bio
+                name: displayName,
+                UTR: utr ?? 0.0,
+                USTA: usta ?? 0.0,
+                usualSpot: usualSpot ?? "",
+                bio: bio ?? ""
             )
             self.isEditingProfile = false
         } catch {

@@ -24,21 +24,11 @@ public struct SettingsView: View {
             List {
                 // the $ allows those variables to change in editProfileSection
                 EditProfileSection(viewModel: viewModel)
-                
-                // Sign Out Section
-                Section {
-                    Button(role: .destructive) {
-                        viewModel.signOut()
-                        authState.isAuthenticated = false
-                        dismiss() // So the exit seems seemliss
-                    } label: {
-                        HStack {
-                            Image(systemName: "rectangle.portrait.and.arrow.forward")
-                                .foregroundColor(.red)
-                            Text("Sign Out")
-                                .foregroundColor(.red)
-                        }
-                    }
+        
+                SignOutButton {
+                    viewModel.signOut()
+                    authState.isAuthenticated = false
+                    dismiss() // So the exit seems seemliss
                 }
             }
             .navigationTitle("Settings")

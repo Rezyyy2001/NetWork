@@ -13,7 +13,7 @@ public struct EditProfileSection: View {
     private let usualSpotCharacterLimit = 25
     
     var isSaveDisabled: Bool {
-        viewModel.usualSpot.count > usualSpotCharacterLimit
+        (viewModel.usualSpot ?? "").count > usualSpotCharacterLimit
     }
 
     public var body: some View {
@@ -40,7 +40,7 @@ public struct EditProfileSection: View {
                         Text("Name:")
                             .frame(width: 100, alignment: .leading)
                             .foregroundColor(.gray)
-                        TextField("First Last", text: $viewModel.name)
+                        TextField("First Last", text: $viewModel.displayName)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocorrectionDisabled()
                             .autocapitalization(.none)
@@ -51,12 +51,12 @@ public struct EditProfileSection: View {
                             .frame(width: 100, alignment: .leading)
                             .foregroundColor(.gray)
                         TextField("1-16", text: Binding(
-                            get: { viewModel.UTR > 0 ? String(format: "%.1f", viewModel.UTR) : "" },
+                            get: { viewModel.utr ?? 0 > 0 ? String(format: "%.1f", viewModel.utr!) : "" },
                             set: { newValue in
                                 if let value = Double(newValue), value >= 1.0, value <= 16.0 {
-                                    viewModel.UTR = value
+                                    viewModel.utr = value
                                 } else if newValue.isEmpty {
-                                    viewModel.UTR = 0
+                                    viewModel.utr = 0
                                 }
                             }
                         ))
@@ -69,12 +69,12 @@ public struct EditProfileSection: View {
                             .frame(width: 100, alignment: .leading)
                             .foregroundColor(.gray)
                         TextField("1-6", text: Binding(
-                            get: { viewModel.USTA > 0 ? String(format: "%.1f", viewModel.USTA) : "" },
+                            get: { viewModel.usta ?? 0 > 0 ? String(format: "%.1f", viewModel.usta!) : "" },
                             set: { newValue in
                                 if let value = Double(newValue), value >= 1.0, value <= 6.0 {
-                                    viewModel.USTA = value
+                                    viewModel.usta = value
                                 } else if newValue.isEmpty {
-                                    viewModel.USTA = 0
+                                    viewModel.usta = 0
                                 }
                             }
                         ))
@@ -86,18 +86,22 @@ public struct EditProfileSection: View {
                         Text("Tennis Court")
                             .frame(width: 100, alignment: .leading)
                             .foregroundColor(.gray)
-                        TextField("(25 Character limit)", text: $viewModel.usualSpot)
+                        TextField("(25 Character limit)", text: Binding(
+                            get: { viewModel.usualSpot ?? "" },
+                            set: { viewModel.usualSpot = $0 }
+                        ))
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
 
                     VStack(alignment: .leading, spacing: 5) {
                         CustomTextbox(
-                            text: $viewModel.bio,
+                            text: Binding(
+                                get: { viewModel.bio ?? "" },
+                                set: { viewModel.bio = $0 }
+                            ),
                             placeholder: "Write a short bio about yourself",
                             characterLimit: 300
                         )
-                        //.frame(width: 325)
-
                     }
 
                     Button(action: {

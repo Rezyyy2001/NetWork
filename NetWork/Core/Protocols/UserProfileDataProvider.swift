@@ -10,12 +10,23 @@ import Foundation
 // if a struct or class conforms to userProfileDataProvider, it must follow these methods or properties.
 // so if a struct conforms to userProfileDataProvider, name needs to be a string, bio needs to be an optional string, etc
 @MainActor
-protocol UserProfileDataProvider {
-    var name: String { get }
-    var bio: String? { get }
-    var usualSpot: String? { get }
-    var utr: Double? { get }
-    var usta: Double? { get }
-    var age: Int { get }
+protocol UserProfileDataProvider: AnyObject {
+    var displayName: String { get set }
+    var bio: String? { get set }
+    var usualSpot: String? { get set }
+    var utr: Double? { get set }
+    var usta: Double? { get set }
+    var age: Int { get set }
     var uid: String { get }
+}
+
+extension UserProfileDataProvider {
+    func apply(_ profile: UserProfile) {
+        displayName = profile.name
+        bio = profile.bio
+        usualSpot = profile.usualSpot
+        utr = profile.UTR
+        usta = profile.USTA
+        age = profile.birthday?.age ?? 0
+    }
 }

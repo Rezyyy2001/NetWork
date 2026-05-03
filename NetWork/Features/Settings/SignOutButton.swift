@@ -11,16 +11,14 @@ struct SignOutButton: View {
     var signOutAction: () -> Void
 
     var body: some View {
-        Section {
-            Button(role: .destructive) {
-                signOutAction()
-            } label: {
-                HStack {
-                    Image(systemName: "rectangle.portrait.and.arrow.forward")
-                        .foregroundColor(.red)
-                    Text("Sign Out")
-                        .foregroundColor(.red)
-                }
+        Button(role: .destructive) {
+            signOutAction()
+        } label: {
+            HStack {
+                Image(systemName: "rectangle.portrait.and.arrow.forward")
+                    .foregroundColor(.red)
+                Text("Sign Out")
+                    .foregroundColor(.red)
             }
         }
     }

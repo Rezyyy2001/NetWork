@@ -41,68 +41,49 @@ final class FriendService: Sendable {
         return loadedStubs
     }
     
+    private func friendshipCount(field: String, userID: String) async -> Int {
+        guard let snapshot = try? await db.collection("friendships")
+            .whereField(field, isEqualTo: userID)
+            .whereField("status", isEqualTo: "accepted")
+            .getDocuments()
+        else { return 0 }
+        return snapshot.documents.count
+    }
+
     func fetchFriendCount(for userID: String) async throws -> Int {
-        //let db = Firestore.firestore()
-        
-        // Query where user is userID1
-        guard let snapshot1 = try? await db.collection("friendships")
-            .whereField("userID1", isEqualTo: userID)
-            .whereField("status", isEqualTo: "accepted")
-            .getDocuments()
-        else { return 0 }
-        let count1 = snapshot1.documents.count
-        
-        guard let snapshot2 = try? await db.collection("friendships")
-            .whereField("userID2", isEqualTo: userID)
-            .whereField("status", isEqualTo: "accepted")
-            .getDocuments()
-        else { return 0 }
-        let count2 = snapshot2.documents.count
-        
+        let count1 = await friendshipCount(field: "userID1", userID: userID)
+        let count2 = await friendshipCount(field: "userID2", userID: userID)
         return count1 + count2
     }
     
+    private func findFriendship(userID1: String, userID2: String) async -> (status: String, documentID: String)? {
+        guard let snapshot = try? await db.collection("friendships")
+            .whereField("userID1", isEqualTo: userID1)
+            .whereField("userID2", isEqualTo: userID2)
+            .getDocuments(),
+            let doc = snapshot.documents.first,
+            let status = doc.data()["status"] as? String
+        else { return nil }
+        return (status: status, documentID: doc.documentID)
+    }
+
     func checkFriendshipStatus(for targetUserID: String) async throws -> FriendshipStatus {
-        //let db = Firestore.firestore()
-        
-        guard let snapshot1 = try? await db.collection("friendships")
-            .whereField("userID1", isEqualTo: Auth.auth().currentUser?.uid ?? "")
-            .whereField("userID2", isEqualTo: targetUserID)
-            .getDocuments()
-        else { return .none }
-        
-        if let doc = snapshot1.documents.first {
-            if let status = doc.data()["status"] as? String {
-                if status == "pending" {
-                    return .sent
-                }
-                if status == "accepted" {
-                    return .friends
-                }
-            }
+        let currentUserID = Auth.auth().currentUser?.uid ?? ""
+
+        if let result = await findFriendship(userID1: currentUserID, userID2: targetUserID) {
+            if result.status == "pending" { return .sent }
+            if result.status == "accepted" { return .friends }
         }
-        
-        guard let snapshot2 = try? await db.collection("friendships")
-            .whereField("userID1", isEqualTo: targetUserID)
-            .whereField("userID2", isEqualTo: Auth.auth().currentUser?.uid ?? "")
-            .getDocuments()
-        else { return .none }
-        
-        if let doc = snapshot2.documents.first {
-            if let status = doc.data()["status"] as? String {
-                if status == "pending" {
-                    return .recieved(documentID: doc.documentID)
-                }
-                if status == "accepted" {
-                    return .friends
-                }
-            }
+
+        if let result = await findFriendship(userID1: targetUserID, userID2: currentUserID) {
+            if result.status == "pending" { return .recieved(documentID: result.documentID) }
+            if result.status == "accepted" { return .friends }
         }
+
         return .none
     }
     
     func sendFriendRequest(for targetUserID: String) async throws {
-        //let db = Firestore.firestore()
         
         let friendshipData: [String: Any] = [
             "userID1": Auth.auth().currentUser?.uid ?? "", // Current user
@@ -124,7 +105,6 @@ final class FriendService: Sendable {
     
     // Updates the status to nil if denied
     func denyFriendRequest(for documentID: String) async throws {
-        //let db = Firestore.firestore()
         try await db.collection("friendships").document(documentID).delete()
     }
     

@@ -8,21 +8,19 @@
 import Foundation
 import FirebaseFirestore
 
-struct ChatService { // handles chat related firestore operations
-    
-    private let db = Firestore.firestore() // links to firebase, allows you to query collections and documents
+struct ChatService {
 
-    // creates the conversation ID
+    private let db = Firestore.firestore()
+
     func conversationID(for user1: String, and user2: String) -> String {
-        return [user1, user2].sorted().joined(separator: "_") // sorted so that the order doesnt matter
+        return [user1, user2].sorted().joined(separator: "_")
     }
 
-    // creates the document for each message sent
     func sendMessage(conversationID: String, message: Message, completion: ((Error?) -> Void)? = nil) {
         do {
-            let docRef = db.collection("conversations")
+            let docRef = db.collection(FirestoreKeys.Collections.conversations)
                 .document(conversationID)
-                .collection("messages")
+                .collection(FirestoreKeys.Collections.messages)
                 .document()
 
             try docRef.setData(from: message, merge: true, completion: completion)
@@ -31,13 +29,12 @@ struct ChatService { // handles chat related firestore operations
         }
     }
 
-    // This sets up real-time listener for the given conversation
     func observeMessages(conversationID: String, onUpdate: @escaping ([Message]) -> Void) -> ListenerRegistration {
-        return db.collection("conversations")
+        return db.collection(FirestoreKeys.Collections.conversations)
             .document(conversationID)
-            .collection("messages")
-            .order(by: "timestamp") // key to make it chronological order
-            .addSnapshotListener { snapshot, error in // listens for live updates
+            .collection(FirestoreKeys.Collections.messages)
+            .order(by: "timestamp")
+            .addSnapshotListener { snapshot, error in
                 guard let documents = snapshot?.documents else {
                     print("Error fetching messages: \(error?.localizedDescription ?? "Unknown error")")
                     return
@@ -51,4 +48,3 @@ struct ChatService { // handles chat related firestore operations
             }
     }
 }
-

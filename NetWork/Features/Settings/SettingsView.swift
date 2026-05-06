@@ -9,7 +9,6 @@ import SwiftUI
 
 public struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
-//    @EnvironmentObject var authState: AuthState
     
     @StateObject private var viewModel: SettingsViewModel
     
@@ -31,7 +30,6 @@ public struct SettingsView: View {
         
                 SignOutButton {
                     viewModel.signOut()
-//                    authState.isAuthenticated = false
                     dismiss() // So the exit seems seemliss
                 }
             }

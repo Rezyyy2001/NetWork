@@ -30,10 +30,6 @@ final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvid
     @Published var usta: Double? = 0.0
     @Published var age: Int = 0
     
-    var name: String {
-        displayName
-    }
-    
     init() {
         if let currentUser = Auth.auth().currentUser {
             self.uid = currentUser.uid

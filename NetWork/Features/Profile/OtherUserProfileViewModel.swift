@@ -29,10 +29,6 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
         userID
     }
     
-    var name: String {
-        displayName
-    }
-    
     // Needs an init to know what user to fetch
     init(userID: String) {
         self.userID = userID

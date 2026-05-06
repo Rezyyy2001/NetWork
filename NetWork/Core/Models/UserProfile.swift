@@ -23,14 +23,14 @@ struct UserProfile {
     }
     
     static func from(_ data: [String: Any]) -> UserProfile {
-        let timestamp = data["birthday"] as? Timestamp
+        let timestamp = data[FirestoreKeys.UserFields.birthday] as? Timestamp
         
         return UserProfile(
-            name: data["name"] as? String ?? "",
-            UTR: data["UTR"] as? Double ?? 0.0,
-            USTA: data["USTA"] as? Double ?? 0.0,
-            usualSpot: data["usualSpot"] as? String ?? "",
-            bio: data["bio"] as? String ?? "",
+            name: data[FirestoreKeys.UserFields.name] as? String ?? "",
+            UTR: data[FirestoreKeys.UserFields.utr] as? Double ?? 0.0,
+            USTA: data[FirestoreKeys.UserFields.usta] as? Double ?? 0.0,
+            usualSpot: data[FirestoreKeys.UserFields.usualSpot] as? String ?? "",
+            bio: data[FirestoreKeys.UserFields.bio] as? String ?? "",
             birthday: timestamp?.dateValue()
         )
     }

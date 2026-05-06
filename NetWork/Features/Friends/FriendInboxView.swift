@@ -11,6 +11,8 @@ struct FriendInboxView: View {
     @StateObject private var viewModel = FriendInboxViewModel()
     @State private var selectedUser: UserStub?
     
+    // TODO: You should not be able to friend yourself
+    
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {

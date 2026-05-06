@@ -25,6 +25,12 @@ final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
     @Published var errorMessage = ""
     
     private let service = CurrentUserService.shared
+    
+    private let authState: AuthState
+    
+    init(authState: AuthState) {
+        self.authState = authState
+    }
 
     func fetchCurrentUserProfile() async {
         do {
@@ -38,6 +44,7 @@ final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
     func signOut() {
         do {
             try AuthenticationManager.shared.signOut()
+            authState.isAuthenticated = false
         } catch {
             self.errorMessage = "Error signing out: \(error.localizedDescription)"
             self.showErrorAlert = true

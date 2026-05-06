@@ -20,6 +20,8 @@ struct MessageListView: View {
             _viewModel = StateObject(wrappedValue: MessageListViewModel())
     }
     
+    // TODO: The list should be in the order of when the messages come in. So newest message at the top
+    
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {

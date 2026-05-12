@@ -91,14 +91,14 @@ struct SignupView: View {
             .padding(.horizontal, 40)
             .padding(.top, 100)
             
-            Spacer()
-            
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
                     .padding()
             }
+            Spacer()
         }
         .navigationBarBackButtonHidden(true)
     }

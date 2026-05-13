@@ -14,7 +14,7 @@ struct PostView: View {
     @State private var places: PlaceSuggestion?
     
     var body: some View {
-        
+        ZStack {
         ScrollView {
             VStack(spacing: 20) {
                 
@@ -70,6 +70,7 @@ struct PostView: View {
                         DatePicker(
                             "",
                             selection: $viewModel.selectedDate,
+                            in: Date()...,
                             displayedComponents: [.date, .hourAndMinute]
                         )
                         .labelsHidden()
@@ -102,6 +103,20 @@ struct PostView: View {
         .padding(.bottom)
         .navigationTitle("New Hit")
         .navigationBarBackButtonHidden(true)
-        
+
+        if viewModel.showPreview {
+            Color.black.opacity(0.7)
+                .ignoresSafeArea()
+                .onTapGesture { viewModel.showPreview = false }
+
+            VStack {
+                PostPreviewCard(viewModel: viewModel)
+                    .padding(.horizontal, 24)
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
+                Spacer()
+            }
+            .padding(.top, 120)
+        }
+        }
     }
 }

@@ -1,0 +1,150 @@
+//
+//  PostPreviewCard.swift
+//  NetWork
+//
+//  Created by Rezka Yuspi on 5/12/26.
+//
+
+import SwiftUI
+
+private struct TruncatedKey: PreferenceKey {
+    static let defaultValue = false
+    static func reduce(value: inout Bool, nextValue: () -> Bool) {
+        value = value || nextValue()
+    }
+}
+
+struct PostPreviewCard: View {
+    @ObservedObject var viewModel: PostViewModel
+    @State private var isExpanded = false
+    @State private var isTruncated = false
+
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d 'at' h:mm a"
+        return formatter.string(from: viewModel.selectedDate)
+    }
+
+    private var city: String {
+        viewModel.location.components(separatedBy: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { $0.count > 3 }
+            .dropFirst()
+        
+            .last ?? viewModel.location
+    }
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(systemName: "person")
+                        .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
+                        .frame(width: 50, height: 50)
+                        .font(.system(size: 25))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 40)
+                                .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2)
+                        )
+                    
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(viewModel.posterName)
+                            .font(.footnote)
+                            .bold()
+                        if let utr = viewModel.posterUTR {
+                            Text("UTR: \(utr, specifier: "%.1f")")
+                                .font(.footnote)
+                        }
+                        if let usta = viewModel.posterUSTA {
+                            Text("USTA: \(usta, specifier: "%.1f")")
+                                .font(.footnote)
+                        }
+                    }
+                    .padding(.leading, 5)
+                    
+                    Spacer()
+                }
+                
+                Divider()
+                
+                HStack {
+                    Text(formattedDate)
+                        .font(.headline)
+                        .bold()
+                    Spacer()
+                    Text(city)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                Text(viewModel.extraInfo)
+                    .font(.body)
+                    .lineLimit(isExpanded ? nil : 3)
+                    .truncationMode(.tail)
+                    .overlay(
+                        GeometryReader { visibleProxy in
+                            Text(viewModel.extraInfo)
+                                .font(.body)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .hidden()
+                                .overlay(
+                                    GeometryReader { fullProxy in
+                                        Color.clear.preference(
+                                            key: TruncatedKey.self,
+                                            value: fullProxy.size.height > visibleProxy.size.height
+                                        )
+                                    }
+                                )
+                        }
+                    )
+                    .onPreferenceChange(TruncatedKey.self) { isTruncated = $0 }
+                
+                if isTruncated || isExpanded {
+                    HStack {
+                        Spacer()
+                        Button(action: { isExpanded.toggle() }) {
+                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                    }
+                }
+                
+            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(16)
+            .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 8)
+            .animation(.easeInOut(duration: 0.2), value: isExpanded)
+            .animation(.easeInOut(duration: 0.2), value: isTruncated)
+            
+            Button(action: {
+                viewModel.confirmPost()
+            }) {
+                Text("Post")
+                    .fontWeight(.bold)
+                    .frame(maxWidth: 100)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+            }
+            .padding()
+        }
+    }
+}
+
+#Preview {
+    let vm = PostViewModel()
+    vm.posterName = "Rezka Yuspi"
+    vm.posterUTR = 8.5
+    vm.posterUSTA = 4.5
+    vm.extraInfo = "Looking for a hitting partner for some competitive rallies. All levels welcome! Preferably someone with a UTR between 7-10. I usually play baseline but love working on my net game too."
+    vm.selectedDate = Date()
+    vm.location = "Griffith Park Tennis Courts, Los Angeles, CA"
+    return ZStack {
+        Color.black.opacity(0.4).ignoresSafeArea()
+        PostPreviewCard(viewModel: vm)
+            .padding(.horizontal, 24)
+    }
+}

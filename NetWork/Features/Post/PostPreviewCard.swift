@@ -15,25 +15,26 @@ private struct TruncatedKey: PreferenceKey {
 }
 
 struct PostPreviewCard: View {
-    @ObservedObject var viewModel: PostViewModel
+    let post: HitPost
+    var onConfirm: () -> Void
+
     @State private var isExpanded = false
     @State private var isTruncated = false
 
     private var formattedDate: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM d 'at' h:mm a"
-        return formatter.string(from: viewModel.selectedDate)
+        return formatter.string(from: post.date)
     }
 
     private var city: String {
-        viewModel.location.components(separatedBy: ",")
+        post.location.components(separatedBy: ",")
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { $0.count > 3 }
             .dropFirst()
-        
-            .last ?? viewModel.location
+            .last ?? post.location
     }
-    
+
     var body: some View {
         VStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 12) {
@@ -46,27 +47,27 @@ struct PostPreviewCard: View {
                             RoundedRectangle(cornerRadius: 40)
                                 .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2)
                         )
-                    
+
                     VStack(alignment: .leading, spacing: 1) {
-                        Text(viewModel.posterName)
+                        Text(post.posterName)
                             .font(.footnote)
                             .bold()
-                        if let utr = viewModel.posterUTR {
+                        if let utr = post.posterUTR {
                             Text("UTR: \(utr, specifier: "%.1f")")
                                 .font(.footnote)
                         }
-                        if let usta = viewModel.posterUSTA {
+                        if let usta = post.posterUSTA {
                             Text("USTA: \(usta, specifier: "%.1f")")
                                 .font(.footnote)
                         }
                     }
                     .padding(.leading, 5)
-                    
+
                     Spacer()
                 }
-                
+
                 Divider()
-                
+
                 HStack {
                     Text(formattedDate)
                         .font(.headline)
@@ -76,14 +77,14 @@ struct PostPreviewCard: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
-                Text(viewModel.extraInfo)
+
+                Text(post.extraInfo)
                     .font(.body)
                     .lineLimit(isExpanded ? nil : 3)
                     .truncationMode(.tail)
                     .overlay(
                         GeometryReader { visibleProxy in
-                            Text(viewModel.extraInfo)
+                            Text(post.extraInfo)
                                 .font(.body)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .hidden()
@@ -98,7 +99,7 @@ struct PostPreviewCard: View {
                         }
                     )
                     .onPreferenceChange(TruncatedKey.self) { isTruncated = $0 }
-                
+
                 if isTruncated || isExpanded {
                     HStack {
                         Spacer()
@@ -109,7 +110,6 @@ struct PostPreviewCard: View {
                         Spacer()
                     }
                 }
-                
             }
             .padding()
             .background(Color.white)
@@ -117,10 +117,8 @@ struct PostPreviewCard: View {
             .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 8)
             .animation(.easeInOut(duration: 0.2), value: isExpanded)
             .animation(.easeInOut(duration: 0.2), value: isTruncated)
-            
-            Button(action: {
-                viewModel.confirmPost()
-            }) {
+
+            Button(action: onConfirm) {
                 Text("Post")
                     .fontWeight(.bold)
                     .frame(maxWidth: 100)
@@ -135,16 +133,18 @@ struct PostPreviewCard: View {
 }
 
 #Preview {
-    let vm = PostViewModel()
-    vm.posterName = "Rezka Yuspi"
-    vm.posterUTR = 8.5
-    vm.posterUSTA = 4.5
-    vm.extraInfo = "Looking for a hitting partner for some competitive rallies. All levels welcome! Preferably someone with a UTR between 7-10. I usually play baseline but love working on my net game too."
-    vm.selectedDate = Date()
-    vm.location = "Griffith Park Tennis Courts, Los Angeles, CA"
+    let post = HitPost(
+        posterName: "Rezka Yuspi",
+        posterUTR: 8.5,
+        posterUSTA: 4.5,
+        location: "Griffith Park Tennis Courts, Los Angeles, CA",
+        date: Date(),
+        extraInfo: "Looking for a hitting partner for some competitive rallies. All levels welcome! Preferably someone with a UTR between 7-10. I usually play baseline but love working on my net game too.",
+        numberOfPeople: 2
+    )
     return ZStack {
-        Color.black.opacity(0.4).ignoresSafeArea()
-        PostPreviewCard(viewModel: vm)
+        Color.black.opacity(0.7).ignoresSafeArea()
+        PostPreviewCard(post: post, onConfirm: {})
             .padding(.horizontal, 24)
     }
 }

@@ -11,8 +11,6 @@ struct PostView: View {
     
     @StateObject private var viewModel = PostViewModel()
     
-    @State private var places: PlaceSuggestion?
-    
     var body: some View {
         ZStack {
         ScrollView {
@@ -87,8 +85,6 @@ struct PostView: View {
             // Post Button
             Button(action: {
                 viewModel.post()
-                // rest of the output
-
             }) {
                 Text("Post")
                     .fontWeight(.bold)
@@ -104,13 +100,13 @@ struct PostView: View {
         .navigationTitle("New Hit")
         .navigationBarBackButtonHidden(true)
 
-        if viewModel.showPreview {
+        if let post = viewModel.hitPost {
             Color.black.opacity(0.7)
                 .ignoresSafeArea()
-                .onTapGesture { viewModel.showPreview = false }
+                .onTapGesture { viewModel.dismissPreview() }
 
             VStack {
-                PostPreviewCard(viewModel: viewModel)
+                PostPreviewCard(post: post, onConfirm: { viewModel.confirmPost() })
                     .padding(.horizontal, 24)
                     .transition(.scale(scale: 0.95).combined(with: .opacity))
                 Spacer()

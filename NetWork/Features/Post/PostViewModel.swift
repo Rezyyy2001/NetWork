@@ -17,10 +17,11 @@ final class PostViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var suggestions: [PlaceSuggestion] = []
 
-    @Published var showPreview = false
-    @Published var posterName = ""
-    @Published var posterUTR: Double? = nil
-    @Published var posterUSTA: Double? = nil
+    @Published var hitPost: HitPost? = nil
+
+    private var posterName = ""
+    private var posterUTR: Double? = nil
+    private var posterUSTA: Double? = nil
 
     init() {
         Task { await fetchPosterInfo() }
@@ -34,13 +35,26 @@ final class PostViewModel: ObservableObject {
     }
 
     func post() {
-        showPreview = true
+        hitPost = HitPost(
+            posterName: posterName,
+            posterUTR: posterUTR,
+            posterUSTA: posterUSTA,
+            location: location,
+            date: selectedDate,
+            extraInfo: extraInfo,
+            numberOfPeople: numberOfPeople
+        )
     }
 
     func confirmPost() {
-        // TODO: save post to Firestore
-        showPreview = false
+        // TODO: save hitPost to Firestore
+        hitPost = nil
     }
+
+    func dismissPreview() {
+        hitPost = nil
+    }
+
     func autocomplete() {
         Task {
             do {
@@ -50,6 +64,7 @@ final class PostViewModel: ObservableObject {
             }
         }
     }
+
     func selectSuggestion(_ suggestion: PlaceSuggestion) {
         location = suggestion.description
         suggestions = []

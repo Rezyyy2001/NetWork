@@ -25,25 +25,14 @@ struct SearchView: View {
                 TextField("Search for players...", text: $viewModel.searchText)
                     .autocorrectionDisabled()
                     .autocapitalization(.none)
+                    .onChange(of: viewModel.searchText) { _, _ in
+                        viewModel.searchUsers()
+                    }
             }
             .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
             .padding(.horizontal)
             .padding()
-
-            // Search Button
-            Button(action: {
-                viewModel.searchUsers()
-            }) {
-                Text("Search")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 30)
-                    .padding(.vertical, 10)
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            }
-            .padding(10)
 
             // Search Results
             List(viewModel.searchResults) { user in

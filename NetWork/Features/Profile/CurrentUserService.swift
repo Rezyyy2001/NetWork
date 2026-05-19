@@ -31,6 +31,7 @@ final class CurrentUserService: Sendable {
             FirestoreKeys.UserFields.usualSpot: usualSpot,
             FirestoreKeys.UserFields.bio: bio,
             FirestoreKeys.UserFields.nameLowercased: name.lowercased(),
+            FirestoreKeys.UserFields.lastNameLowercased: name.components(separatedBy: " ").last?.lowercased() ?? "",
         ]
         try await Firestore.firestore().collection(FirestoreKeys.Collections.users).document(user.uid).updateData(userData)
     }
@@ -58,6 +59,7 @@ final class CurrentUserService: Sendable {
         let userData: [String: Any] = [
             FirestoreKeys.UserFields.name: name,
             FirestoreKeys.UserFields.nameLowercased: name.lowercased(),
+            FirestoreKeys.UserFields.lastNameLowercased: name.components(separatedBy: " ").last?.lowercased() ?? "",
             FirestoreKeys.UserFields.email: email,
             FirestoreKeys.UserFields.uid: user.uid,
             FirestoreKeys.UserFields.birthday: birthday.map { Timestamp(date: $0) } ?? NSNull(),

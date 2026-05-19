@@ -17,6 +17,7 @@ enum FirestoreKeys {
     enum UserFields {
         static let name = "name"
         static let nameLowercased = "name_lowercased"
+        static let lastNameLowercased = "last_name_lowercased"
         static let utr = "UTR"
         static let usta = "USTA"
         static let bio = "bio"

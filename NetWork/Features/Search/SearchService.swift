@@ -13,17 +13,24 @@ final class SearchService: Sendable {
     func searchUsers(matching searchText: String) async -> [UserStub] {
         let searchLowercased = searchText.lowercased()
 
+        async let firstNameResults = query(field: FirestoreKeys.UserFields.nameLowercased, matching: searchLowercased)
+        async let lastNameResults = query(field: FirestoreKeys.UserFields.lastNameLowercased, matching: searchLowercased)
+
+        let combined = await firstNameResults + lastNameResults
+        var seen = Set<String>()
+        return combined.filter { seen.insert($0.id).inserted }
+    }
+
+    private func query(field: String, matching searchLowercased: String) async -> [UserStub] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.users)
-            .whereField(FirestoreKeys.UserFields.nameLowercased, isGreaterThanOrEqualTo: searchLowercased)
-            .whereField(FirestoreKeys.UserFields.nameLowercased, isLessThanOrEqualTo: searchLowercased + "\u{f8ff}")
+            .whereField(field, isGreaterThanOrEqualTo: searchLowercased)
+            .whereField(field, isLessThanOrEqualTo: searchLowercased + "\u{f8ff}")
             .getDocuments()
         else { return [] }
 
         return snapshot.documents.compactMap { doc in
-            let data = doc.data()
-            let name = data[FirestoreKeys.UserFields.name] as? String
-            let uid = doc.documentID
-            return UserStub(uid: uid, displayName: name)
+            let name = doc.data()[FirestoreKeys.UserFields.name] as? String
+            return UserStub(uid: doc.documentID, displayName: name)
         }
     }
 }

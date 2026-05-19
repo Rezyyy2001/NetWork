@@ -18,6 +18,10 @@ final class SearchViewModel: ObservableObject {
 
     // searches users in firestore database
     func searchUsers() {
+        guard !searchText.trimmingCharacters(in: .whitespaces).isEmpty else {
+            searchResults = []
+            return
+        }
         Task {
             self.searchResults = await service.searchUsers(matching: searchText)
         }

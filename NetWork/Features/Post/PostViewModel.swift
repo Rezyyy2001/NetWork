@@ -22,12 +22,14 @@ final class PostViewModel: ObservableObject {
     private var posterName = ""
     private var posterUTR: Double? = nil
     private var posterUSTA: Double? = nil
+    private var selectedCity = ""
+    private var didSelectSuggestion = false
 
     init() {
-        Task { await fetchPosterInfo() }
+        Task { try await fetchPosterInfo() }
     }
 
-    private func fetchPosterInfo() async {
+    private func fetchPosterInfo() async throws {
         guard let profile = try? await CurrentUserService.shared.fetchUserProfile() else { return }
         posterName = profile.name
         posterUTR = profile.UTR
@@ -40,6 +42,7 @@ final class PostViewModel: ObservableObject {
             posterUTR: posterUTR,
             posterUSTA: posterUSTA,
             location: location,
+            city: selectedCity,
             date: selectedDate,
             extraInfo: extraInfo,
             numberOfPeople: numberOfPeople
@@ -56,6 +59,10 @@ final class PostViewModel: ObservableObject {
     }
 
     func autocomplete() {
+        guard !didSelectSuggestion else {
+            didSelectSuggestion = false
+            return
+        }
         Task {
             do {
                 suggestions = try await GooglePlacesService.autocomplete(input: location)
@@ -66,7 +73,10 @@ final class PostViewModel: ObservableObject {
     }
 
     func selectSuggestion(_ suggestion: PlaceSuggestion) {
-        location = suggestion.description
+        didSelectSuggestion = true
+        let parts = suggestion.description.components(separatedBy: ",")
+        location = parts.first?.trimmingCharacters(in: .whitespaces) ?? suggestion.description
+        selectedCity = parts.dropFirst(2).first?.trimmingCharacters(in: .whitespaces) ?? ""
         suggestions = []
     }
 }

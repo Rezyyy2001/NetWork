@@ -27,14 +27,6 @@ struct PostPreviewCard: View {
         return formatter.string(from: post.date)
     }
 
-    private var city: String {
-        post.location.components(separatedBy: ",")
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { $0.count > 3 }
-            .dropFirst()
-            .last ?? post.location
-    }
-
     var body: some View {
         VStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 12) {
@@ -73,7 +65,7 @@ struct PostPreviewCard: View {
                         .font(.headline)
                         .bold()
                     Spacer()
-                    Text(city)
+                    Text(post.city)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -137,7 +129,8 @@ struct PostPreviewCard: View {
         posterName: "Rezka Yuspi",
         posterUTR: 8.5,
         posterUSTA: 4.5,
-        location: "Griffith Park Tennis Courts, Los Angeles, CA",
+        location: "Griffith Park Tennis Courts",
+        city: "Los Angeles",
         date: Date(),
         extraInfo: "Looking for a hitting partner for some competitive rallies. All levels welcome! Preferably someone with a UTR between 7-10. I usually play baseline but love working on my net game too.",
         numberOfPeople: 2

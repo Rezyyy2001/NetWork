@@ -12,6 +12,7 @@ struct HitPost {
     let posterUTR: Double?
     let posterUSTA: Double?
     let location: String
+    let city: String
     let date: Date
     let extraInfo: String
     let numberOfPeople: Int

@@ -26,10 +26,10 @@ final class PostViewModel: ObservableObject {
     private var didSelectSuggestion = false
 
     init() {
-        Task { try await fetchPosterInfo() }
+        Task { await fetchPosterInfo() }
     }
 
-    private func fetchPosterInfo() async throws {
+    private func fetchPosterInfo() async {
         guard let profile = try? await CurrentUserService.shared.fetchUserProfile() else { return }
         posterName = profile.name
         posterUTR = profile.UTR

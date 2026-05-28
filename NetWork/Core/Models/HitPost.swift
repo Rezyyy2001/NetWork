@@ -16,6 +16,7 @@ struct HitPost {
     let date: Date
     let extraInfo: String
     let numberOfPeople: Int
+    let isPublic: Bool
 }
 
 // TODO: Redundent poster prefix

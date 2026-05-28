@@ -18,6 +18,7 @@ final class PostViewModel: ObservableObject {
     @Published var suggestions: [PlaceSuggestion] = []
 
     @Published var hitPost: HitPost? = nil
+    @Published var isPublic: Bool = true
 
     private var posterName = ""
     private var posterUTR: Double? = nil
@@ -45,7 +46,8 @@ final class PostViewModel: ObservableObject {
             city: selectedCity,
             date: selectedDate,
             extraInfo: extraInfo,
-            numberOfPeople: numberOfPeople
+            numberOfPeople: numberOfPeople,
+            isPublic: isPublic
         )
     }
 

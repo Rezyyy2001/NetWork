@@ -56,11 +56,11 @@ struct PostView: View {
                         Text("Players \(viewModel.numberOfPeople)")
                             .font(.headline)
                         Stepper(value: $viewModel.numberOfPeople, in: 1...10) {
-                            
+
                         }
                         .labelsHidden()
                     }
-                    
+
                     // Date
                     VStack {
                         Text("Time")
@@ -73,13 +73,23 @@ struct PostView: View {
                         )
                         .labelsHidden()
                     }
+
                 }
+
+                HStack {
+                    Text("Public")
+                        .font(.headline)
+                    Spacer()
+                    Toggle("", isOn: $viewModel.isPublic)
+                        .labelsHidden()
+                }
+
                 CustomTextbox(
                     text: $viewModel.extraInfo,
                     placeholder: "What are you looking for in this session?",
                     characterLimit: 150
                 )
-                
+
             }
             .padding(.horizontal)
             // Post Button

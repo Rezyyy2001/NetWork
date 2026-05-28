@@ -133,9 +133,10 @@ struct PostPreviewCard: View {
         city: "Los Angeles",
         date: Date(),
         extraInfo: "Looking for a hitting partner for some competitive rallies. All levels welcome! Preferably someone with a UTR between 7-10. I usually play baseline but love working on my net game too.",
-        numberOfPeople: 2
+        numberOfPeople: 2,
+        isPublic: true
     )
-    return ZStack {
+    ZStack {
         Color.black.opacity(0.7).ignoresSafeArea()
         PostPreviewCard(post: post, onConfirm: {})
             .padding(.horizontal, 24)

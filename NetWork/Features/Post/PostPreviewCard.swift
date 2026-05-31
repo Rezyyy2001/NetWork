@@ -126,6 +126,7 @@ struct PostPreviewCard: View {
 
 #Preview {
     let post = HitPost(
+        userID: "preview",
         posterName: "Rezka Yuspi",
         posterUTR: 8.5,
         posterUSTA: 4.5,

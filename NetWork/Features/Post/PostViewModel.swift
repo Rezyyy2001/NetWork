@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 
 @MainActor
 final class PostViewModel: ObservableObject {
@@ -20,6 +21,7 @@ final class PostViewModel: ObservableObject {
     @Published var hitPost: HitPost? = nil
     @Published var isPublic: Bool = true
 
+    private var posterUID = ""
     private var posterName = ""
     private var posterUTR: Double? = nil
     private var posterUSTA: Double? = nil
@@ -32,6 +34,8 @@ final class PostViewModel: ObservableObject {
 
     private func fetchPosterInfo() async {
         guard let profile = try? await CurrentUserService.shared.fetchUserProfile() else { return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        posterUID = uid
         posterName = profile.name
         posterUTR = profile.UTR
         posterUSTA = profile.USTA
@@ -39,6 +43,7 @@ final class PostViewModel: ObservableObject {
 
     func post() {
         hitPost = HitPost(
+            userID: posterUID,
             posterName: posterName,
             posterUTR: posterUTR,
             posterUSTA: posterUSTA,

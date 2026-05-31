@@ -8,6 +8,7 @@
 import Foundation
 
 struct HitPost {
+    let userID: String
     let posterName: String
     let posterUTR: Double?
     let posterUSTA: Double?

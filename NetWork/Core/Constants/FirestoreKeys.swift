@@ -13,6 +13,7 @@ enum FirestoreKeys {
         static let friendships = "friendships"
         static let conversations = "conversations"
         static let messages = "messages"
+        static let posts = "posts"
     }
     enum UserFields {
         static let name = "name"
@@ -30,5 +31,17 @@ enum FirestoreKeys {
         static let userID1 = "userID1"
         static let userID2 = "userID2"
         static let status = "status"
+    }
+    enum PostFields {
+        static let userID = "userID"
+        static let posterName = "posterName"
+        static let posterUTR = "posterUTR"
+        static let posterUSTA = "posterUSTA"
+        static let location = "location"
+        static let city = "city"
+        static let date = "date"
+        static let extraInfo = "extraInfo"
+        static let numberOfPeople = "numberOfPeople"
+        static let isPublic = "isPublic"
     }
 }

@@ -27,6 +27,8 @@ final class PostViewModel: ObservableObject {
     private var posterUSTA: Double? = nil
     private var selectedCity = ""
     private var didSelectSuggestion = false
+    
+    private let service = PostService()
 
     init() {
         Task { await fetchPosterInfo() }
@@ -57,8 +59,11 @@ final class PostViewModel: ObservableObject {
     }
 
     func confirmPost() {
-        // TODO: save hitPost to Firestore
-        hitPost = nil
+        Task {
+            guard let post = hitPost else { return }
+            try? await service.savePost(post: post)
+            hitPost = nil
+        }
     }
 
     func dismissPreview() {

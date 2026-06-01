@@ -11,7 +11,7 @@ struct HomeView: View {
     @State private var tabselection = 1
     
     let homeTabItems: [(image: String, title: String)] = [
-        ("figure.tennis", "Friends"),
+        ("figure.tennis", "Hits"),
         ("globe", "Local"),
         ("plus.app", "Post"),
         ("magnifyingglass", "Search"),
@@ -23,7 +23,7 @@ struct HomeView: View {
             ZStack(alignment: .bottom) {
                 VStack {
                     if tabselection == 1 {
-                        FriendsView()
+                        HitsView()
                     } else if tabselection == 2 {
                         LocalView()
                     } else if tabselection == 3 {

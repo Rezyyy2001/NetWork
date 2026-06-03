@@ -16,6 +16,7 @@ private struct TruncatedKey: PreferenceKey {
 
 struct PostPreviewCard: View {
     let post: HitPost
+    var showConfirm: Bool = true
     var onConfirm: () -> Void
 
     @State private var isExpanded = false
@@ -110,22 +111,25 @@ struct PostPreviewCard: View {
             .animation(.easeInOut(duration: 0.2), value: isExpanded)
             .animation(.easeInOut(duration: 0.2), value: isTruncated)
 
-            Button(action: onConfirm) {
-                Text("Post")
-                    .fontWeight(.bold)
-                    .frame(maxWidth: 100)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+            if showConfirm {
+                Button(action: onConfirm) {
+                    Text("Post")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: 100)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+                .padding()
             }
-            .padding()
         }
     }
 }
 
 #Preview {
     let post = HitPost(
+        id: "preview",
         userID: "preview",
         posterName: "Rezka Yuspi",
         posterUTR: 8.5,

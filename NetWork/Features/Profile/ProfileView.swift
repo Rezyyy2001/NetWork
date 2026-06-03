@@ -8,16 +8,20 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @StateObject private var viewModel = CurrentUserProfileViewModel() //observes CurrentUserProfileViewModel
+    @StateObject private var currentUserViewModel = CurrentUserProfileViewModel() //observes CurrentUserProfileViewModel
+    // @StateObject private var postViewModel =
+    
     @EnvironmentObject var authState: AuthState
     
     var body: some View {
         
         VStack {
             // This is where all the child views will stack up
-            HeaderView(viewModel: viewModel)
-            InfoView(viewModel: viewModel)
-            BiographyView(viewModel: viewModel)
+            HeaderView(viewModel: currentUserViewModel)
+            InfoView(viewModel: currentUserViewModel)
+            BiographyView(viewModel: currentUserViewModel)
+            
+            
             Spacer()
             
         }
@@ -26,7 +30,7 @@ struct ProfileView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    viewModel.showMessageView = true
+                    currentUserViewModel.showMessageView = true
                 } label: {
                     Image(systemName: "message")
                         .font(.headline)
@@ -34,7 +38,7 @@ struct ProfileView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    viewModel.showFriendRequests = true
+                    currentUserViewModel.showFriendRequests = true
                 } label: {
                     Image(systemName: "tray")
                         .font(.headline)
@@ -42,7 +46,7 @@ struct ProfileView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    viewModel.showSettings = true
+                    currentUserViewModel.showSettings = true
                 } label: {
                     Image(systemName: "slider.horizontal.3")
                         .font(.headline)
@@ -53,18 +57,18 @@ struct ProfileView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         
-        .sheet(isPresented: $viewModel.showMessageView) {
-            MessageListView(currentUserID: viewModel.uid)
+        .sheet(isPresented: $currentUserViewModel.showMessageView) {
+            MessageListView(currentUserID: currentUserViewModel.uid)
         }
-        .sheet(isPresented: $viewModel.showFriendRequests) {
+        .sheet(isPresented: $currentUserViewModel.showFriendRequests) {
             FriendInboxView()
         }
-        .sheet(isPresented: $viewModel.showSettings) {
+        .sheet(isPresented: $currentUserViewModel.showSettings) {
             SettingsView(authState: authState)
         }
         //This whole block of code is to keep the data updated
         .task {
-            await viewModel.fetchCurrentUserProfile()
+            await currentUserViewModel.fetchCurrentUserProfile()
         }
     }
 }

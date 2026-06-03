@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct HitPost {
+struct HitPost: Identifiable {
+    let id: String
+    
     let userID: String
     let posterName: String
     let posterUTR: Double?

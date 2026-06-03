@@ -45,6 +45,7 @@ final class PostViewModel: ObservableObject {
 
     func post() {
         hitPost = HitPost(
+            id: UUID().uuidString, //Just generates a unique string for swift
             userID: posterUID,
             posterName: posterName,
             posterUTR: posterUTR,

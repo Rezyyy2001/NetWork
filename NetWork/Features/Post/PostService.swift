@@ -34,6 +34,8 @@ struct PostService: Sendable {
         try await Firestore.firestore().collection(FirestoreKeys.Collections.posts).document().setData(postData)
     }
     
+    // TODO: They return the same thing use a private helper function to clean up this DRY violation
+    
     func fetchPosts() async throws -> [HitPost] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.posts)
             .getDocuments()

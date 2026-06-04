@@ -8,19 +8,22 @@
 import SwiftUI
 
 struct UserProfileView: View {
-    @StateObject private var viewModel: OtherUserProfileViewModel
+    @StateObject private var otherUserProfileViewModel: OtherUserProfileViewModel
+    @StateObject private var userPostsViewModel: UserPostsViewModel
+    
     @Environment(\.dismiss) private var dismiss
     
     init(userID: String) {
-        _viewModel = StateObject(wrappedValue: OtherUserProfileViewModel(userID: userID))
+        _otherUserProfileViewModel = StateObject(wrappedValue: OtherUserProfileViewModel(userID: userID))
+        _userPostsViewModel = StateObject(wrappedValue: UserPostsViewModel(userID: userID))
     }
     
     var body: some View {
         VStack {
-            HeaderView(viewModel: viewModel)
-            InfoView(viewModel: viewModel)
-            BiographyView(viewModel: viewModel)
-            FriendButtonView(targetUserID: viewModel.uid)
+            HeaderView(viewModel: otherUserProfileViewModel)
+            InfoView(viewModel: otherUserProfileViewModel)
+            BiographyView(viewModel: otherUserProfileViewModel)
+            FriendButtonView(targetUserID: otherUserProfileViewModel.uid)
             Spacer()
         }
         .padding(.horizontal, 2)

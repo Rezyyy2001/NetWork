@@ -19,21 +19,32 @@ struct UserProfileView: View {
     }
     
     var body: some View {
-        VStack {
-            HeaderView(viewModel: otherUserProfileViewModel)
-            InfoView(viewModel: otherUserProfileViewModel)
-            BiographyView(viewModel: otherUserProfileViewModel)
-            FriendButtonView(targetUserID: otherUserProfileViewModel.uid)
-            Spacer()
-        }
-        .padding(.horizontal, 2)
-        .ignoresSafeArea(.container, edges: .horizontal)
-        .toolbar {
-            ToolbarItem (placement: .navigationBarLeading) {
-                BackButton(padded: false)
+        ScrollView {
+            VStack {
+                HeaderView(viewModel: otherUserProfileViewModel)
+                InfoView(viewModel: otherUserProfileViewModel)
+                BiographyView(viewModel: otherUserProfileViewModel)
+                FriendButtonView(targetUserID: otherUserProfileViewModel.uid)
+                
+                if otherUserProfileViewModel.friendshipStatus == .friends {
+                    ForEach(userPostsViewModel.hits) { post in
+                        PostPreviewCard(post: post, showConfirm: false, onConfirm: {})
+                    }
+                }
+                Spacer()
+            }
+            .padding(.horizontal, 2)
+            .ignoresSafeArea(.container, edges: .horizontal)
+            .toolbar {
+                ToolbarItem (placement: .navigationBarLeading) {
+                    BackButton(padded: false)
+                }
+            }
+            .navigationBarBackButtonHidden(true)
+            .task {
+                try? await userPostsViewModel.fetchUserPosts()
             }
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 

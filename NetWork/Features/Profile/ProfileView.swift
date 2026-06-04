@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileView: View {
     @StateObject private var currentUserViewModel = CurrentUserProfileViewModel() //observes CurrentUserProfileViewModel
-    // @StateObject private var postViewModel =
+    @StateObject private var userPostsViewModel = UserPostsViewModel(userID: Auth.auth().currentUser?.uid ?? "")
     
     @EnvironmentObject var authState: AuthState
     
@@ -20,6 +21,8 @@ struct ProfileView: View {
             HeaderView(viewModel: currentUserViewModel)
             InfoView(viewModel: currentUserViewModel)
             BiographyView(viewModel: currentUserViewModel)
+            
+            // We need to loop through hitposts to display For each
             
             
             Spacer()

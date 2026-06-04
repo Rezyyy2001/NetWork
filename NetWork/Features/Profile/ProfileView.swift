@@ -6,65 +6,78 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileView: View {
-    @StateObject private var viewModel = CurrentUserProfileViewModel() //observes CurrentUserProfileViewModel
+    @StateObject private var currentUserViewModel = CurrentUserProfileViewModel()
+    @StateObject private var userPostsViewModel = UserPostsViewModel(userID: Auth.auth().currentUser?.uid ?? "")
+    
     @EnvironmentObject var authState: AuthState
     
     var body: some View {
-        
-        VStack {
-            // This is where all the child views will stack up
-            HeaderView(viewModel: viewModel)
-            InfoView(viewModel: viewModel)
-            BiographyView(viewModel: viewModel)
-            Spacer()
+        ScrollView {
+            VStack {
+                // This is where all the child views will stack up
+                HeaderView(viewModel: currentUserViewModel)
+                InfoView(viewModel: currentUserViewModel)
+                BiographyView(viewModel: currentUserViewModel)
+                
+                // TODO: add a filter to switch between current and past hit posts
+                
+                // We need to loop through hitposts to display For each
+                ForEach(userPostsViewModel.hits) { post in
+                    PostPreviewCard(post: post, showConfirm: false, onConfirm: {})
+                }
+                
+                Spacer()
+                
+            }
+            .padding(.horizontal, 2)
+            .ignoresSafeArea(.container, edges: .horizontal)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        currentUserViewModel.showMessageView = true
+                    } label: {
+                        Image(systemName: "message")
+                            .font(.headline)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        currentUserViewModel.showFriendRequests = true
+                    } label: {
+                        Image(systemName: "tray")
+                            .font(.headline)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        currentUserViewModel.showSettings = true
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.headline)
+                    }
+                }
+            }
             
-        }
-        .padding(.horizontal, 2)
-        .ignoresSafeArea(.container, edges: .horizontal)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    viewModel.showMessageView = true
-                } label: {
-                    Image(systemName: "message")
-                        .font(.headline)
-                }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+            
+            .sheet(isPresented: $currentUserViewModel.showMessageView) {
+                MessageListView(currentUserID: currentUserViewModel.uid)
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    viewModel.showFriendRequests = true
-                } label: {
-                    Image(systemName: "tray")
-                        .font(.headline)
-                }
+            .sheet(isPresented: $currentUserViewModel.showFriendRequests) {
+                FriendInboxView()
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    viewModel.showSettings = true
-                } label: {
-                    Image(systemName: "slider.horizontal.3")
-                        .font(.headline)
-                }
+            .sheet(isPresented: $currentUserViewModel.showSettings) {
+                SettingsView(authState: authState)
             }
-        }
-        
-        .navigationBarBackButtonHidden(true)
-        .navigationBarTitleDisplayMode(.inline)
-        
-        .sheet(isPresented: $viewModel.showMessageView) {
-            MessageListView(currentUserID: viewModel.uid)
-        }
-        .sheet(isPresented: $viewModel.showFriendRequests) {
-            FriendInboxView()
-        }
-        .sheet(isPresented: $viewModel.showSettings) {
-            SettingsView(authState: authState)
-        }
-        //This whole block of code is to keep the data updated
-        .task {
-            await viewModel.fetchCurrentUserProfile()
+            //This whole block of code is to keep the data updated
+            .task {
+                await currentUserViewModel.fetchCurrentUserProfile()
+                try? await userPostsViewModel.fetchUserPosts()
+            }
         }
     }
 }

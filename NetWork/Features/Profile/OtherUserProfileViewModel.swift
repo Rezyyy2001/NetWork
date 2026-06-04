@@ -12,6 +12,7 @@ import FirebaseFirestore
 final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider {
     
     private let service = OtherUserProfileService()
+    private let friendService = FriendService()
     
     // userProfileDataProvider ensures that the properties are the correct type
     @Published var displayName: String = "Loading..."
@@ -22,6 +23,8 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
     @Published var age: Int = 0
     
     @Published var errorMessage: String? = nil
+    
+    @Published var friendshipStatus: FriendshipStatus = .none
 
     private let userID: String
 
@@ -39,6 +42,8 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
         do {
             let profile = try await service.fetchUserProfile(userID: userID)
             apply(profile)
+            
+            self.friendshipStatus = (try await friendService.checkFriendshipStatus(for: userID)) // ?? .none
         } catch {
             self.errorMessage = "Could not find user"
         }

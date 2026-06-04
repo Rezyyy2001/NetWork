@@ -22,6 +22,8 @@ struct ProfileView: View {
                 InfoView(viewModel: currentUserViewModel)
                 BiographyView(viewModel: currentUserViewModel)
                 
+                // TODO: add a filter to switch between current and past hit posts
+                
                 // We need to loop through hitposts to display For each
                 ForEach(userPostsViewModel.hits) { post in
                     PostPreviewCard(post: post, showConfirm: false, onConfirm: {})

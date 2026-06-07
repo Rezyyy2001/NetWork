@@ -23,6 +23,22 @@ struct HitsView: View {
             }
             .navigationBarBackButtonHidden(true)
         }
+        .toolbar{
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    viewModel.showFilter = true
+                } label: {
+                    Image(systemName: "line.3.horizontal.decrease.circle")
+                        .font(.headline)
+                }
+            }
+        }
+        .sheet(isPresented: $viewModel.showFilter, onDismiss: {
+            viewModel.fetchPosts()
+        }) {
+            FilterView(isNewest: $viewModel.isNewest, numberOfPeople: $viewModel.numberOfPeople)
+                .presentationDetents([.fraction(0.25)])
+        }
     }
 }
 

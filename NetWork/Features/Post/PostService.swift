@@ -38,6 +38,9 @@ struct PostService: Sendable {
     
     func fetchPosts() async throws -> [HitPost] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.posts)
+            .order(by: FirestoreKeys.PostFields.date, descending: false)
+            .whereField(FirestoreKeys.PostFields.date, isGreaterThanOrEqualTo: Date())
+            .limit(to: 20)
             .getDocuments()
                 else { return [] }
         

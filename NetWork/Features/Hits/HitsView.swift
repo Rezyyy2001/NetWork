@@ -36,7 +36,9 @@ struct HitsView: View {
         .sheet(isPresented: $viewModel.showFilter, onDismiss: {
             viewModel.fetchPosts()
         }) {
-            FilterView(isNewest: $viewModel.isNewest, numberOfPeople: $viewModel.numberOfPeople)
+            FilterView(isNewest: $viewModel.isNewest,
+                       numberOfPeople: $viewModel.numberOfPeople,
+                       isFriends: $viewModel.isFriends)
                 .presentationDetents([.fraction(0.25)])
         }
     }

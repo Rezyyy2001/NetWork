@@ -11,6 +11,7 @@ struct FilterView: View {
 
     @Binding var isNewest: Bool
     @Binding var numberOfPeople: Int
+    @Binding var isFriends: Bool
     
     var body: some View {
         VStack {
@@ -27,9 +28,17 @@ struct FilterView: View {
                 Text("4+").tag(4)
             }
             .pickerStyle(.segmented)
+            
+            Picker("Visibility", selection: $isFriends) {
+                Text("Friends").tag(true)
+                Text("Public").tag(false)
+            }
+            .pickerStyle(.segmented)
         }
     }
 }
 #Preview {
-    FilterView(isNewest: .constant(true), numberOfPeople: .constant(0))
+    FilterView(isNewest: .constant(true),
+               numberOfPeople: .constant(0),
+               isFriends: .constant(true))
 }

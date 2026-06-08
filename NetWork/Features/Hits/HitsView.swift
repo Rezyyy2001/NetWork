@@ -36,8 +36,13 @@ struct HitsView: View {
         .sheet(isPresented: $viewModel.showFilter, onDismiss: {
             viewModel.fetchPosts()
         }) {
-            FilterView(isNewest: $viewModel.isNewest, numberOfPeople: $viewModel.numberOfPeople)
-                .presentationDetents([.fraction(0.25)])
+            FilterView(isNewest: $viewModel.isNewest,
+                       numberOfPeople: $viewModel.numberOfPeople,
+                       isFriends: $viewModel.isFriends,
+                       utrRange: $viewModel.utrRange,
+                       ustaRange: $viewModel.ustaRange
+            )
+                .presentationDetents([.fraction(0.35)])
         }
     }
 }

@@ -13,10 +13,17 @@ final class HitsViewModel: ObservableObject {
     private let service = PostService()
     
     @Published var hits: [HitPost] = []
+    
     @Published var isNewest: Bool = false
     @Published var numberOfPeople: Int = 0
+    @Published var isFriends: Bool = false
+    @Published var UTR: Int = 0
+    @Published var USTA: Int = 0
     
     @Published var showFilter: Bool = false
+    
+    @Published var utrRange: [CGFloat] = [1, 16]
+    @Published var ustaRange: [CGFloat] = [1, 7]
     
     func fetchPosts() {
         Task {

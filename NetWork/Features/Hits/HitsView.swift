@@ -38,8 +38,11 @@ struct HitsView: View {
         }) {
             FilterView(isNewest: $viewModel.isNewest,
                        numberOfPeople: $viewModel.numberOfPeople,
-                       isFriends: $viewModel.isFriends)
-                .presentationDetents([.fraction(0.25)])
+                       isFriends: $viewModel.isFriends,
+                       utrRange: $viewModel.utrRange,
+                       ustaRange: $viewModel.ustaRange
+            )
+                .presentationDetents([.fraction(0.35)])
         }
     }
 }

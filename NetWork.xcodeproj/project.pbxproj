@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5B62A98D2D381F8400FDC7B0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5B62A98C2D381F8400FDC7B0 /* FirebaseFirestore */; };
+		5B8F33DA2FD636A4005435A8 /* MultiSlider in Frameworks */ = {isa = PBXBuildFile; productRef = 5B8F33D92FD636A4005435A8 /* MultiSlider */; };
 		5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */; };
 		5BC98D112CF5AD0F00D9A485 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D102CF5AD0F00D9A485 /* FirebaseAnalytics */; };
 		5BC98D142CF6740D00D9A485 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D132CF6740D00D9A485 /* FirebaseAuth */; };
@@ -36,6 +37,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5BC98D112CF5AD0F00D9A485 /* FirebaseAnalytics in Frameworks */,
+				5B8F33DA2FD636A4005435A8 /* MultiSlider in Frameworks */,
 				5BC98D142CF6740D00D9A485 /* FirebaseAuth in Frameworks */,
 				5B62A98D2D381F8400FDC7B0 /* FirebaseFirestore in Frameworks */,
 			);
@@ -137,6 +139,7 @@
 			mainGroup = 5BD056892C968C0900E6DADA;
 			packageReferences = (
 				5BC98D0F2CF5AD0F00D9A485 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5B8F33D82FD636A4005435A8 /* XCRemoteSwiftPackageReference "MultiSlider" */,
 			);
 			productRefGroup = 5BD056932C968C0900E6DADA /* Products */;
 			projectDirPath = "";
@@ -379,6 +382,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5B8F33D82FD636A4005435A8 /* XCRemoteSwiftPackageReference "MultiSlider" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yonat/MultiSlider";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.1;
+			};
+		};
 		5BC98D0F2CF5AD0F00D9A485 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -394,6 +405,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5BC98D0F2CF5AD0F00D9A485 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		5B8F33D92FD636A4005435A8 /* MultiSlider */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5B8F33D82FD636A4005435A8 /* XCRemoteSwiftPackageReference "MultiSlider" */;
+			productName = MultiSlider;
 		};
 		5BC98D102CF5AD0F00D9A485 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -45,7 +45,7 @@ struct FilterView: View {
                     MultiValueSlider(value: $utrRange, minimumValue: CGFloat(1), maximumValue: CGFloat(16), outerTrackColor: .lightGray)
                         .thumbTintColor(.systemBlue)
                         .orientation(.horizontal)
-                        .valueLabelPosition(.top)
+                        .valueLabelPosition(.topMargin)
                 }
                 
                 HStack {
@@ -53,7 +53,7 @@ struct FilterView: View {
                     MultiValueSlider(value: $ustaRange, minimumValue: CGFloat(1), maximumValue: CGFloat(7), outerTrackColor: .lightGray)
                         .thumbTintColor(.systemBlue)
                         .orientation(.horizontal)
-                        .valueLabelPosition(.top)
+                        .valueLabelPosition(.topMargin)
                 }
             }
         }

@@ -10,11 +10,12 @@ import FirebaseAuth
 
 @MainActor
 final class HitsViewModel: ObservableObject {
-    private let service = PostService()
+    private let postService = PostService()
+    private let friendService = FriendService()
     
     @Published var hits: [HitPost] = []
     
-    @Published var isNewest: Bool = false
+    @Published var isNewest: Bool = true
     @Published var numberOfPeople: Int = 0
     @Published var isFriends: Bool = false
     @Published var UTR: Int = 0
@@ -27,7 +28,22 @@ final class HitsViewModel: ObservableObject {
     
     func fetchPosts() {
         Task {
-            self.hits = try await service.fetchPosts()
+            var friendIDs: [String] = []
+            
+            if isFriends == true {
+                let userID = Auth.auth().currentUser?.uid ?? ""
+                friendIDs = await friendService.fetchFriendIDs(for: userID)
+                print("friendIDs: \(friendIDs)")
+            }
+            
+            self.hits = (try? await postService.fetchPosts(
+                isNewest: isNewest,
+                numberOfPeople: numberOfPeople,
+                isFriends: isFriends,
+                utrRange: utrRange,
+                ustaRange: ustaRange,
+                friendIDs: friendIDs
+            )) ?? []
         }
     }
 }

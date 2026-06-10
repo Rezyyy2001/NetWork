@@ -121,4 +121,22 @@ final class FriendService: Sendable {
         }
         return await fetchStubs(for: friendIDs)
     }
+    
+    public func fetchFriendIDs(for currentUserID: String) async -> [String] {
+        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.friendships)
+            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "accepted")
+            .getDocuments()
+        else { return [] }
+        
+        let friendIDs = snapshot.documents.compactMap { doc -> String? in
+            let data = doc.data()
+            let userID1 = data[FirestoreKeys.FriendshipFields.userID1] as? String ?? ""
+            let userID2 = data[FirestoreKeys.FriendshipFields.userID2] as? String ?? ""
+
+            if userID1 == currentUserID { return userID2 }
+            else if userID2 == currentUserID { return userID1 }
+            return nil
+        }
+        return friendIDs
+    }
 }

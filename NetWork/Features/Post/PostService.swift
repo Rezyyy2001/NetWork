@@ -50,7 +50,7 @@ struct PostService: Sendable {
         do {
             let snapshot = try await query.getDocuments()
             
-            return snapshot.documents.compactMap { doc in
+            var posts = snapshot.documents.compactMap { doc in
                 let userID = doc.data()[FirestoreKeys.PostFields.userID] as? String ?? ""
                 let posterName = doc.data()[FirestoreKeys.PostFields.posterName] as? String ?? ""
                 let posterUTR = doc.data()[FirestoreKeys.PostFields.posterUTR] as? Double
@@ -65,6 +65,27 @@ struct PostService: Sendable {
                 
                 return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic)
             }
+            
+            switch numberOfPeople {
+            case 1:
+                posts = posts.filter { $0.numberOfPeople == 1 }
+            case 3:
+                posts = posts.filter { $0.numberOfPeople == 3 }
+            case 4:
+                posts = posts.filter { $0.numberOfPeople >= 4 }
+            default:
+                break
+            }
+            
+            posts = posts.filter {
+                ($0.posterUTR ?? 0) >= Double(utrRange[0]) &&
+                ($0.posterUTR ?? 0) <= Double(utrRange[1]) &&
+                ($0.posterUSTA ?? 0) >= Double(ustaRange[0]) &&
+                ($0.posterUSTA ?? 0) <= Double(ustaRange[1])
+            }
+            
+            return posts
+            
         } catch {
             print("fetchPosts error \(error)") // gives us a link that allows us to create configured indexes
             return []

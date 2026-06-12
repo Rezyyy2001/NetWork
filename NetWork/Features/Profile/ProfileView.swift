@@ -23,6 +23,14 @@ struct ProfileView: View {
                 BiographyView(viewModel: currentUserViewModel)
                 
                 // TODO: add a filter to switch between current and past hit posts
+                Picker("Order", selection: $userPostsViewModel.active) {
+                    Text("Active").tag(true)
+                    Text("Past").tag(false)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .onChange(of: userPostsViewModel.active) {
+                      Task { try? await userPostsViewModel.fetchUserPosts() }
+                }
                 
                 // We need to loop through hitposts to display For each
                 ForEach(userPostsViewModel.hits) { post in

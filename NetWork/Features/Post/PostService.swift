@@ -84,6 +84,8 @@ struct PostService: Sendable {
                 ($0.posterUSTA ?? 0) <= Double(ustaRange[1])
             }
             
+            // TODO: Find a way to filter location or nearby location and make it look nice in filterView
+            
             return posts
             
         } catch {
@@ -92,27 +94,41 @@ struct PostService: Sendable {
         }
     }
     
-    func fetchUserPosts(userID: String) async throws -> [HitPost] {
-        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.posts)
+    func fetchUserPosts(userID: String, active: Bool) async throws -> [HitPost] {
+        
+        var query: Query = db.collection(FirestoreKeys.Collections.posts)
             .whereField(FirestoreKeys.PostFields.userID, isEqualTo: userID)
-            .getDocuments()
-        else { return [] }
+            .order(by: FirestoreKeys.PostFields.date, descending: false)
         
-        return snapshot.documents.compactMap { doc in
+        if active {
+            query = query.whereField(FirestoreKeys.PostFields.date, isGreaterThanOrEqualTo: Date())
+          } else {
+              query = query.whereField(FirestoreKeys.PostFields.date, isLessThan: Date())
+          }
         
-            let userID = doc.data()[FirestoreKeys.PostFields.userID] as? String ?? ""
-            let posterName = doc.data()[FirestoreKeys.PostFields.posterName] as? String ?? ""
-            let posterUTR = doc.data()[FirestoreKeys.PostFields.posterUTR] as? Double
-            let posterUSTA = doc.data()[FirestoreKeys.PostFields.posterUSTA] as? Double
-            let location = doc.data()[FirestoreKeys.PostFields.location] as? String ?? ""
-            let city = doc.data()[FirestoreKeys.PostFields.city] as? String ?? ""
-            let timestamp = doc.data()[FirestoreKeys.PostFields.date] as? Timestamp
-            let date = timestamp?.dateValue() ?? Date()
-            let extraInfo = doc.data()[FirestoreKeys.PostFields.extraInfo] as? String ?? ""
-            let numberOfPeople = doc.data()[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1
-            let isPublic = doc.data()[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
+        do {
+            let snapshot = try await query.getDocuments()
             
-            return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic)
+            let posts = snapshot.documents.compactMap { doc in
+                let userID = doc.data()[FirestoreKeys.PostFields.userID] as? String ?? ""
+                let posterName = doc.data()[FirestoreKeys.PostFields.posterName] as? String ?? ""
+                let posterUTR = doc.data()[FirestoreKeys.PostFields.posterUTR] as? Double
+                let posterUSTA = doc.data()[FirestoreKeys.PostFields.posterUSTA] as? Double
+                let location = doc.data()[FirestoreKeys.PostFields.location] as? String ?? ""
+                let city = doc.data()[FirestoreKeys.PostFields.city] as? String ?? ""
+                let timestamp = doc.data()[FirestoreKeys.PostFields.date] as? Timestamp
+                let date = timestamp?.dateValue() ?? Date()
+                let extraInfo = doc.data()[FirestoreKeys.PostFields.extraInfo] as? String ?? ""
+                let numberOfPeople = doc.data()[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1
+                let isPublic = doc.data()[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
+                
+                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic)
+            }
+            return posts
+            
+        } catch {
+            print("fetchPosts error \(error)") // gives us a link that allows us to create configured indexes
+            return []
         }
     }
 }

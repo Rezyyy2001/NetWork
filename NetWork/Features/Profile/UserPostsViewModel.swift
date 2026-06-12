@@ -13,6 +13,7 @@ final class UserPostsViewModel: ObservableObject {
     private let service = PostService()
     
     @Published var hits: [HitPost] = []
+    @Published var active: Bool = true
     
     private let userID: String
     
@@ -22,6 +23,6 @@ final class UserPostsViewModel: ObservableObject {
     }
     
     func fetchUserPosts() async throws {
-        self.hits = try await service.fetchUserPosts(userID: userID)
+        self.hits = try await service.fetchUserPosts(userID: userID, active: active)
     }
 }

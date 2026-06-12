@@ -25,11 +25,3 @@ struct BiographyView<T: UserProfileDataProvider & ObservableObject>: View {
         }
     }
 }
-
-#Preview {
-    ProfileView()
-
-}
-
-
-

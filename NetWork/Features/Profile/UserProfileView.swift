@@ -26,6 +26,15 @@ struct UserProfileView: View {
                 BiographyView(viewModel: otherUserProfileViewModel)
                 FriendButtonView(targetUserID: otherUserProfileViewModel.uid)
                 
+                Picker("Order", selection: $userPostsViewModel.active) {
+                    Text("Active").tag(true)
+                    Text("Past").tag(false)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .onChange(of: userPostsViewModel.active) {
+                      Task { try? await userPostsViewModel.fetchUserPosts() }
+                }
+                
                 if otherUserProfileViewModel.friendshipStatus == .friends {
                     ForEach(userPostsViewModel.hits) { post in
                         PostPreviewCard(post: post, showConfirm: false, onConfirm: {})

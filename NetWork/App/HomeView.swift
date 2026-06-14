@@ -34,7 +34,7 @@ struct HomeView: View {
                         ProfileView()
                     }
                 }
-                
+                .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 80) }
                 CustomTabView(tabSelection: $tabselection, items: homeTabItems)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

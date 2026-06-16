@@ -34,9 +34,84 @@ struct HitRequestService: Sendable {
     }
     
     func fetchRequests(for postID: String) async throws -> [UserProfile] {
-        return []
+        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
+            .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "pending")
+            .getDocuments()
+        else { return [] }
+        
+        let requesterID = snapshot.documents.compactMap {
+            $0.data()[FirestoreKeys.HitRequestFields.requesterID] as? String
+        }
+        return await fetchProfiles(for: requesterID)
     }
-    func confirmedHits(for userID: String) async throws -> [HitPost] {
-        return []
+    
+    private func fetchProfiles(for userIDs: [String]) async -> [UserProfile] {
+        var userProfile: [UserProfile] = []
+        
+        
+        for id in userIDs {
+            guard let doc = try? await db.collection(FirestoreKeys.Collections.users).document(id).getDocument(),
+                  let data = doc.data()
+            else { continue }
+            
+            let timestamp = data[FirestoreKeys.UserFields.birthday] as? Timestamp
+            
+            let profile = UserProfile(
+                name: data[FirestoreKeys.UserFields.name] as? String ?? "",
+                UTR: data[FirestoreKeys.UserFields.utr] as? Double ?? 0.0,
+                USTA: data[FirestoreKeys.UserFields.usta] as? Double ?? 0.0,
+                usualSpot: data[FirestoreKeys.UserFields.usualSpot] as? String ?? "",
+                bio: data[FirestoreKeys.UserFields.bio] as? String ?? "",
+                birthday: timestamp?.dateValue()
+                )
+                userProfile.append(profile)
+            
+        }
+        return userProfile
+    }
+    
+    func confirmedHits(for requesterID: String) async throws -> [HitPost] {
+        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
+            .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: requesterID)
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "accepted")
+            .getDocuments()
+        else { return [] }
+        
+        let postID = snapshot.documents.compactMap {
+            $0.data()[FirestoreKeys.HitRequestFields.postID] as? String
+        }
+        return await fetchConfirmedHits(for: postID)
+    }
+    
+    private func fetchConfirmedHits(for postID: [String]) async -> [HitPost] {
+        var posts: [HitPost] = []
+        
+        
+        for id in postID {
+            guard let doc = try? await db.collection(FirestoreKeys.Collections.posts).document(id).getDocument(),
+                  let data = doc.data()
+            else { continue }
+            
+            let timestamp = data[FirestoreKeys.PostFields.date] as? Timestamp
+            
+            let hitPost = HitPost(
+                id: id,
+                userID: data[FirestoreKeys.PostFields.userID] as? String ?? "",
+                posterName: data[FirestoreKeys.PostFields.posterName] as? String ?? "",
+                posterUTR: data[FirestoreKeys.PostFields.posterUTR] as? Double ?? 0.0,
+                posterUSTA: data[FirestoreKeys.PostFields.posterUSTA] as? Double ?? 0.0,
+                location: data[FirestoreKeys.PostFields.location] as? String ?? "",
+                city: data[FirestoreKeys.PostFields.city] as? String ?? "",
+                date: timestamp?.dateValue() ?? Date(),
+                extraInfo: data[FirestoreKeys.PostFields.extraInfo] as? String ?? "",
+                numberOfPeople: data[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 0,
+                isPublic: data[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
+                )
+            
+                posts.append(hitPost)
+            
+        }
+        return posts
     }
 }

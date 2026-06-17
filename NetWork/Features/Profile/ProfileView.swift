@@ -34,7 +34,12 @@ struct ProfileView: View {
                 
                 // We need to loop through hitposts to display For each
                 ForEach(userPostsViewModel.hits) { post in
-                    PostPreviewCard(post: post, showConfirm: false, onConfirm: {})
+                    PostPreviewCard(post: post,
+                                    showConfirm: false,
+                                    onConfirm: {},
+                                    showJoinButton: false,
+                                    onJoinRequest: {}
+                    )
                 }
                 
                 Spacer()

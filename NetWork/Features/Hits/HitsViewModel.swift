@@ -12,6 +12,7 @@ import FirebaseAuth
 final class HitsViewModel: ObservableObject {
     private let postService = PostService()
     private let friendService = FriendService()
+    private let hitRequestService = HitRequestService()
     
     @Published var hits: [HitPost] = []
     
@@ -44,6 +45,12 @@ final class HitsViewModel: ObservableObject {
                 ustaRange: ustaRange,
                 friendIDs: friendIDs
             )) ?? []
+        }
+    }
+    
+    func sendRequest(for post: HitPost) {
+        Task {
+            try await hitRequestService.sendRequest(postID: post.id, posterID: post.userID)
         }
     }
 }

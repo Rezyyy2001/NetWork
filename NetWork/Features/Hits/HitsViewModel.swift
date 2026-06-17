@@ -53,4 +53,10 @@ final class HitsViewModel: ObservableObject {
             try await hitRequestService.sendRequest(postID: post.id, posterID: post.userID)
         }
     }
+    
+    func cancelRequest(for post: HitPost) {
+        Task {
+            try await hitRequestService.cancelRequest(documentID: post.id)
+        }
+    }
 }

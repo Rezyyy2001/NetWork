@@ -15,8 +15,11 @@ struct HitsView: View {
         VStack {
             ScrollView {
                 ForEach(viewModel.hits) { post in
-                    PostPreviewCard(post: post, showConfirm: false, onConfirm: {}, onJoinRequest: {})
-                }
+                    PostPreviewCard(post: post,
+                                    showConfirm: false,
+                                    onConfirm: {},
+                                    onJoinRequest: {viewModel.sendRequest(for: post)}
+                )}
             }
             .onAppear {
                 viewModel.fetchPosts()

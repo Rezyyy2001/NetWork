@@ -16,8 +16,12 @@ private struct TruncatedKey: PreferenceKey {
 
 struct PostPreviewCard: View {
     let post: HitPost
+    
     var showConfirm: Bool = true
     var onConfirm: () -> Void
+    
+    var showJoinButton: Bool = true
+    var onJoinRequest: () -> Void
 
     @State private var isExpanded = false
     @State private var isTruncated = false
@@ -54,9 +58,18 @@ struct PostPreviewCard: View {
                                 .font(.footnote)
                         }
                     }
-                    .padding(.leading, 5)
-
+                    
                     Spacer()
+    
+                    if showJoinButton {
+                        Button {
+                            onJoinRequest()
+                        } label: {
+                            Image(systemName: "plus.app")
+                                .font(.title)
+                                .foregroundColor(.green)
+                        }
+                    }
                 }
 
                 Divider()
@@ -143,7 +156,7 @@ struct PostPreviewCard: View {
     )
     ZStack {
         Color.black.opacity(0.7).ignoresSafeArea()
-        PostPreviewCard(post: post, onConfirm: {})
+        PostPreviewCard(post: post, onConfirm: {}, onJoinRequest: {})
             .padding(.horizontal, 24)
     }
 }

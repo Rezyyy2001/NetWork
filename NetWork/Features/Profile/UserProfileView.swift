@@ -37,7 +37,7 @@ struct UserProfileView: View {
                 
                 if otherUserProfileViewModel.friendshipStatus == .friends {
                     ForEach(userPostsViewModel.hits) { post in
-                        PostPreviewCard(post: post, showConfirm: false, onConfirm: {})
+                        PostPreviewCard(post: post, showConfirm: false, onConfirm: {}, onJoinRequest: {})
                     }
                 }
                 Spacer()

@@ -22,6 +22,9 @@ struct PostPreviewCard: View {
     
     var showJoinButton: Bool = true
     var onJoinRequest: () -> Void
+    
+    var isRequested: Bool = false
+    var onCancelRequest: () -> Void
 
     @State private var isExpanded = false
     @State private var isTruncated = false
@@ -63,11 +66,11 @@ struct PostPreviewCard: View {
     
                     if showJoinButton {
                         Button {
-                            onJoinRequest()
+                            isRequested ? onCancelRequest() : onJoinRequest()
                         } label: {
-                            Image(systemName: "plus.app")
+                            Image(systemName: isRequested ? "minus.circle" : "plus.app")
                                 .font(.title)
-                                .foregroundColor(.green)
+                                .foregroundColor(isRequested ? .red : .green)
                         }
                     }
                 }
@@ -156,7 +159,7 @@ struct PostPreviewCard: View {
     )
     ZStack {
         Color.black.opacity(0.7).ignoresSafeArea()
-        PostPreviewCard(post: post, onConfirm: {}, onJoinRequest: {})
+        PostPreviewCard(post: post, onConfirm: {}, onJoinRequest: {}, onCancelRequest: {})
             .padding(.horizontal, 24)
     }
 }

@@ -18,7 +18,9 @@ struct HitsView: View {
                     PostPreviewCard(post: post,
                                     showConfirm: false,
                                     onConfirm: {},
-                                    onJoinRequest: {viewModel.sendRequest(for: post)}
+                                    onJoinRequest: {viewModel.sendRequest(for: post)},
+                                    isRequested: viewModel.requestedPostIDs.contains(post.id),
+                                    onCancelRequest:{ viewModel.cancelRequest(for: post) }
                 )}
             }
             .onAppear {

@@ -116,7 +116,7 @@ struct PostView: View {
                 .onTapGesture { viewModel.dismissPreview() }
 
             VStack {
-                PostPreviewCard(post: post, onConfirm: { viewModel.confirmPost() }, onJoinRequest: {})
+                PostPreviewCard(post: post, onConfirm: { viewModel.confirmPost() }, onJoinRequest: {}, onCancelRequest: {})
                     .padding(.horizontal, 24)
                     .transition(.scale(scale: 0.95).combined(with: .opacity))
                 Spacer()

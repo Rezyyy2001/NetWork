@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct HitsView: View {
     
@@ -18,7 +19,10 @@ struct HitsView: View {
                     PostPreviewCard(post: post,
                                     showConfirm: false,
                                     onConfirm: {},
-                                    onJoinRequest: {viewModel.sendRequest(for: post)}
+                                    showJoinButton: post.userID != Auth.auth().currentUser?.uid,
+                                    onJoinRequest: {viewModel.sendRequest(for: post)},
+                                    isRequested: viewModel.requestedPostIDs.contains(post.id),
+                                    onCancelRequest:{ viewModel.cancelRequest(for: post) }
                 )}
             }
             .onAppear {

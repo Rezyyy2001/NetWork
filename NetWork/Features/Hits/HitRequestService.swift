@@ -23,10 +23,22 @@ struct HitRequestService: Sendable {
         try await db.collection(FirestoreKeys.Collections.hitrequests).addDocument(data: hitRequestData)
     }
     
-    func cancelRequest(documentID: String) async throws {
-        try await db.collection(FirestoreKeys.Collections.hitrequests).document(documentID).delete()
+    func cancelRequest(postID: String) async throws {
+        if let cancellation = try await findRequest(postID: postID, requesterID: Auth.auth().currentUser?.uid ?? "") {
+            try await db.collection(FirestoreKeys.Collections.hitrequests).document(cancellation).delete()
+        }
     }
     
+    private func findRequest(postID: String, requesterID: String) async throws -> String? {
+        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
+            .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
+            .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: Auth.auth().currentUser?.uid ?? "")
+            .getDocuments(),
+            let doc = snapshot.documents.first
+            else { return nil }
+        return (doc.documentID)
+    }
+
     func acceptRequest(documentID: String) async throws {
         try await db.collection(FirestoreKeys.Collections.hitrequests).document(documentID).updateData([
             FirestoreKeys.HitRequestFields.status: "accepted"
@@ -86,7 +98,6 @@ struct HitRequestService: Sendable {
     
     private func fetchConfirmedHits(for postID: [String]) async -> [HitPost] {
         var posts: [HitPost] = []
-        
         
         for id in postID {
             guard let doc = try? await db.collection(FirestoreKeys.Collections.posts).document(id).getDocument(),

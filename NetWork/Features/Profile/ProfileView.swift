@@ -38,7 +38,8 @@ struct ProfileView: View {
                                     showConfirm: false,
                                     onConfirm: {},
                                     showJoinButton: false,
-                                    onJoinRequest: {}
+                                    onJoinRequest: {},
+                                    onCancelRequest: {}
                     )
                 }
                 

@@ -27,6 +27,8 @@ final class HitsViewModel: ObservableObject {
     @Published var utrRange: [CGFloat] = [1, 16]
     @Published var ustaRange: [CGFloat] = [1, 7]
     
+    @Published var requestedPostIDs: Set<String> = []
+    
     func fetchPosts() {
         Task {
             var friendIDs: [String] = []
@@ -51,6 +53,14 @@ final class HitsViewModel: ObservableObject {
     func sendRequest(for post: HitPost) {
         Task {
             try await hitRequestService.sendRequest(postID: post.id, posterID: post.userID)
+            requestedPostIDs.insert(post.id)
+        }
+    }
+    
+    func cancelRequest(for post: HitPost) {
+        Task {
+            try await hitRequestService.cancelRequest(postID: post.id)
+            requestedPostIDs.remove(post.id)
         }
     }
 }

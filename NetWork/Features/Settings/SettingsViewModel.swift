@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import FirebaseStorage
+import UIKit
+import FirebaseAuth
 
 @MainActor
 final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
@@ -18,11 +21,14 @@ final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
     @Published var usualSpot: String? = nil
     @Published var bio: String? = nil
     @Published var age: Int = 0
+    @Published var profilePictureURL: String? = nil
     
     @Published var uid: String = ""
     
     @Published var showErrorAlert = false
     @Published var errorMessage = ""
+    
+    @Published var selectedImage: UIImage? = nil
     
     private let service = CurrentUserService.shared
     
@@ -54,16 +60,34 @@ final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
     // EditProfileSection will be using this function
     func saveProfile() async {
         do {
+            let photoURL = await changePhoto() ?? ""
+            print("photoURL: \(photoURL)")
+            
             try await service.updateProfile(
                 name: displayName,
                 UTR: utr ?? 0.0,
                 USTA: usta ?? 0.0,
                 usualSpot: usualSpot ?? "",
-                bio: bio ?? ""
+                bio: bio ?? "",
+                profilePictureURL: photoURL
             )
             self.isEditingProfile = false
         } catch {
             self.errorMessage = "Could not save profile"
+        }
+    }
+    
+    func changePhoto() async -> String? {
+        guard let image = selectedImage,
+              let data = image.jpegData(compressionQuality: 0.8) else {
+                return profilePictureURL }
+        let storageRef = Storage.storage().reference().child("users/\(Auth.auth().currentUser?.uid ?? "").jpg")
+        do {
+            _ = try? await storageRef.putDataAsync(data)
+            let url = try await storageRef.downloadURL()
+            return url.absoluteString
+        } catch {
+            return nil
         }
     }
 }

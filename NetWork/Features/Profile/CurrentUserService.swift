@@ -15,7 +15,7 @@ final class CurrentUserService: Sendable {
     private init() {}
 
     // Update profile information in Firebase Auth and Firestore
-    func updateProfile(name: String, UTR: Double, USTA: Double, usualSpot: String, bio: String) async throws {
+    func updateProfile(name: String, UTR: Double, USTA: Double, usualSpot: String, bio: String, profilePictureURL: String) async throws {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
@@ -32,6 +32,7 @@ final class CurrentUserService: Sendable {
             FirestoreKeys.UserFields.bio: bio,
             FirestoreKeys.UserFields.nameLowercased: name.lowercased(),
             FirestoreKeys.UserFields.lastNameLowercased: name.components(separatedBy: " ").last?.lowercased() ?? "",
+            FirestoreKeys.UserFields.profilePictureURL: profilePictureURL
         ]
         try await Firestore.firestore().collection(FirestoreKeys.Collections.users).document(user.uid).updateData(userData)
     }

@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 public struct EditProfileSection: View {
     @ObservedObject var viewModel: SettingsViewModel
+    
+    @State private var selectedItem: PhotosPickerItem? = nil
     
     private let usualSpotCharacterLimit = 25
     
@@ -36,6 +39,34 @@ public struct EditProfileSection: View {
 
             if viewModel.isEditingProfile {
                 VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "person")
+                            .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
+                            .frame(width: 80, height: 80)
+                            .font(.system(size: 35))
+                            .overlay(RoundedRectangle(cornerRadius: 40)
+                                .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
+                        Spacer()
+                    }
+                    HStack {
+                        Spacer()
+                        PhotosPicker(selection: $selectedItem) {
+                            Text ("Choose Photo")
+                        }
+                        .buttonStyle(.borderless)
+                        Spacer()
+                    }
+                    .onChange(of: selectedItem) {
+                          Task {
+                              if let data = try? await selectedItem?.loadTransferable(type:
+                      Data.self),
+                                 let image = UIImage(data: data) {
+                                  viewModel.selectedImage = image
+                                }
+                          }
+                    }
+                    
                     HStack {
                         Text("Name:")
                             .frame(width: 100, alignment: .leading)

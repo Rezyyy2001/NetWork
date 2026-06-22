@@ -29,6 +29,7 @@ final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvid
     @Published var utr: Double? = 0.0
     @Published var usta: Double? = 0.0
     @Published var age: Int = 0
+    @Published var profilePictureURL: String? = nil
     
     init() {
         if let currentUser = Auth.auth().currentUser {

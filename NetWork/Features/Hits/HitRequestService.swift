@@ -75,7 +75,8 @@ struct HitRequestService: Sendable {
                 USTA: data[FirestoreKeys.UserFields.usta] as? Double ?? 0.0,
                 usualSpot: data[FirestoreKeys.UserFields.usualSpot] as? String ?? "",
                 bio: data[FirestoreKeys.UserFields.bio] as? String ?? "",
-                birthday: timestamp?.dateValue()
+                birthday: timestamp?.dateValue(),
+                profilePictureURL: data[FirestoreKeys.UserFields.profilePictureURL] as? String
                 )
                 userProfile.append(profile)
             

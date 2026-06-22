@@ -18,6 +18,7 @@ protocol UserProfileDataProvider: AnyObject {
     var usta: Double? { get set }
     var age: Int { get set }
     var uid: String { get }
+    var profilePictureURL: String? { get set }
 }
 
 extension UserProfileDataProvider {
@@ -28,5 +29,6 @@ extension UserProfileDataProvider {
         utr = profile.UTR
         usta = profile.USTA
         age = profile.birthday?.age ?? 0
+        profilePictureURL = profile.profilePictureURL
     }
 }

@@ -27,6 +27,7 @@ enum FirestoreKeys {
         static let email = "email"
         static let uid = "uid"
         static let birthday = "birthday"
+        static let profilePictureURL = "profilePictureURL"
     }
     enum FriendshipFields {
         static let userID1 = "userID1"

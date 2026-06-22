@@ -16,6 +16,7 @@ struct UserProfile {
     let usualSpot: String?
     let bio: String?
     let birthday: Date?
+    let profilePictureURL: String?
     
     var age: Int? {
             guard let birthday = birthday else { return nil }
@@ -29,9 +30,10 @@ struct UserProfile {
             name: data[FirestoreKeys.UserFields.name] as? String ?? "",
             UTR: data[FirestoreKeys.UserFields.utr] as? Double ?? 0.0,
             USTA: data[FirestoreKeys.UserFields.usta] as? Double ?? 0.0,
-            usualSpot: data[FirestoreKeys.UserFields.usualSpot] as? String ?? "",
-            bio: data[FirestoreKeys.UserFields.bio] as? String ?? "",
-            birthday: timestamp?.dateValue()
+            usualSpot: data[FirestoreKeys.UserFields.usualSpot] as? String,
+            bio: data[FirestoreKeys.UserFields.bio] as? String,
+            birthday: timestamp?.dateValue(),
+            profilePictureURL: data[FirestoreKeys.UserFields.profilePictureURL] as? String
         )
     }
 }

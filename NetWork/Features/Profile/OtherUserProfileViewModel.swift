@@ -21,6 +21,7 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
     @Published var utr: Double? = 0.0
     @Published var usta: Double? = 0.0
     @Published var age: Int = 0
+    @Published var profilePictureURL: String? = nil
     
     @Published var errorMessage: String? = nil
     

@@ -30,7 +30,8 @@ final class SearchService: Sendable {
 
         return snapshot.documents.compactMap { doc in
             let name = doc.data()[FirestoreKeys.UserFields.name] as? String
-            return UserStub(uid: doc.documentID, displayName: name)
+            let profilePictureURL = doc.data()[FirestoreKeys.UserFields.profilePictureURL] as? String
+            return UserStub(uid: doc.documentID, displayName: name, profilePictureURL: profilePictureURL)
         }
     }
 }

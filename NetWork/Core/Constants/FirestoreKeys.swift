@@ -45,6 +45,7 @@ enum FirestoreKeys {
         static let extraInfo = "extraInfo"
         static let numberOfPeople = "numberOfPeople"
         static let isPublic = "isPublic"
+        static let profilePictureURL = "profilePictureURL"
     }
     enum HitRequestFields {
         static let postID = "postID"

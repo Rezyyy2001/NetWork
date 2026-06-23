@@ -12,10 +12,12 @@ struct UserStub: Identifiable, Hashable, Decodable {
     
     let id: String  // Conforms to Identifiable for SwiftUI lists
     let displayName: String?
+    var profilePictureURL: String?
 
-    init(uid: String, displayName: String?) {
+    init(uid: String, displayName: String?, profilePictureURL: String?) {
         self.id = uid
         self.displayName = displayName
+        self.profilePictureURL = profilePictureURL
     }
     
     // Implement the equality check based on 'id' (or any other unique property)

@@ -118,7 +118,8 @@ struct HitRequestService: Sendable {
                 date: timestamp?.dateValue() ?? Date(),
                 extraInfo: data[FirestoreKeys.PostFields.extraInfo] as? String ?? "",
                 numberOfPeople: data[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 0,
-                isPublic: data[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
+                isPublic: data[FirestoreKeys.PostFields.isPublic] as? Bool ?? true,
+                profilePictureURL: data[FirestoreKeys.PostFields.profilePictureURL] as? String ?? ""
                 )
             
                 posts.append(hitPost)

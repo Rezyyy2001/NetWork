@@ -36,7 +36,6 @@ final class HitsViewModel: ObservableObject {
             if isFriends == true {
                 let userID = Auth.auth().currentUser?.uid ?? ""
                 friendIDs = await friendService.fetchFriendIDs(for: userID)
-                print("friendIDs: \(friendIDs)")
             }
             
             self.hits = (try? await postService.fetchPosts(

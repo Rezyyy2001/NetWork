@@ -61,7 +61,6 @@ final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
     func saveProfile() async {
         do {
             let photoURL = await changePhoto() ?? ""
-            print("photoURL: \(photoURL)")
             
             try await service.updateProfile(
                 name: displayName,

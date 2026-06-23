@@ -39,15 +39,18 @@ struct PostPreviewCard: View {
         VStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Image(systemName: "person")
-                        .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
-                        .frame(width: 50, height: 50)
-                        .font(.system(size: 25))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 40)
-                                .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2)
-                        )
-
+                    AsyncImage(url: URL(string: post.profilePictureURL ?? "")) { image in image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        Image(systemName: "person")
+                            .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
+                            .font(.system(size: 25))
+                    }
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
+                    
                     VStack(alignment: .leading, spacing: 1) {
                         Text(post.posterName)
                             .font(.footnote)
@@ -155,7 +158,9 @@ struct PostPreviewCard: View {
         date: Date(),
         extraInfo: "Looking for a hitting partner for some competitive rallies. All levels welcome! Preferably someone with a UTR between 7-10. I usually play baseline but love working on my net game too.",
         numberOfPeople: 2,
-        isPublic: true
+        isPublic: true,
+        profilePictureURL: ""
+        
     )
     ZStack {
         Color.black.opacity(0.7).ignoresSafeArea()

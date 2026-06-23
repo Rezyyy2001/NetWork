@@ -13,10 +13,17 @@ struct StubView: View {
 
     var body: some View {
         HStack {
-            Image(systemName: "person.circle") // Placeholder for profile pic
-                .resizable()
-                .frame(width: 40, height: 40)
-                .foregroundColor(.blue)
+            AsyncImage(url: URL(string: user.profilePictureURL ?? "")) { image in image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                Image(systemName: "person")
+                    .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
+                    .font(.system(size: 25))
+            }
+            .frame(width: 50, height: 50)
+            .clipShape(Circle())
+            .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
 
             Text(user.displayName ?? "Unknown User")
                 .font(.headline)
@@ -31,9 +38,4 @@ struct StubView: View {
             onTap() // Handle tap for navigation
         }
     }
-}
-
-#Preview {
-    StubView(user: UserStub(uid: "123", displayName: "Tezuka Kunimitzu"))
-        .padding()
 }

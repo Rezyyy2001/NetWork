@@ -41,12 +41,27 @@ public struct EditProfileSection: View {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         Spacer()
-                        Image(systemName: "person")
-                            .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
+                        if let selected = viewModel.selectedImage {
+                            Image(uiImage: selected)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 80, height: 80)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
+                        } else {
+                            
+                            AsyncImage(url: URL(string: viewModel.profilePictureURL ?? "")) { image in image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                Image(systemName: "person")
+                                    .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
+                                    .font(.system(size: 35))
+                            }
                             .frame(width: 80, height: 80)
-                            .font(.system(size: 35))
-                            .overlay(RoundedRectangle(cornerRadius: 40)
-                                .stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
+                        }
                         Spacer()
                     }
                     HStack {

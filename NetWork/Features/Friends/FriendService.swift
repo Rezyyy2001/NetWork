@@ -35,7 +35,7 @@ final class FriendService: Sendable {
                   let data = doc.data()
             else { continue }
 
-            let stub = UserStub(uid: id, displayName: data[FirestoreKeys.UserFields.name] as? String ?? "Unknown")
+            let stub = UserStub(uid: id, displayName: data[FirestoreKeys.UserFields.name] as? String ?? "Unknown", profilePictureURL: data[FirestoreKeys.UserFields.profilePictureURL] as? String)
             loadedStubs.append(stub)
         }
         return loadedStubs

@@ -27,6 +27,7 @@ final class PostViewModel: ObservableObject {
     private var posterUSTA: Double? = nil
     private var selectedCity = ""
     private var didSelectSuggestion = false
+    private var posterProfilePictureURL: String? = nil
     
     private let service = PostService()
 
@@ -41,6 +42,7 @@ final class PostViewModel: ObservableObject {
         posterName = profile.name
         posterUTR = profile.UTR
         posterUSTA = profile.USTA
+        posterProfilePictureURL = profile.profilePictureURL
     }
 
     func post() {
@@ -55,7 +57,8 @@ final class PostViewModel: ObservableObject {
             date: selectedDate,
             extraInfo: extraInfo,
             numberOfPeople: numberOfPeople,
-            isPublic: isPublic
+            isPublic: isPublic,
+            profilePictureURL: posterProfilePictureURL
         )
     }
 

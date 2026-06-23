@@ -28,7 +28,8 @@ struct PostService: Sendable {
             FirestoreKeys.PostFields.date: post.date,
             FirestoreKeys.PostFields.extraInfo: post.extraInfo,
             FirestoreKeys.PostFields.numberOfPeople: post.numberOfPeople,
-            FirestoreKeys.PostFields.isPublic: post.isPublic
+            FirestoreKeys.PostFields.isPublic: post.isPublic,
+            FirestoreKeys.PostFields.profilePictureURL: post.profilePictureURL ?? ""
         ]
         
         try await Firestore.firestore().collection(FirestoreKeys.Collections.posts).document().setData(postData)
@@ -62,8 +63,9 @@ struct PostService: Sendable {
                 let extraInfo = doc.data()[FirestoreKeys.PostFields.extraInfo] as? String ?? ""
                 let numberOfPeople = doc.data()[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1
                 let isPublic = doc.data()[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
+                let profilePictureURL = doc.data()[FirestoreKeys.PostFields.profilePictureURL] as? String
                 
-                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic)
+                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic, profilePictureURL: profilePictureURL)
             }
             
             switch numberOfPeople {
@@ -121,8 +123,9 @@ struct PostService: Sendable {
                 let extraInfo = doc.data()[FirestoreKeys.PostFields.extraInfo] as? String ?? ""
                 let numberOfPeople = doc.data()[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1
                 let isPublic = doc.data()[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
+                let profilePictureURL = doc.data()[FirestoreKeys.PostFields.profilePictureURL] as? String ?? ""
                 
-                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic)
+                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic, profilePictureURL: profilePictureURL)
             }
             return posts
             

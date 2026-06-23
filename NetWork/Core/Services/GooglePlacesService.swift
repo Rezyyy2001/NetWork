@@ -26,12 +26,6 @@ struct GooglePlacesService {
         
         let (data, _) = try await URLSession.shared.data(from: url)
         let decoded = try JSONDecoder().decode(TextSearchResponse.self, from: data)
-        for place in decoded.results {
-            print("Name:", place.name)
-            print("Address:", place.formatted_address ?? "N/A")
-            print("Place ID:", place.id)
-            print("---")
-        }
         return decoded.results
     }
     
@@ -51,11 +45,6 @@ struct GooglePlacesService {
         }
         let (data, _) = try await URLSession.shared.data(from: url)
         let decoded = try JSONDecoder().decode(AutoTextSearch.self, from: data)
-        for place in decoded.predictions {
-            print("Name:", place.description)
-            print("Place ID:", place.id)
-            print("---")
-        }
         return decoded.predictions
     }
 }

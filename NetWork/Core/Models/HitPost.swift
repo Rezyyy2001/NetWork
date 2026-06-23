@@ -20,6 +20,7 @@ struct HitPost: Identifiable {
     let extraInfo: String
     let numberOfPeople: Int
     let isPublic: Bool
+    let profilePictureURL: String?
 }
 
 // TODO: Redundent poster prefix

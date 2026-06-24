@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 private struct TruncatedKey: PreferenceKey {
     static let defaultValue = false
@@ -64,6 +65,10 @@ struct PostPreviewCard: View {
                                 .font(.footnote)
                         }
                     }
+                    
+                    Spacer()
+                    
+                    AvatarClusterView(postID: post.id, isOwner: post.userID == Auth.auth().currentUser?.uid)
                     
                     Spacer()
     

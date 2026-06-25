@@ -11,7 +11,7 @@ import Foundation
 final class AvatarClusterViewModel: ObservableObject {
     private let hitRequestService = HitRequestService()
     
-    @Published var profiles: [UserProfile] = []
+    @Published var profiles: [HitRequestProfile] = []
     var postID: String
     var isOwner: Bool
     

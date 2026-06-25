@@ -45,31 +45,32 @@ struct HitRequestService: Sendable {
         ])
     }
     
-    func fetchRequests(for postID: String) async throws -> [UserProfile] {
+    func fetchRequests(for postID: String) async throws -> [HitRequestProfile] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
             .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "pending")
             .getDocuments()
         else { return [] }
         
-        let requesterID = snapshot.documents.compactMap {
-            $0.data()[FirestoreKeys.HitRequestFields.requesterID] as? String
+        let requesterID = snapshot.documents.compactMap { doc -> (userID: String, documentID: String)? in
+            guard let requesterID = doc.data()[FirestoreKeys.HitRequestFields.requesterID] as? String
+            else { return nil }
+            return (userID: requesterID, documentID: doc.documentID)
         }
         return await fetchProfiles(for: requesterID)
     }
     
-    private func fetchProfiles(for userIDs: [String]) async -> [UserProfile] {
-        var userProfile: [UserProfile] = []
+    private func fetchProfiles(for requests: [(userID: String, documentID: String)]) async -> [HitRequestProfile] {
+        var results: [HitRequestProfile] = []
         
-        
-        for id in userIDs {
-            guard let doc = try? await db.collection(FirestoreKeys.Collections.users).document(id).getDocument(),
+        for request in requests {
+            guard let doc = try? await db.collection(FirestoreKeys.Collections.users).document(request.userID).getDocument(),
                   let data = doc.data()
             else { continue }
             
             let timestamp = data[FirestoreKeys.UserFields.birthday] as? Timestamp
             
-            let profile = UserProfile(
+            let userProfile = UserProfile(
                 name: data[FirestoreKeys.UserFields.name] as? String ?? "",
                 UTR: data[FirestoreKeys.UserFields.utr] as? Double ?? 0.0,
                 USTA: data[FirestoreKeys.UserFields.usta] as? Double ?? 0.0,
@@ -78,10 +79,9 @@ struct HitRequestService: Sendable {
                 birthday: timestamp?.dateValue(),
                 profilePictureURL: data[FirestoreKeys.UserFields.profilePictureURL] as? String
                 )
-                userProfile.append(profile)
-            
+            results.append(HitRequestProfile(documentID: request.documentID, userProfile: userProfile))
         }
-        return userProfile
+        return results
     }
     
     func confirmedHits(for requesterID: String) async throws -> [HitPost] {

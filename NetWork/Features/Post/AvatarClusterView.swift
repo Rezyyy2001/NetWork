@@ -10,14 +10,17 @@ import SwiftUI
 struct AvatarClusterView: View {
     @StateObject private var viewModel: AvatarClusterViewModel
     
+    @State private var showSheet: Bool = false
+    var onTap: () -> Void = {}
+    
     init(postID: String, isOwner: Bool) {
         _viewModel = StateObject(wrappedValue: AvatarClusterViewModel(postID: postID, isOwner: isOwner))
     }
     
     var body: some View {
         HStack(spacing: -20) {
-            ForEach(viewModel.profiles, id: \.name) { profile in
-                AsyncImage(url: URL(string: profile.profilePictureURL ?? "")) { image in
+            ForEach(viewModel.profiles, id: \.documentID) { profile in
+                AsyncImage(url: URL(string: profile.userProfile.profilePictureURL ?? "")) { image in
                     image.resizable().scaledToFill()
                 } placeholder: {
                     Image(systemName: "person")
@@ -28,5 +31,13 @@ struct AvatarClusterView: View {
             }
         }
         .task { viewModel.fetchProfiles() }
+        .onTapGesture {
+            showSheet = true
+        }
+        .sheet(isPresented: $showSheet) {
+            AvatarClusterSheetView(profiles: viewModel.profiles, isOwner: viewModel.isOwner)
+                .presentationDetents([.height(CGFloat(viewModel.profiles.count) * 80)])
+        }
     }
+        
 }

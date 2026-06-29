@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Kingfisher
 
 public struct EditProfileSection: View {
     @ObservedObject var viewModel: SettingsViewModel
@@ -50,14 +51,14 @@ public struct EditProfileSection: View {
                                 .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
                         } else {
                             
-                            AsyncImage(url: URL(string: viewModel.profilePictureURL ?? "")) { image in image
-                                    .resizable()
-                                    .scaledToFill()
-                            } placeholder: {
+                            KFImage(URL(string: viewModel.profilePictureURL ?? ""))
+                                .placeholder {
                                 Image(systemName: "person")
                                     .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
                                     .font(.system(size: 35))
                             }
+                            .resizable()
+                            .scaledToFill()
                             .frame(width: 80, height: 80)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct AvatarClusterSheetView: View {
     let profiles: [HitRequestProfile]
@@ -16,14 +17,14 @@ struct AvatarClusterSheetView: View {
             ForEach(profiles, id: \.documentID) { profile in
                 
                 HStack {
-                    AsyncImage(url: URL(string: profile.userProfile.profilePictureURL ?? "")) { image in image
-                            .resizable()
-                            .scaledToFill()
-                    } placeholder: {
+                    KFImage(URL(string: profile.userProfile.profilePictureURL ?? ""))
+                        .placeholder {
                         Image(systemName: "person")
                             .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
                             .font(.system(size: 25))
                     }
+                    .resizable()
+                    .scaledToFill()
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))

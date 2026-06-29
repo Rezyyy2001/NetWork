@@ -127,4 +127,16 @@ struct HitRequestService: Sendable {
         }
         return posts
     }
+    
+    func fetchExistingRequest() async -> [String] {
+        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
+            .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: Auth.auth().currentUser?.uid ?? "")
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "pending")
+            .getDocuments()
+        else { return [] }
+        
+        return snapshot.documents.compactMap {
+            $0.data()[FirestoreKeys.HitRequestFields.postID] as? String
+        }
+    }
 }

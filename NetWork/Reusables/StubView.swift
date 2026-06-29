@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct StubView: View {
     let user: UserStub
@@ -13,14 +14,14 @@ struct StubView: View {
 
     var body: some View {
         HStack {
-            AsyncImage(url: URL(string: user.profilePictureURL ?? "")) { image in image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
+            KFImage(URL(string: user.profilePictureURL ?? ""))
+                .placeholder {
                 Image(systemName: "person")
                     .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
                     .font(.system(size: 25))
             }
+            .resizable()
+            .scaledToFill()
             .frame(width: 50, height: 50)
             .clipShape(Circle())
             .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))

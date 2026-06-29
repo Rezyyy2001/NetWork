@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import Kingfisher
 
 private struct TruncatedKey: PreferenceKey {
     static let defaultValue = false
@@ -40,14 +41,14 @@ struct PostPreviewCard: View {
         VStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    AsyncImage(url: URL(string: post.profilePictureURL ?? "")) { image in image
-                            .resizable()
-                            .scaledToFill()
-                    } placeholder: {
+                    KFImage(URL(string: post.profilePictureURL ?? ""))
+                        .placeholder {
                         Image(systemName: "person")
                             .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
                             .font(.system(size: 25))
                     }
+                    .resizable()
+                    .scaledToFill()
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))

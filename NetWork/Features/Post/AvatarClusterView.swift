@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct AvatarClusterView: View {
     @StateObject private var viewModel: AvatarClusterViewModel
@@ -20,11 +21,12 @@ struct AvatarClusterView: View {
     var body: some View {
         HStack(spacing: -20) {
             ForEach(viewModel.profiles, id: \.documentID) { profile in
-                AsyncImage(url: URL(string: profile.userProfile.profilePictureURL ?? "")) { image in
-                    image.resizable().scaledToFill()
-                } placeholder: {
+                KFImage(URL(string: profile.userProfile.profilePictureURL ?? ""))
+                    .placeholder {
                     Image(systemName: "person")
                 }
+                .resizable()
+                .scaledToFill()
                 .frame(width: 35, height: 35)
                 .clipShape(Circle())
                 .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 1))
@@ -39,5 +41,4 @@ struct AvatarClusterView: View {
                 .presentationDetents([.height(CGFloat(viewModel.profiles.count) * 80)])
         }
     }
-        
 }

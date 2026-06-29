@@ -62,4 +62,11 @@ final class HitsViewModel: ObservableObject {
             requestedPostIDs.remove(post.id)
         }
     }
+    
+    func fetchExistingRequest() {
+        Task {
+            let postIDs = await hitRequestService.fetchExistingRequest()
+            requestedPostIDs = Set(postIDs)
+        }
+    }
 }

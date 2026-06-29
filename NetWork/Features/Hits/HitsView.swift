@@ -27,6 +27,7 @@ struct HitsView: View {
             }
             .onAppear {
                 viewModel.fetchPosts()
+                viewModel.fetchExistingRequest()
             }
             .navigationBarBackButtonHidden(true)
         }

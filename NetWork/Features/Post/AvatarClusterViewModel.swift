@@ -25,4 +25,10 @@ final class AvatarClusterViewModel: ObservableObject {
             self.profiles = (try? await hitRequestService.fetchRequests(for: postID)) ?? []
         }
     }
+    
+    func acceptRequests(documentID: String) {
+        Task {
+            try? await hitRequestService.acceptRequest(documentID: documentID)
+        }
+    }
 }

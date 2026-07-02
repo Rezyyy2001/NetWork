@@ -48,19 +48,19 @@ struct HitRequestService: Sendable {
     func fetchRequests(for postID: String) async throws -> [HitRequestProfile] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
-            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "pending")
             .getDocuments()
         else { return [] }
         
-        let requesterID = snapshot.documents.compactMap { doc -> (userID: String, documentID: String)? in
-            guard let requesterID = doc.data()[FirestoreKeys.HitRequestFields.requesterID] as? String
+        let requesterID = snapshot.documents.compactMap { doc -> (userID: String, documentID: String, status: String)? in
+            guard let requesterID = doc.data()[FirestoreKeys.HitRequestFields.requesterID] as? String,
+                  let status = doc.data()[FirestoreKeys.HitRequestFields.status] as? String
             else { return nil }
-            return (userID: requesterID, documentID: doc.documentID)
+            return (userID: requesterID, documentID: doc.documentID, status: status)
         }
         return await fetchProfiles(for: requesterID)
     }
     
-    private func fetchProfiles(for requests: [(userID: String, documentID: String)]) async -> [HitRequestProfile] {
+    private func fetchProfiles(for requests: [(userID: String, documentID: String, status: String)]) async -> [HitRequestProfile] {
         var results: [HitRequestProfile] = []
         
         for request in requests {
@@ -79,7 +79,7 @@ struct HitRequestService: Sendable {
                 birthday: timestamp?.dateValue(),
                 profilePictureURL: data[FirestoreKeys.UserFields.profilePictureURL] as? String
                 )
-            results.append(HitRequestProfile(documentID: request.documentID, userProfile: userProfile))
+            results.append(HitRequestProfile(documentID: request.documentID, userProfile: userProfile, status: request.status))
         }
         return results
     }

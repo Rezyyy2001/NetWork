@@ -18,7 +18,7 @@ struct ContentView: View {
                 Button(action: { showLoginSignupView = true}) { //this button shows the LoginSignupView
                     TennisCourt()
                         .stroke(Color.white, lineWidth: 4)
-                        .background(Color(red: 30/255, green: 143/255, blue: 213/255))
+                        .background(Color.brandBlue)
                         .frame(width: 300, height: 650)
                 }
                 VStack {

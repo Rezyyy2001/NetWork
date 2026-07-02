@@ -20,14 +20,14 @@ struct AvatarClusterSheetView: View {
                     KFImage(URL(string: profile.userProfile.profilePictureURL ?? ""))
                         .placeholder {
                         Image(systemName: "person")
-                            .foregroundColor(Color(red: 30/255, green: 143/255, blue: 213/255))
+                            .foregroundColor(Color.brandBlue)
                             .font(.system(size: 25))
                     }
                     .resizable()
                     .scaledToFill()
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
-                    .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 2))
+                    .overlay(Circle().stroke(Color.brandBlue, lineWidth: 2))
                     
                     Text(profile.userProfile.name)
                         .font(.headline)

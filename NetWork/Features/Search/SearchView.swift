@@ -32,7 +32,6 @@ struct SearchView: View {
             .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
             .padding(.horizontal)
-            .padding()
 
             // Search Results
             List(viewModel.searchResults) { user in
@@ -43,7 +42,6 @@ struct SearchView: View {
             }
             .listStyle(PlainListStyle())
         }
-        .padding(.top, 10)
         .navigationDestination(item: $selectedUser) { user in
             UserProfileView(userID: user.id) // Navigate on selection
                 .onAppear {
@@ -51,6 +49,7 @@ struct SearchView: View {
                 }
         }
         .navigationBarBackButtonHidden(true)
+        .navigationTitle("Search Players")
     }
 }
 #Preview {

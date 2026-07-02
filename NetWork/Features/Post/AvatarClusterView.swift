@@ -29,7 +29,7 @@ struct AvatarClusterView: View {
                 .scaledToFill()
                 .frame(width: 35, height: 35)
                 .clipShape(Circle())
-                .overlay(Circle().stroke(Color(red: 30/255, green: 143/255, blue: 213/255), lineWidth: 1))
+                .overlay(Circle().stroke(Color.brandBlue, lineWidth: 1))
             }
         }
         .task { viewModel.fetchProfiles() }

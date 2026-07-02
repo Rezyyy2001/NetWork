@@ -18,7 +18,6 @@ struct LoginSignupView: View {
     
     var body: some View {
         ZStack {
-            //Color(red: 30/255, green: 143/255, blue: 213/255) (pastel blue)
             Color(.green)
                 .edgesIgnoringSafeArea(.all)
             

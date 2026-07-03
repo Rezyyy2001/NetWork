@@ -16,25 +16,25 @@ struct AvatarClusterSheetView: View {
     var body: some View {
         List {
             ForEach(profiles, id: \.documentID) { profile in
-                if isOwner == true {
-                    HStack {
-                        KFImage(URL(string: profile.userProfile.profilePictureURL ?? ""))
-                            .placeholder {
-                                Image(systemName: "person")
-                                    .foregroundColor(Color.brandBlue)
-                                    .font(.system(size: 25))
-                            }
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.brandBlue, lineWidth: 2))
-                        
-                        Text(profile.userProfile.name)
-                            .font(.headline)
-                        
-                        Spacer()
-                        
+                
+                HStack {
+                    KFImage(URL(string: profile.userProfile.profilePictureURL ?? ""))
+                        .placeholder {
+                            Image(systemName: "person")
+                                .foregroundColor(Color.brandBlue)
+                                .font(.system(size: 25))
+                        }
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.brandBlue, lineWidth: 2))
+                    
+                    Text(profile.userProfile.name)
+                        .font(.headline)
+                    
+                    Spacer()
+                    if isOwner {
                         if profile.status == "accepted" {
                             Text("Accepted")
                                 .foregroundColor(.gray)
@@ -46,6 +46,7 @@ struct AvatarClusterSheetView: View {
                         }
                     }
                 }
+                
             }
             Spacer()
         }

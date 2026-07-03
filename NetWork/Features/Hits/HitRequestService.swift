@@ -139,4 +139,20 @@ struct HitRequestService: Sendable {
             $0.data()[FirestoreKeys.HitRequestFields.postID] as? String
         }
     }
+    
+    func fetchAcceptedRequest(postID: String) async -> [HitRequestProfile] {
+        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
+            .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "accepted")
+            .getDocuments()
+        else { return [] }
+        
+        let requesterID = snapshot.documents.compactMap { doc -> (userID: String, documentID: String, status: String)? in
+            guard let requesterID = doc.data()[FirestoreKeys.HitRequestFields.requesterID] as? String,
+                  let status = doc.data()[FirestoreKeys.HitRequestFields.status] as? String
+            else { return nil }
+            return (userID: requesterID, documentID: doc.documentID, status: status)
+        }
+        return await fetchProfiles(for: requesterID)
+    }
 }

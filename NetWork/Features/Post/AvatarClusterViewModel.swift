@@ -22,7 +22,11 @@ final class AvatarClusterViewModel: ObservableObject {
     
     func fetchProfiles() {
         Task {
-            self.profiles = (try? await hitRequestService.fetchRequests(for: postID)) ?? []
+            if isOwner {
+                self.profiles = (try? await hitRequestService.fetchRequests(for: postID)) ?? []
+            } else {
+                self.profiles = await hitRequestService.fetchAcceptedRequest(postID: postID)
+            }
         }
     }
     

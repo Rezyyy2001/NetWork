@@ -15,27 +15,35 @@ struct FriendInboxView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
-                BackButton()
-                
-                Text("Friend Requests")
-                    .font(.largeTitle)
-                    .padding(.horizontal)
-                
-                List(viewModel.stubs) { stub in
-                    StubView(user: stub) {
-                        selectedUser = stub
+            Group {
+                if viewModel.stubs.isEmpty {
+                    ContentUnavailableView(
+                        "No pending requests",
+                        systemImage: "tray",
+                        description: Text("Friend requests you receive will show up here.")
+                    )
+                } else {
+                    List(viewModel.stubs) { stub in
+                        StubView(user: stub) {
+                            selectedUser = stub
+                        }
+                        .listRowBackground(Color.clear)
                     }
-                    .listRowBackground(Color.clear)
+                    .listStyle(PlainListStyle())
                 }
-                .listStyle(PlainListStyle())
-                Spacer()
             }
             .navigationDestination(item: $selectedUser) { user in
                 UserProfileView(userID: user.id)
             }
             .onAppear {
                 viewModel.fetchPendingRequests()
+            }
+            .navigationTitle("Friend Requests")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    BackButton(padded: false)
+                }
             }
         }
     }

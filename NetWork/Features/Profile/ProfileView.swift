@@ -67,6 +67,14 @@ struct ProfileView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
+                        currentUserViewModel.showConfirmedHits = true
+                    } label: {
+                        Image(systemName: "checkmark.square")
+                            .font(.headline)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
                         currentUserViewModel.showSettings = true
                     } label: {
                         Image(systemName: "slider.horizontal.3")
@@ -86,6 +94,9 @@ struct ProfileView: View {
             }
             .sheet(isPresented: $currentUserViewModel.showSettings) {
                 SettingsView(authState: authState)
+            }
+            .sheet(isPresented: $currentUserViewModel.showConfirmedHits) {
+                ConfirmedHitsView()
             }
             //This whole block of code is to keep the data updated
             .task {

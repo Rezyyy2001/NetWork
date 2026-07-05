@@ -24,20 +24,21 @@ struct MessageListView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
-                BackButton()
-                
-                Text("Messages")
-                    .font(.largeTitle)
-                    .padding(.horizontal)
-
-                // shows each friend as a list
-                List(viewModel.friends) { friend in
-                    StubView(user: friend) {
-                        selectedUser = friend // selectedUser triggers navigation
+            Group {
+                if viewModel.friends.isEmpty {
+                    ContentUnavailableView(
+                        "No messages yet",
+                        systemImage: "message",
+                        description: Text("Add friends to start chatting.")
+                    )
+                } else {
+                    List(viewModel.friends) { friend in
+                        StubView(user: friend) {
+                            selectedUser = friend
+                        }
                     }
+                    .listStyle(PlainListStyle())
                 }
-                .listStyle(PlainListStyle())
             }
             // navigates to chatView when user is selected
             .navigationDestination(item: $selectedUser) { user in
@@ -45,6 +46,13 @@ struct MessageListView: View {
             }
             .onAppear {
                 viewModel.fetchFriends(for: currentUserID)
+            }
+            .navigationTitle("Messages")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    BackButton(padded: false)
+                }
             }
         }
     }

@@ -17,6 +17,7 @@ final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvid
     @Published var showSettings = false
     @Published var showFriendRequests = false
     @Published var showMessageView = false
+    @Published var showConfirmedHits = false
     @Published var errorMessage: String? = nil
 
     // Auth info

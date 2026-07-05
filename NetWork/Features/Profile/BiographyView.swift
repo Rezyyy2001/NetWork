@@ -14,14 +14,24 @@ struct BiographyView<T: UserProfileDataProvider & ObservableObject>: View {
     var body: some View {
         VStack {
             //
-            Text(viewModel.bio ?? "No Biography Set") //gets the bio from CurrentUserProfileViewModel
-                .padding()
-                .font(.system(size: 15))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
+            Group {
+                if let bio = viewModel.bio, !bio.isEmpty {
+                    Text(bio)
+                        .font(.system(size: 15))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    Text("No bio yet")
+                        .font(.system(size: 15))
+                        .italic()
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .padding()
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.gray, lineWidth: 1)
+            )
         }
     }
 }

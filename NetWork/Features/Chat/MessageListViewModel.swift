@@ -7,7 +7,6 @@
 
 import FirebaseFirestore
 import FirebaseAuth
-import SwiftUI
 
 @MainActor
 final class MessageListViewModel: ObservableObject {

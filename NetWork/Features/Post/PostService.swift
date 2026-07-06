@@ -18,7 +18,7 @@ struct PostService: Sendable {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
         
-        let postData: [String: Any] = [
+        var postData: [String: Any] = [
             FirestoreKeys.PostFields.userID: user.uid,
             FirestoreKeys.PostFields.posterName: post.posterName,
             FirestoreKeys.PostFields.posterUTR: post.posterUTR ?? 0.0,
@@ -31,6 +31,10 @@ struct PostService: Sendable {
             FirestoreKeys.PostFields.isPublic: post.isPublic,
             FirestoreKeys.PostFields.profilePictureURL: post.profilePictureURL ?? ""
         ]
+        if let lat = post.latitude, let lng = post.longitude {
+            postData[FirestoreKeys.PostFields.latitude] = lat
+            postData[FirestoreKeys.PostFields.longitude] = lng
+        }
         
         try await Firestore.firestore().collection(FirestoreKeys.Collections.posts).document().setData(postData)
     }
@@ -64,10 +68,12 @@ struct PostService: Sendable {
                 let numberOfPeople = doc.data()[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1
                 let isPublic = doc.data()[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
                 let profilePictureURL = doc.data()[FirestoreKeys.PostFields.profilePictureURL] as? String
-                
-                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic, profilePictureURL: profilePictureURL)
+                let latitude = doc.data()[FirestoreKeys.PostFields.latitude] as? Double
+                let longitude = doc.data()[FirestoreKeys.PostFields.longitude] as? Double
+
+                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic, profilePictureURL: profilePictureURL, latitude: latitude, longitude: longitude)
             }
-            
+
             switch numberOfPeople {
             case 1:
                 posts = posts.filter { $0.numberOfPeople == 1 }
@@ -123,9 +129,11 @@ struct PostService: Sendable {
                 let extraInfo = doc.data()[FirestoreKeys.PostFields.extraInfo] as? String ?? ""
                 let numberOfPeople = doc.data()[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1
                 let isPublic = doc.data()[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
-                let profilePictureURL = doc.data()[FirestoreKeys.PostFields.profilePictureURL] as? String ?? ""
-                
-                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic, profilePictureURL: profilePictureURL)
+                let profilePictureURL = doc.data()[FirestoreKeys.PostFields.profilePictureURL] as? String
+                let latitude = doc.data()[FirestoreKeys.PostFields.latitude] as? Double
+                let longitude = doc.data()[FirestoreKeys.PostFields.longitude] as? Double
+
+                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic, profilePictureURL: profilePictureURL, latitude: latitude, longitude: longitude)
             }
             return posts
             

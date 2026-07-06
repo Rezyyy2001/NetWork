@@ -5,6 +5,23 @@
 //  Created by Rezka Yuspi on 3/25/26.
 //
 
+struct PlaceDetailsResponse: Decodable {
+    let result: PlaceDetailsResult
+}
+
+struct PlaceDetailsResult: Decodable {
+    let geometry: PlaceGeometry
+}
+
+struct PlaceGeometry: Decodable {
+    let location: PlaceCoordinate
+}
+
+struct PlaceCoordinate: Decodable {
+    let lat: Double
+    let lng: Double
+}
+
 struct TextSearchResponse: Decodable {
     let results: [PlaceResult]
 }

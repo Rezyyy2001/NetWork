@@ -9,7 +9,7 @@ import Foundation
 
 struct HitPost: Identifiable {
     let id: String
-    
+
     let userID: String
     let posterName: String
     let posterUTR: Double?
@@ -21,6 +21,8 @@ struct HitPost: Identifiable {
     let numberOfPeople: Int
     let isPublic: Bool
     let profilePictureURL: String?
+    let latitude: Double?
+    let longitude: Double?
 }
 
 // TODO: Redundent poster prefix

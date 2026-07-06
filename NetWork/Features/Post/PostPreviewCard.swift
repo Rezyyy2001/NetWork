@@ -165,8 +165,9 @@ struct PostPreviewCard: View {
         extraInfo: "Looking for a hitting partner for some competitive rallies. All levels welcome! Preferably someone with a UTR between 7-10. I usually play baseline but love working on my net game too.",
         numberOfPeople: 2,
         isPublic: true,
-        profilePictureURL: ""
-        
+        profilePictureURL: "",
+        latitude: 34.1365,
+        longitude: -118.2942                    
     )
     ZStack {
         Color.black.opacity(0.7).ignoresSafeArea()

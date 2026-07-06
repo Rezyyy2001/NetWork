@@ -29,6 +29,21 @@ struct GooglePlacesService {
         return decoded.results
     }
     
+    static func getCoordinates(placeID: String) async throws -> (latitude: Double, longitude: Double)? {
+        let apiKey = Secrets.googleAPIKey
+        let urlString =
+            "https://maps.googleapis.com/maps/api/place/details/json" +
+            "?place_id=\(placeID)" +
+            "&fields=geometry" +
+            "&key=\(apiKey)"
+
+        guard let url = URL(string: urlString) else { return nil }
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let decoded = try JSONDecoder().decode(PlaceDetailsResponse.self, from: data)
+        let coord = decoded.result.geometry.location
+        return (coord.lat, coord.lng)
+    }
+
     static func autocomplete(input: String) async throws -> [PlaceSuggestion] {
         let apiKey = Secrets.googleAPIKey
 

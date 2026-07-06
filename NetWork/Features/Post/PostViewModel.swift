@@ -26,6 +26,8 @@ final class PostViewModel: ObservableObject {
     private var posterUTR: Double? = nil
     private var posterUSTA: Double? = nil
     private var selectedCity = ""
+    private var selectedLatitude: Double? = nil
+    private var selectedLongitude: Double? = nil
     private var didSelectSuggestion = false
     private var posterProfilePictureURL: String? = nil
     
@@ -47,7 +49,7 @@ final class PostViewModel: ObservableObject {
 
     func post() {
         hitPost = HitPost(
-            id: UUID().uuidString, //Just generates a unique string for swift
+            id: UUID().uuidString,
             userID: posterUID,
             posterName: posterName,
             posterUTR: posterUTR,
@@ -58,7 +60,9 @@ final class PostViewModel: ObservableObject {
             extraInfo: extraInfo,
             numberOfPeople: numberOfPeople,
             isPublic: isPublic,
-            profilePictureURL: posterProfilePictureURL
+            profilePictureURL: posterProfilePictureURL,
+            latitude: selectedLatitude,
+            longitude: selectedLongitude
         )
     }
 
@@ -94,5 +98,10 @@ final class PostViewModel: ObservableObject {
         location = parts.first?.trimmingCharacters(in: .whitespaces) ?? suggestion.description
         selectedCity = parts.dropFirst(2).first?.trimmingCharacters(in: .whitespaces) ?? ""
         suggestions = []
+        Task {
+            let coords = try? await GooglePlacesService.getCoordinates(placeID: suggestion.id)
+            selectedLatitude = coords?.latitude
+            selectedLongitude = coords?.longitude
+        }
     }
 }

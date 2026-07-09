@@ -84,7 +84,7 @@ struct HitRequestService: Sendable {
         return results
     }
     
-    func confirmedHits(for requesterID: String) async throws -> [HitPost] {
+    func confirmedHits(for requesterID: String) async throws -> [ConfirmedHit] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: requesterID)
             .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "accepted")
@@ -97,8 +97,8 @@ struct HitRequestService: Sendable {
         return await fetchConfirmedHits(for: postID)
     }
     
-    private func fetchConfirmedHits(for postID: [String]) async -> [HitPost] {
-        var posts: [HitPost] = []
+    private func fetchConfirmedHits(for postID: [String]) async -> [ConfirmedHit] {
+        var hit: [ConfirmedHit] = []
         
         for id in postID {
             guard let doc = try? await db.collection(FirestoreKeys.Collections.posts).document(id).getDocument(),
@@ -107,27 +107,26 @@ struct HitRequestService: Sendable {
             
             let timestamp = data[FirestoreKeys.PostFields.date] as? Timestamp
             
-            let hitPost = HitPost(
+            let confirmedHit = ConfirmedHit(
                 id: id,
-                userID: data[FirestoreKeys.PostFields.userID] as? String ?? "",
                 posterName: data[FirestoreKeys.PostFields.posterName] as? String ?? "",
-                posterUTR: data[FirestoreKeys.PostFields.posterUTR] as? Double ?? 0.0,
-                posterUSTA: data[FirestoreKeys.PostFields.posterUSTA] as? Double ?? 0.0,
+                posterUTR: data[FirestoreKeys.PostFields.posterUTR] as? Double,
+                posterUSTA: data[FirestoreKeys.PostFields.posterUSTA] as? Double,
                 location: data[FirestoreKeys.PostFields.location] as? String ?? "",
-                city: data[FirestoreKeys.PostFields.city] as? String ?? "",
                 date: timestamp?.dateValue() ?? Date(),
                 extraInfo: data[FirestoreKeys.PostFields.extraInfo] as? String ?? "",
                 numberOfPeople: data[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 0,
-                isPublic: data[FirestoreKeys.PostFields.isPublic] as? Bool ?? true,
-                profilePictureURL: data[FirestoreKeys.PostFields.profilePictureURL] as? String ?? "",
+                profilePictureURL: data[FirestoreKeys.PostFields.profilePictureURL] as? String,
                 latitude: data[FirestoreKeys.PostFields.latitude] as? Double,
                 longitude: data[FirestoreKeys.PostFields.longitude] as? Double
                 )
             
-                posts.append(hitPost)
+            if confirmedHit.date >= Date() {
+                hit.append(confirmedHit)
+            }
             
         }
-        return posts
+        return hit
     }
     
     func fetchExistingRequest() async -> [String] {

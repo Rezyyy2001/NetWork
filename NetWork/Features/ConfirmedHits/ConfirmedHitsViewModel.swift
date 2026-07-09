@@ -11,7 +11,7 @@ import FirebaseAuth
 @MainActor
 final class ConfirmedHitsViewModel: ObservableObject {
     private let service = HitRequestService()
-    @Published var acceptedHitPosts: [HitPost] = []
+    @Published var acceptedHitPosts: [ConfirmedHit] = []
     
     func fetchConfirmedHits() {
         Task {

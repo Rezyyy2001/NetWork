@@ -22,15 +22,8 @@ struct ConfirmedHitsView: View {
                 } else {
                     ScrollView {
                         VStack(spacing: 16) {
-                            ForEach(viewModel.acceptedHitPosts) { post in
-                                PostPreviewCard(
-                                    post: post,
-                                    showConfirm: false,
-                                    onConfirm: {},
-                                    showJoinButton: false,
-                                    onJoinRequest: {},
-                                    onCancelRequest: {}
-                                )
+                            ForEach(viewModel.acceptedHitPosts) { hit in
+                                ConfirmedHitCard(confirmedHit: hit)
                             }
                         }
                         .padding(.horizontal, 16)

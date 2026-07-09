@@ -77,7 +77,7 @@ struct ProfileView: View {
                     Button {
                         currentUserViewModel.showSettings = true
                     } label: {
-                        Image(systemName: "slider.horizontal.3")
+                        Image(systemName: "gearshape")
                             .font(.headline)
                     }
                 }

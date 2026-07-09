@@ -36,7 +36,7 @@ struct HitsView: View {
                 Button {
                     viewModel.showFilter = true
                 } label: {
-                    Image(systemName: "line.3.horizontal.decrease.circle")
+                    Image(systemName: "slider.horizontal.3")
                         .font(.headline)
                 }
             }

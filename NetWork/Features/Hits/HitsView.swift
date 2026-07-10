@@ -22,12 +22,14 @@ struct HitsView: View {
                                     showJoinButton: post.userID != Auth.auth().currentUser?.uid,
                                     onJoinRequest: {viewModel.sendRequest(for: post)},
                                     isRequested: viewModel.requestedPostIDs.contains(post.id),
-                                    onCancelRequest:{ viewModel.cancelRequest(for: post) }
+                                    onCancelRequest:{ viewModel.cancelRequest(for: post) },
+                                    isAccepted: viewModel.acceptedPostIDs.contains(post.id)
                 )}
             }
             .onAppear {
                 viewModel.fetchPosts()
-                viewModel.fetchExistingRequest()
+                viewModel.fetchExistingRequests()
+                viewModel.fetchAcceptedRequests()
             }
             .navigationBarBackButtonHidden(true)
         }

@@ -12,7 +12,6 @@ struct AvatarClusterView: View {
     @StateObject private var viewModel: AvatarClusterViewModel
     
     @State private var showSheet: Bool = false
-    var onTap: () -> Void = {}
     
     init(postID: String, isOwner: Bool) {
         _viewModel = StateObject(wrappedValue: AvatarClusterViewModel(postID: postID, isOwner: isOwner))
@@ -37,8 +36,9 @@ struct AvatarClusterView: View {
             showSheet = true
         }
         .sheet(isPresented: $showSheet) {
-            AvatarClusterSheetView(profiles: viewModel.profiles, isOwner: viewModel.isOwner, onAccept: viewModel.acceptRequests)
+            AvatarClusterSheetView(viewModel: viewModel, onAccept: viewModel.acceptRequests)
                 .presentationDetents([.height(CGFloat(viewModel.profiles.count) * 80)])
+                .onAppear { viewModel.fetchProfiles() }
         }
     }
 }

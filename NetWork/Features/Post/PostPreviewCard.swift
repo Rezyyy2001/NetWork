@@ -27,6 +27,8 @@ struct PostPreviewCard: View {
     
     var isRequested: Bool = false
     var onCancelRequest: () -> Void
+    
+    var isAccepted: Bool = false
 
     @State private var isExpanded = false
     @State private var isTruncated = false
@@ -74,14 +76,22 @@ struct PostPreviewCard: View {
                     Spacer()
     
                     if showJoinButton {
-                        Button {
-                            isRequested ? onCancelRequest() : onJoinRequest()
-                        } label: {
-                            Image(systemName: isRequested ? "minus.circle" : "plus.app")
-                                .font(.title)
-                                .foregroundColor(isRequested ? .red : .green)
+                        if isAccepted {
+                            Text("Accepted")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                            
+                        } else {
+                            Button {
+                                isRequested ? onCancelRequest() : onJoinRequest()
+                            } label: {
+                                Image(systemName: isRequested ? "minus.circle" : "plus.app")
+                                    .font(.title)
+                                    .foregroundColor(isRequested ? .red : .green)
+                            }
                         }
                     }
+                    
                 }
 
                 Divider()

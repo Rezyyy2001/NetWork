@@ -9,13 +9,15 @@ import SwiftUI
 import Kingfisher
 
 struct AvatarClusterSheetView: View {
-    let profiles: [HitRequestProfile]
-    let isOwner: Bool
+    @ObservedObject var viewModel: AvatarClusterViewModel
+    
+    @State private var acceptedIDs: Set<String> = []
+    
     var onAccept: (String) -> Void
 
     var body: some View {
         List {
-            ForEach(profiles, id: \.documentID) { profile in
+            ForEach(viewModel.profiles, id: \.documentID) { profile in
                 
                 HStack {
                     KFImage(URL(string: profile.userProfile.profilePictureURL ?? ""))
@@ -34,21 +36,20 @@ struct AvatarClusterSheetView: View {
                         .font(.headline)
                     
                     Spacer()
-                    if isOwner {
-                        if profile.status == "accepted" {
+                    if viewModel.isOwner {
+                        if profile.status == "accepted" || acceptedIDs.contains(profile.documentID) {
                             Text("Accepted")
                                 .foregroundColor(.gray)
                         } else {
                             Button("Accept") {
+                                acceptedIDs.insert(profile.documentID)
                                 onAccept(profile.documentID)
                             }
                             .buttonStyle(.borderedProminent)
                         }
                     }
                 }
-                
             }
-            Spacer()
         }
         .listStyle(.plain)
         .scrollDisabled(true)

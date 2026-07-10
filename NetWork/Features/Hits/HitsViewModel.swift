@@ -19,8 +19,6 @@ final class HitsViewModel: ObservableObject {
     @Published var isNewest: Bool = true
     @Published var numberOfPeople: Int = 0
     @Published var isFriends: Bool = false
-    @Published var UTR: Int = 0
-    @Published var USTA: Int = 0
     
     @Published var showFilter: Bool = false
     
@@ -28,6 +26,8 @@ final class HitsViewModel: ObservableObject {
     @Published var ustaRange: [CGFloat] = [1, 7]
     
     @Published var requestedPostIDs: Set<String> = []
+    
+    @Published var acceptedPostIDs: Set<String> = []
     
     func fetchPosts() {
         Task {
@@ -63,10 +63,17 @@ final class HitsViewModel: ObservableObject {
         }
     }
     
-    func fetchExistingRequest() {
+    func fetchExistingRequests() {
         Task {
-            let postIDs = await hitRequestService.fetchExistingRequest()
+            let postIDs = await hitRequestService.fetchExistingRequests()
             requestedPostIDs = Set(postIDs)
+        }
+    }
+    
+    func fetchAcceptedRequests() {
+        Task {
+            let postIDs = await hitRequestService.fetchAcceptedRequests()
+            acceptedPostIDs = Set(postIDs)
         }
     }
 }

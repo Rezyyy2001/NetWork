@@ -124,12 +124,11 @@ struct HitRequestService: Sendable {
             if confirmedHit.date >= Date() {
                 hit.append(confirmedHit)
             }
-            
         }
-        return hit
+        return hit.sorted { $0.date < $1.date }
     }
     
-    func fetchExistingRequest() async -> [String] {
+    func fetchExistingRequests() async -> [String] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: Auth.auth().currentUser?.uid ?? "")
             .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "pending")
@@ -155,5 +154,17 @@ struct HitRequestService: Sendable {
             return (userID: requesterID, documentID: doc.documentID, status: status)
         }
         return await fetchProfiles(for: requesterID)
+    }
+    
+    func fetchAcceptedRequests() async -> [String] {
+        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
+            .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: Auth.auth().currentUser?.uid ?? "")
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "accepted")
+            .getDocuments()
+        else { return [] }
+        
+        return snapshot.documents.compactMap {
+            $0.data()[FirestoreKeys.HitRequestFields.postID] as? String
+        }
     }
 }

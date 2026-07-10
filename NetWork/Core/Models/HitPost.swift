@@ -24,5 +24,3 @@ struct HitPost: Identifiable {
     let latitude: Double?
     let longitude: Double?
 }
-
-// TODO: Redundent poster prefix

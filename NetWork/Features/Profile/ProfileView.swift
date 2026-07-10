@@ -22,7 +22,6 @@ struct ProfileView: View {
                 InfoView(viewModel: currentUserViewModel)
                 BiographyView(viewModel: currentUserViewModel)
                 
-                // TODO: add a filter to switch between current and past hit posts
                 Picker("Order", selection: $userPostsViewModel.active) {
                     Text("Active").tag(true)
                     Text("Past").tag(false)
@@ -92,7 +91,9 @@ struct ProfileView: View {
             .sheet(isPresented: $currentUserViewModel.showFriendRequests) {
                 FriendInboxView()
             }
-            .sheet(isPresented: $currentUserViewModel.showSettings) {
+            .sheet(isPresented: $currentUserViewModel.showSettings, onDismiss: {
+                Task { await currentUserViewModel.fetchCurrentUserProfile() }
+            }) {
                 SettingsView(authState: authState)
             }
             .sheet(isPresented: $currentUserViewModel.showConfirmedHits) {

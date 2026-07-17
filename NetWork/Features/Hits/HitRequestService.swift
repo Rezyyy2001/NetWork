@@ -36,7 +36,7 @@ struct HitRequestService: Sendable {
             .getDocuments(),
             let doc = snapshot.documents.first
             else { return nil }
-        return (doc.documentID)
+        return doc.documentID
     }
 
     func acceptRequest(documentID: String) async throws {
@@ -98,7 +98,7 @@ struct HitRequestService: Sendable {
     }
     
     private func fetchConfirmedHits(for postID: [String]) async -> [ConfirmedHit] {
-        var hit: [ConfirmedHit] = []
+        var hits: [ConfirmedHit] = []
         
         for id in postID {
             guard let doc = try? await db.collection(FirestoreKeys.Collections.posts).document(id).getDocument(),
@@ -122,10 +122,10 @@ struct HitRequestService: Sendable {
                 )
             
             if confirmedHit.date >= Date() {
-                hit.append(confirmedHit)
+                hits.append(confirmedHit)
             }
         }
-        return hit.sorted { $0.date < $1.date }
+        return hits.sorted { $0.date < $1.date }
     }
     
     func fetchExistingRequests() async -> [String] {

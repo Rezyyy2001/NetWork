@@ -10,10 +10,13 @@ import SwiftUI
 public struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject private var viewModel: SettingsViewModel
+    @StateObject private var settingsViewModel: SettingsViewModel
+    
+    @StateObject private var editServiceViewModel: EditServiceViewModel
     
     init (authState: AuthState) {
-        _viewModel = StateObject(wrappedValue: SettingsViewModel(authState: authState))
+        _settingsViewModel = StateObject(wrappedValue: SettingsViewModel(authState: authState))
+        _editServiceViewModel = StateObject(wrappedValue: EditServiceViewModel())
     }
     
     public var body: some View {
@@ -26,21 +29,24 @@ public struct SettingsView: View {
             
             List {
                 // the $ allows those variables to change in editProfileSection
-                EditProfileSection(viewModel: viewModel)
+                EditProfileSection(viewModel: settingsViewModel)
+                
+                // EditServiceSection
+                EditServiceSection(viewModel: editServiceViewModel)
         
                 SignOutButton {
-                    viewModel.signOut()
-                    dismiss() // So the exit seems seemliss
+                    settingsViewModel.signOut()
+                    dismiss() // So the exit seems seemless
                 }
             }
             .navigationTitle("Settings")
-            .alert("Error", isPresented: $viewModel.showErrorAlert) {
+            .alert("Error", isPresented: $settingsViewModel.showErrorAlert) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(viewModel.errorMessage)
+                Text(settingsViewModel.errorMessage)
             }
             .task {
-                await viewModel.fetchCurrentUserProfile()
+                await settingsViewModel.fetchCurrentUserProfile()
             }
         }
     }

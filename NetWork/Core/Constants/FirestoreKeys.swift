@@ -15,6 +15,7 @@ enum FirestoreKeys {
         static let messages = "messages"
         static let posts = "posts"
         static let hitrequests = "hitrequests"
+        static let businessCardFields = "businessCardFields"
     }
     enum UserFields {
         static let name = "name"
@@ -54,5 +55,23 @@ enum FirestoreKeys {
         static let requesterID = "requesterID"
         static let posterID = "posterID"
         static let status = "status"
+    }
+    enum BusinessCardFields {
+        static let id =  "id"
+        static let userID = "userID"
+        static let isActive = "isActive"
+        
+        static let serviceType = "serviceType"
+        static let pricing = "pricing"
+    
+        static let city = "city"
+        static let likeCount = "likeCount"
+        
+        static let description = "description"
+        static let chips = "chips"
+
+        static let phoneNumber = "phoneNumber"
+        static let email = "email"
+        static let insta = "insta"
     }
 }

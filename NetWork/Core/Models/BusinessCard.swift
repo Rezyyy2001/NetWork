@@ -19,7 +19,7 @@ struct BusinessCard: Identifiable {
     let likeCount: Int
     
     let description: String
-    let chips: [ServiceTag]?
+    let tags: [ServiceTag]
 
     let phoneNumber: String?
     let email: String?
@@ -36,6 +36,13 @@ enum ServiceType: String, Codable, CaseIterable {
         case .stringing: return "tennis.racket"
         case .lessons: return "figure.tennis"
         case .paidHit: return "tennisball"
+        }
+    }
+    
+    var availableTags: [ServiceTag] {
+        switch self {
+        case .stringing: return [.fiveYears, .tenYears, .twentyFourHour, .walkInsOnly, .mobile, .dropWeight, .manualCrank, .electronic, .bulkDiscount, .freeTrial]
+        case .lessons, .paidHit: return [.beginnerFriendly, .advancedPlayer, .rally, .juniors, .adults, .privateLessons, .groupLessons, .weekends, .weekdays, .english, .mandarin, .spanish, .clubAffiliated, .publicCourts, .certifiedCoach, .collegeTennis, .highSchoolTennis, .middleSchoolTennis, .d1, .d2, .d3]
         }
     }
 }
@@ -79,4 +86,6 @@ enum ServiceTag: String, Codable, CaseIterable {
     case dropWeight = "Drop Weight"
     case manualCrank = "Manual Crank"
     case electronic = "Electronic"
+    case bulkDiscount = "Bulk Discount"
+    case freeTrial = "Free Trial"
 }

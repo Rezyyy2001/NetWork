@@ -16,7 +16,7 @@ final class EditServiceViewModel: ObservableObject {
     @Published var pricing: Int = 0
     @Published var city: String = ""
     @Published var description: String = ""
-    @Published var chips: [ServiceTag] = []
+    @Published var selectedTags: [ServiceTag] = []
     @Published var phoneNumber: String = ""
     @Published var email: String = ""
     @Published var insta: String = ""
@@ -42,7 +42,7 @@ final class EditServiceViewModel: ObservableObject {
                 pricing: pricing,
                 likeCount: 0,
                 description: description,
-                chips: chips.map { $0.rawValue },
+                tags: selectedTags.map { $0.rawValue },
                 phoneNumber: phoneNumber,
                 email: email,
                 insta: insta)
@@ -63,7 +63,7 @@ final class EditServiceViewModel: ObservableObject {
                 self.city = card.city
                 self.pricing = card.pricing
                 self.description = card.description
-                self.chips = card.chips ?? []
+                self.selectedTags = card.tags
                 self.phoneNumber = card.phoneNumber ?? ""
                 self.email = card.email ?? ""
                 self.insta = card.insta ?? ""

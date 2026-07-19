@@ -68,7 +68,7 @@ enum FirestoreKeys {
         static let likeCount = "likeCount"
         
         static let description = "description"
-        static let chips = "chips"
+        static let tags = "tags"
 
         static let phoneNumber = "phoneNumber"
         static let email = "email"

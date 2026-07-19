@@ -124,6 +124,31 @@ public struct EditServiceSection: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     
+                    let columns = [GridItem(.adaptive(minimum: 100))]
+                    
+                    LazyVGrid(columns: columns, spacing: 8) {
+                        let tags: [ServiceTag] = viewModel.selectedServiceType?.availableTags ?? []
+                        ForEach (tags, id: \.self) { tag in
+                            Button {
+                                if viewModel.selectedTags.contains(tag) {
+                                    viewModel.selectedTags.removeAll { $0 == tag }
+                                } else {
+                                    viewModel.selectedTags.append(tag)
+                                }
+                            } label: {
+                                Text(tag.rawValue)
+                                    .font(.caption)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(viewModel.selectedTags.contains(tag) ? Color.brandBlue : Color(.systemGray4))
+                                    .foregroundColor(viewModel.selectedTags.contains(tag) ? .white : .primary)
+                                    .cornerRadius(20)
+                            }
+                            .buttonStyle(.plain)
+                            
+                        }
+                    }
+
                     HStack {
                         Toggle("", isOn: $viewModel.isActive)
                             .labelsHidden()

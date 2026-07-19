@@ -32,7 +32,7 @@ struct HitRequestService: Sendable {
     private func findRequest(postID: String, requesterID: String) async throws -> String? {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
-            .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: Auth.auth().currentUser?.uid ?? "")
+            .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: requesterID)
             .getDocuments(),
             let doc = snapshot.documents.first
             else { return nil }

@@ -13,7 +13,7 @@ struct BusinessCardService {
     
     private let db = Firestore.firestore()
     
-    func saveBusinessCard(cardID: String?, isActive: Bool, city: String, serviceType: String, pricing: Int, likeCount: Int, description: String, chips: [String], phoneNumber: String?, email: String?, insta: String?) async throws {
+    func saveBusinessCard(cardID: String?, isActive: Bool, city: String, serviceType: String, pricing: Int, likeCount: Int, description: String, tags: [String], phoneNumber: String?, email: String?, insta: String?) async throws {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
@@ -26,7 +26,7 @@ struct BusinessCardService {
             FirestoreKeys.BusinessCardFields.pricing: pricing,
             FirestoreKeys.BusinessCardFields.likeCount: likeCount,
             FirestoreKeys.BusinessCardFields.description: description,
-            FirestoreKeys.BusinessCardFields.chips: chips,
+            FirestoreKeys.BusinessCardFields.tags: tags,
             FirestoreKeys.BusinessCardFields.phoneNumber: phoneNumber ?? "",
             FirestoreKeys.BusinessCardFields.email: email ?? "",
             FirestoreKeys.BusinessCardFields.insta: insta ?? ""
@@ -55,12 +55,12 @@ struct BusinessCardService {
                 let pricing = doc.data()[FirestoreKeys.BusinessCardFields.pricing] as? Int ?? 0
                 let likeCount = doc.data()[FirestoreKeys.BusinessCardFields.likeCount] as? Int ?? 0
                 let description = doc.data()[FirestoreKeys.BusinessCardFields.description] as? String ?? ""
-                let chips = (doc.data()[FirestoreKeys.BusinessCardFields.chips] as? [String])?.compactMap { ServiceTag(rawValue: $0) }
+                let tags = (doc.data()[FirestoreKeys.BusinessCardFields.tags] as? [String])?.compactMap { ServiceTag(rawValue: $0) } ?? []
                 let phoneNumber = doc.data()[FirestoreKeys.BusinessCardFields.phoneNumber] as? String
                 let email = doc.data()[FirestoreKeys.BusinessCardFields.email] as? String
                 let insta = doc.data()[FirestoreKeys.BusinessCardFields.insta] as? String
                 
-                return BusinessCard(id: doc.documentID, userID: userID, isActive: isActive, serviceType: serviceType, pricing: pricing, city: city, likeCount: likeCount, description: description, chips: chips, phoneNumber: phoneNumber, email: email, insta: insta)
+                return BusinessCard(id: doc.documentID, userID: userID, isActive: isActive, serviceType: serviceType, pricing: pricing, city: city, likeCount: likeCount, description: description, tags: tags, phoneNumber: phoneNumber, email: email, insta: insta)
             }
             return card
         } catch {
@@ -85,12 +85,12 @@ struct BusinessCardService {
                 let pricing = doc.data()[FirestoreKeys.BusinessCardFields.pricing] as? Int ?? 0
                 let likeCount = doc.data()[FirestoreKeys.BusinessCardFields.likeCount] as? Int ?? 0
                 let description = doc.data()[FirestoreKeys.BusinessCardFields.description] as? String ?? ""
-                let chips = (doc.data()[FirestoreKeys.BusinessCardFields.chips] as? [String])?.compactMap { ServiceTag(rawValue: $0) }
+                let tags = (doc.data()[FirestoreKeys.BusinessCardFields.tags] as? [String])?.compactMap { ServiceTag(rawValue: $0) } ?? []
                 let phoneNumber = doc.data()[FirestoreKeys.BusinessCardFields.phoneNumber] as? String
                 let email = doc.data()[FirestoreKeys.BusinessCardFields.email] as? String
                 let insta = doc.data()[FirestoreKeys.BusinessCardFields.insta] as? String
                 
-                return BusinessCard(id: doc.documentID, userID: userID, isActive: isActive, serviceType: serviceType, pricing: pricing, city: city, likeCount: likeCount, description: description, chips: chips, phoneNumber: phoneNumber, email: email, insta: insta)
+                return BusinessCard(id: doc.documentID, userID: userID, isActive: isActive, serviceType: serviceType, pricing: pricing, city: city, likeCount: likeCount, description: description, tags: tags, phoneNumber: phoneNumber, email: email, insta: insta)
             }
             return card
         } catch {

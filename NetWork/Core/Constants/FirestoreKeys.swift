@@ -73,5 +73,9 @@ enum FirestoreKeys {
         static let phoneNumber = "phoneNumber"
         static let email = "email"
         static let insta = "insta"
+        
+        static let cardName = "cardName"
+        static let profilePicture = "profilePicture"
+        static let backgroundPic = "backgroundPic"
     }
 }

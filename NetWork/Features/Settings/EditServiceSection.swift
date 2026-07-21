@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import PhotosUI
+import Kingfisher
 
 public struct EditServiceSection: View {
     @ObservedObject var viewModel: EditServiceViewModel
-    
+    @State private var selectedItem: PhotosPickerItem? = nil
+
     public var body: some View {
         Section {
             Button(action: {
@@ -32,6 +35,8 @@ public struct EditServiceSection: View {
                 HStack {
                     ForEach(ServiceType.allCases, id: \.self) { type in
                         Button {
+                            selectedItem = nil
+                            viewModel.selectedBackgroundPic = nil
                             viewModel.selectedServiceType = type
                             viewModel.serviceType = type
                             Task { await viewModel.fetchUserCard(for: type) }
@@ -57,6 +62,43 @@ public struct EditServiceSection: View {
                     }
                 }
                 if viewModel.selectedServiceType != nil {
+                    // Background photo
+                    if let selected = viewModel.selectedBackgroundPic {
+                        Image(uiImage: selected)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 120)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    } else {
+                        KFImage(URL(string: viewModel.backgroundPic ?? ""))
+                            .placeholder {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color(.systemGray5))
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 120)
+                                    .overlay(Image(systemName: "photo").foregroundColor(.gray))
+                            }
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 120)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    PhotosPicker(selection: $selectedItem) {
+                        Text("Choose Background Photo")
+                            .font(.caption)
+                    }
+                    .buttonStyle(.borderless)
+                    .onChange(of: selectedItem) {
+                        Task {
+                            if let data = try? await selectedItem?.loadTransferable(type: Data.self),
+                               let image = UIImage(data: data) {
+                                viewModel.selectedBackgroundPic = image
+                            }
+                        }
+                    }
+
                     // About
                     Text("About")
                         .font(.caption)

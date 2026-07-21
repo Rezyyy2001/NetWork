@@ -24,6 +24,10 @@ struct BusinessCard: Identifiable {
     let phoneNumber: String?
     let email: String?
     let insta: String?
+    
+    let cardName: String
+    let profilePicture: String?
+    let backgroundPic: String?
 }
 
 enum ServiceType: String, Codable, CaseIterable {

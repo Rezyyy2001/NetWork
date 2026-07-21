@@ -39,8 +39,6 @@ struct PostService: Sendable {
         try await Firestore.firestore().collection(FirestoreKeys.Collections.posts).document().setData(postData)
     }
     
-    // TODO: They return the same thing use a private helper function to clean up this DRY violation
-    
     func fetchPosts(isNewest: Bool, numberOfPeople: Int, isFriends: Bool, utrRange: [CGFloat], ustaRange: [CGFloat], friendIDs: [String]) async throws -> [HitPost] {
         
         var query: Query = db.collection(FirestoreKeys.Collections.posts)
@@ -54,25 +52,8 @@ struct PostService: Sendable {
         
         do {
             let snapshot = try await query.getDocuments()
+            var posts = snapshot.documents.compactMap(buildPost)
             
-            var posts = snapshot.documents.compactMap { doc in
-                let userID = doc.data()[FirestoreKeys.PostFields.userID] as? String ?? ""
-                let posterName = doc.data()[FirestoreKeys.PostFields.posterName] as? String ?? ""
-                let posterUTR = doc.data()[FirestoreKeys.PostFields.posterUTR] as? Double
-                let posterUSTA = doc.data()[FirestoreKeys.PostFields.posterUSTA] as? Double
-                let location = doc.data()[FirestoreKeys.PostFields.location] as? String ?? ""
-                let city = doc.data()[FirestoreKeys.PostFields.city] as? String ?? ""
-                let timestamp = doc.data()[FirestoreKeys.PostFields.date] as? Timestamp
-                let date = timestamp?.dateValue() ?? Date()
-                let extraInfo = doc.data()[FirestoreKeys.PostFields.extraInfo] as? String ?? ""
-                let numberOfPeople = doc.data()[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1
-                let isPublic = doc.data()[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
-                let profilePictureURL = doc.data()[FirestoreKeys.PostFields.profilePictureURL] as? String
-                let latitude = doc.data()[FirestoreKeys.PostFields.latitude] as? Double
-                let longitude = doc.data()[FirestoreKeys.PostFields.longitude] as? Double
-
-                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic, profilePictureURL: profilePictureURL, latitude: latitude, longitude: longitude)
-            }
 
             switch numberOfPeople {
             case 1:
@@ -116,30 +97,32 @@ struct PostService: Sendable {
         
         do {
             let snapshot = try await query.getDocuments()
-            
-            let posts = snapshot.documents.compactMap { doc in
-                let userID = doc.data()[FirestoreKeys.PostFields.userID] as? String ?? ""
-                let posterName = doc.data()[FirestoreKeys.PostFields.posterName] as? String ?? ""
-                let posterUTR = doc.data()[FirestoreKeys.PostFields.posterUTR] as? Double
-                let posterUSTA = doc.data()[FirestoreKeys.PostFields.posterUSTA] as? Double
-                let location = doc.data()[FirestoreKeys.PostFields.location] as? String ?? ""
-                let city = doc.data()[FirestoreKeys.PostFields.city] as? String ?? ""
-                let timestamp = doc.data()[FirestoreKeys.PostFields.date] as? Timestamp
-                let date = timestamp?.dateValue() ?? Date()
-                let extraInfo = doc.data()[FirestoreKeys.PostFields.extraInfo] as? String ?? ""
-                let numberOfPeople = doc.data()[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1
-                let isPublic = doc.data()[FirestoreKeys.PostFields.isPublic] as? Bool ?? true
-                let profilePictureURL = doc.data()[FirestoreKeys.PostFields.profilePictureURL] as? String
-                let latitude = doc.data()[FirestoreKeys.PostFields.latitude] as? Double
-                let longitude = doc.data()[FirestoreKeys.PostFields.longitude] as? Double
-
-                return HitPost(id: doc.documentID, userID: userID, posterName: posterName, posterUTR: posterUTR, posterUSTA: posterUSTA, location: location, city: city, date: date, extraInfo: extraInfo, numberOfPeople: numberOfPeople, isPublic: isPublic, profilePictureURL: profilePictureURL, latitude: latitude, longitude: longitude)
-            }
-            return posts
+            return snapshot.documents.compactMap(buildPost)
             
         } catch {
             print("fetchPosts error \(error)") // gives us a link that allows us to create configured indexes
             return []
         }
+    }
+    
+    private func buildPost(_ doc: QueryDocumentSnapshot) -> HitPost {
+        let data = doc.data()
+        let timestamp = data[FirestoreKeys.PostFields.date] as? Timestamp 
+        return HitPost(
+            id: doc.documentID,
+            userID: data[FirestoreKeys.PostFields.userID] as? String ?? "",
+            posterName: data[FirestoreKeys.PostFields.posterName] as? String ?? "",
+            posterUTR: data[FirestoreKeys.PostFields.posterUTR] as? Double,
+            posterUSTA: data[FirestoreKeys.PostFields.posterUSTA] as? Double,
+            location: data[FirestoreKeys.PostFields.location] as? String ?? "",
+            city: data[FirestoreKeys.PostFields.city] as? String ?? "",
+            date: timestamp?.dateValue() ?? Date(),
+            extraInfo: data[FirestoreKeys.PostFields.extraInfo] as? String ?? "",
+            numberOfPeople: data[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 1,
+            isPublic: data[FirestoreKeys.PostFields.isPublic] as? Bool ?? true,
+            profilePictureURL: data[FirestoreKeys.PostFields.profilePictureURL] as? String,
+            latitude: data[FirestoreKeys.PostFields.latitude] as? Double,
+            longitude: data[FirestoreKeys.PostFields.longitude] as? Double
+        )
     }
 }

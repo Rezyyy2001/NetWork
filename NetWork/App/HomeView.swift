@@ -25,7 +25,7 @@ struct HomeView: View {
                     if tabselection == 1 {
                         HitsView()
                     } else if tabselection == 2 {
-                        LocalView()
+                        ServiceView()
                     } else if tabselection == 3 {
                         PostView()
                     } else if tabselection == 4 {

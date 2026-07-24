@@ -18,6 +18,10 @@ struct BusinessCardService: Sendable {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
         
+        let userDoc = try await db.collection(FirestoreKeys.Collections.users).document(user.uid).getDocument()
+        let cardName = userDoc.data()?[FirestoreKeys.UserFields.name] as? String ?? ""
+        let profilePicture = userDoc.data()?[FirestoreKeys.UserFields.profilePictureURL] as? String ?? ""
+
         let userData: [String: Any] = [
             FirestoreKeys.BusinessCardFields.userID: user.uid,
             FirestoreKeys.BusinessCardFields.isActive: isActive,
@@ -30,7 +34,9 @@ struct BusinessCardService: Sendable {
             FirestoreKeys.BusinessCardFields.phoneNumber: phoneNumber ?? "",
             FirestoreKeys.BusinessCardFields.email: email ?? "",
             FirestoreKeys.BusinessCardFields.insta: insta ?? "",
-            FirestoreKeys.BusinessCardFields.backgroundPic: backgroundPic ?? ""
+            FirestoreKeys.BusinessCardFields.backgroundPic: backgroundPic ?? "",
+            FirestoreKeys.BusinessCardFields.cardName: cardName,
+            FirestoreKeys.BusinessCardFields.profilePicture: profilePicture
         ]
         
         let ref = cardID != nil

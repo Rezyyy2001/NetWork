@@ -1,5 +1,5 @@
 {
-  "originHash" : "1e987722f9f9295e52178621f4702edc94f00640983b2e7f1855217e02cb43fb",
+  "originHash" : "5c0385e5d4b6cbb98405d439297e8269fc6ea1a589965f7b454f0733f312888f",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -143,6 +143,15 @@
       "state" : {
         "revision" : "ebc7251dd5b37f627c93698e4374084d98409633",
         "version" : "1.28.2"
+      }
+    },
+    {
+      "identity" : "wrappinghstack",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dkk/WrappingHStack",
+      "state" : {
+        "revision" : "425d9488ba55f58f0b34498c64c054c77fc2a44b",
+        "version" : "2.2.11"
       }
     }
   ],

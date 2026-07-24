@@ -11,6 +11,7 @@
 		5B8F33DA2FD636A4005435A8 /* MultiSlider in Frameworks */ = {isa = PBXBuildFile; productRef = 5B8F33D92FD636A4005435A8 /* MultiSlider */; };
 		5B8F35172FE4ED3C005435A8 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 5B8F35162FE4ED3C005435A8 /* FirebaseStorage */; };
 		5B8F36612FF30794005435A8 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 5B8F36602FF30794005435A8 /* Kingfisher */; };
+		5B8F37EB3011BBC5005435A8 /* WrappingHStack in Frameworks */ = {isa = PBXBuildFile; productRef = 5B8F37EA3011BBC5005435A8 /* WrappingHStack */; };
 		5BC98D0E2CF59E6A00D9A485 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BC98D0D2CF59E6A00D9A485 /* GoogleService-Info.plist */; };
 		5BC98D112CF5AD0F00D9A485 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D102CF5AD0F00D9A485 /* FirebaseAnalytics */; };
 		5BC98D142CF6740D00D9A485 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5BC98D132CF6740D00D9A485 /* FirebaseAuth */; };
@@ -40,6 +41,7 @@
 			files = (
 				5B8F36612FF30794005435A8 /* Kingfisher in Frameworks */,
 				5BC98D112CF5AD0F00D9A485 /* FirebaseAnalytics in Frameworks */,
+				5B8F37EB3011BBC5005435A8 /* WrappingHStack in Frameworks */,
 				5B8F33DA2FD636A4005435A8 /* MultiSlider in Frameworks */,
 				5BC98D142CF6740D00D9A485 /* FirebaseAuth in Frameworks */,
 				5B8F35172FE4ED3C005435A8 /* FirebaseStorage in Frameworks */,
@@ -145,6 +147,7 @@
 				5BC98D0F2CF5AD0F00D9A485 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				5B8F33D82FD636A4005435A8 /* XCRemoteSwiftPackageReference "MultiSlider" */,
 				5B8F365F2FF30794005435A8 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				5B8F37E93011BBC5005435A8 /* XCRemoteSwiftPackageReference "WrappingHStack" */,
 			);
 			productRefGroup = 5BD056932C968C0900E6DADA /* Products */;
 			projectDirPath = "";
@@ -403,6 +406,14 @@
 				minimumVersion = 8.10.0;
 			};
 		};
+		5B8F37E93011BBC5005435A8 /* XCRemoteSwiftPackageReference "WrappingHStack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dkk/WrappingHStack";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.11;
+			};
+		};
 		5BC98D0F2CF5AD0F00D9A485 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -433,6 +444,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5B8F365F2FF30794005435A8 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		5B8F37EA3011BBC5005435A8 /* WrappingHStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5B8F37E93011BBC5005435A8 /* XCRemoteSwiftPackageReference "WrappingHStack" */;
+			productName = WrappingHStack;
 		};
 		5BC98D102CF5AD0F00D9A485 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

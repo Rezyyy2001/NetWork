@@ -15,7 +15,7 @@ enum FirestoreKeys {
         static let messages = "messages"
         static let posts = "posts"
         static let hitrequests = "hitrequests"
-        static let businessCardFields = "businessCardFields"
+        static let businessCard = "businessCard"
     }
     enum UserFields {
         static let name = "name"

@@ -40,13 +40,13 @@ struct BusinessCardService: Sendable {
         ]
         
         let ref = cardID != nil
-            ? Firestore.firestore().collection(FirestoreKeys.Collections.businessCardFields).document(cardID!)
-            : Firestore.firestore().collection(FirestoreKeys.Collections.businessCardFields).document()
+            ? Firestore.firestore().collection(FirestoreKeys.Collections.businessCard).document(cardID!)
+            : Firestore.firestore().collection(FirestoreKeys.Collections.businessCard).document()
         try await ref.setData(userData)
     }
     
     func fetchUserCard() async throws -> [BusinessCard] {
-        let query: Query = db.collection(FirestoreKeys.Collections.businessCardFields)
+        let query: Query = db.collection(FirestoreKeys.Collections.businessCard)
             .whereField(FirestoreKeys.BusinessCardFields.userID, isEqualTo: Auth.auth().currentUser?.uid ?? "")
             .limit(to: 10)
         do {
@@ -59,7 +59,7 @@ struct BusinessCardService: Sendable {
     }
 
     func fetchAllActiveCards() async throws -> [BusinessCard] {
-        let query: Query = db.collection(FirestoreKeys.Collections.businessCardFields)
+        let query: Query = db.collection(FirestoreKeys.Collections.businessCard)
             .whereField(FirestoreKeys.BusinessCardFields.isActive, isEqualTo: true)
         do {
             let snapshot = try await query.getDocuments()

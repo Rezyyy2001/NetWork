@@ -12,15 +12,20 @@ struct ServiceView: View {
 
     var body: some View {
         NavigationStack {
-            TabView {
-                ForEach(viewModel.cards) { card in
-                    BusinessCardView(card: card)
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .always))
-            .navigationTitle("Services")
-            .navigationBarBackButtonHidden(true)
-            .task { await viewModel.fetchCards() }
+            
+            CardStackView(cards: viewModel.cards)
+                .navigationTitle("Services")
+                .task { await viewModel.fetchCards() }
+            
+//            TabView {
+//                ForEach(viewModel.cards) { card in
+//                    BusinessCardView(card: card)
+//                }
+//            }
+//            .tabViewStyle(.page(indexDisplayMode: .always))
+//            .navigationTitle("Services")
+//            .navigationBarBackButtonHidden(true)
+//            .task { await viewModel.fetchCards() }
         }
     }
 }

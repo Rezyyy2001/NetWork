@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BusinessCard: Identifiable {
+struct BusinessCard: Identifiable, Equatable {
     let id: String
     let userID: String
     let isActive: Bool

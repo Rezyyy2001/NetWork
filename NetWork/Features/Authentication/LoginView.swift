@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var viewModel = LoginViewModel() // creates an instance of LoginViewModel which manages authentication
-    
+    @StateObject private var viewModel = LoginViewModel()
+    @EnvironmentObject var authState: AuthState
+
     var body: some View {
         VStack {
             VStack(spacing: 24) { // spacing between input fields
@@ -37,8 +38,8 @@ struct LoginView: View {
                         .cornerRadius(10)
                 }
                 .padding(.top, 24)
-                .navigationDestination(isPresented: $viewModel.showHomeView) { // navigates to homeView
-                    HomeView()
+                .onChange(of: viewModel.showHomeView) { _, show in
+                    if show { authState.isAuthenticated = true }
                 }
             
             }
@@ -61,7 +62,6 @@ struct LoginView: View {
                     .padding()
             }
         }
-        .navigationBarBackButtonHidden(true) // the back button be gone
     }
 }
 

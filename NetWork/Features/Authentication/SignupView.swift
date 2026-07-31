@@ -9,8 +9,9 @@ import SwiftUI
 
 struct SignupView: View {
 
-    @StateObject private var viewModel = SignupViewModel() // to tie the signupViewModel logic and userInput
-    
+    @StateObject private var viewModel = SignupViewModel()
+    @EnvironmentObject var authState: AuthState
+
     var body: some View {
         VStack {
             VStack(spacing: 24) {
@@ -77,8 +78,8 @@ struct SignupView: View {
                         .cornerRadius(10)
                 }
                 .padding(.top, 24)
-                .navigationDestination(isPresented: $viewModel.showHomeView) { // calls viewModel.showHomeView as true
-                    HomeView() // if true navigates to homeView
+                .onChange(of: viewModel.showHomeView) { _, show in
+                    if show { authState.isAuthenticated = true }
                 }
             }
             .padding()

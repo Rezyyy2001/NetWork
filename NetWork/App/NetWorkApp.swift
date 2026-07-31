@@ -17,6 +17,7 @@ struct NetWorkApp: App {
         WindowGroup {
             if authState.isAuthenticated {
                 HomeView()
+                    .environmentObject(authState)
             } else {
                 ContentView()
                     .environmentObject(authState)

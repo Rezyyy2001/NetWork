@@ -15,41 +15,42 @@ struct SearchView: View {
     
 
     var body: some View {
-        VStack {
-            // Search Bar
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-                    .padding(10)
-
-                TextField("Search for players...", text: $viewModel.searchText)
-                    .autocorrectionDisabled()
-                    .autocapitalization(.none)
-                    .onChange(of: viewModel.searchText) { _, _ in
-                        viewModel.searchUsers()
+        NavigationStack {
+            VStack {
+                // Search Bar
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                        .padding(10)
+                    
+                    TextField("Search for players...", text: $viewModel.searchText)
+                        .autocorrectionDisabled()
+                        .autocapitalization(.none)
+                        .onChange(of: viewModel.searchText) { _, _ in
+                            viewModel.searchUsers()
+                        }
+                }
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
+                .padding(.horizontal)
+                
+                // Search Results
+                List(viewModel.searchResults) { user in
+                    StubView(user: user) {
+                        selectedUser = user // Store selected user
+                    }
+                    .listRowBackground(Color.clear) // Ensures it doesn’t apply default background
+                }
+                .listStyle(PlainListStyle())
+            }
+            .navigationDestination(item: $selectedUser) { user in
+                UserProfileView(userID: user.id) // Navigate on selection
+                    .onAppear {
+                        print("Navigating to userProfileView for \(user.id)")
                     }
             }
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
-            .padding(.horizontal)
-
-            // Search Results
-            List(viewModel.searchResults) { user in
-                StubView(user: user) {
-                    selectedUser = user // Store selected user
-                }
-                .listRowBackground(Color.clear) // Ensures it doesn’t apply default background
-            }
-            .listStyle(PlainListStyle())
+            //.navigationTitle("Search Players")
         }
-        .navigationDestination(item: $selectedUser) { user in
-            UserProfileView(userID: user.id) // Navigate on selection
-                .onAppear {
-                    print("Navigating to userProfileView for \(user.id)")
-                }
-        }
-        .navigationBarBackButtonHidden(true)
-        .navigationTitle("Search Players")
     }
 }
 #Preview {

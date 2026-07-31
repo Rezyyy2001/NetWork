@@ -13,7 +13,7 @@ struct HitsView: View {
     @StateObject private var viewModel = HitsViewModel()
     
     var body: some View {
-        VStack {
+        NavigationStack {
             ScrollView {
                 ForEach(viewModel.hits) { post in
                     PostPreviewCard(post: post,
@@ -24,35 +24,34 @@ struct HitsView: View {
                                     isRequested: viewModel.requestedPostIDs.contains(post.id),
                                     onCancelRequest:{ viewModel.cancelRequest(for: post) },
                                     isAccepted: viewModel.acceptedPostIDs.contains(post.id)
-                )}
+                    )}
             }
             .onAppear {
                 viewModel.fetchPosts()
                 viewModel.fetchExistingRequests()
                 viewModel.fetchAcceptedRequests()
             }
-            .navigationBarBackButtonHidden(true)
-        }
-        .toolbar{
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    viewModel.showFilter = true
-                } label: {
-                    Image(systemName: "slider.horizontal.3")
-                        .font(.headline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        viewModel.showFilter = true
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.headline)
+                    }
                 }
             }
-        }
-        .sheet(isPresented: $viewModel.showFilter, onDismiss: {
-            viewModel.fetchPosts()
-        }) {
-            FilterView(isNewest: $viewModel.isNewest,
-                       numberOfPeople: $viewModel.numberOfPeople,
-                       isFriends: $viewModel.isFriends,
-                       utrRange: $viewModel.utrRange,
-                       ustaRange: $viewModel.ustaRange
-            )
+            .sheet(isPresented: $viewModel.showFilter, onDismiss: {
+                viewModel.fetchPosts()
+            }) {
+                FilterView(isNewest: $viewModel.isNewest,
+                           numberOfPeople: $viewModel.numberOfPeople,
+                           isFriends: $viewModel.isFriends,
+                           utrRange: $viewModel.utrRange,
+                           ustaRange: $viewModel.ustaRange
+                )
                 .presentationDetents([.fraction(0.35)])
+            }
         }
     }
 }

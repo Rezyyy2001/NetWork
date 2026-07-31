@@ -8,40 +8,18 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var tabselection = 1
-    
-    let homeTabItems: [(image: String, title: String)] = [
-        ("figure.tennis", "Hits"),
-        ("globe", "Local"),
-        ("plus.app", "Post"),
-        ("magnifyingglass", "Search"),
-        ("person", "Profile")
-    ]
-    
     var body: some View {
-        VStack {
-            ZStack(alignment: .bottom) {
-                VStack {
-                    if tabselection == 1 {
-                        HitsView()
-                    } else if tabselection == 2 {
-                        ServiceView()
-                    } else if tabselection == 3 {
-                        PostView()
-                    } else if tabselection == 4 {
-                        SearchView()
-                    } else if tabselection == 5 {
-                        ProfileView()
-                    }
-                }
-                .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 80) }
-                CustomTabView(tabSelection: $tabselection, items: homeTabItems)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(
-                Color(.white)
-                    .edgesIgnoringSafeArea(.all)
-            )
+        TabView {
+            HitsView()
+                .tabItem { Label("Hits", systemImage: "figure.tennis") }
+            ServiceView()
+                .tabItem { Label("Service", systemImage: "globe") }
+            PostView()
+                .tabItem { Label("Post", systemImage: "plus.app") }
+            SearchView()
+                .tabItem { Label("Search", systemImage: "magnifyingglass") }
+            ProfileView()
+                .tabItem { Label("Profile", systemImage: "person") }
         }
     }
 }

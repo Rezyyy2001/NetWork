@@ -11,11 +11,13 @@ struct ContentView: View {
     @State private var showLoginSignupView = false //meaning the LoginSignupView initially does not show
     
     var body: some View {
-        NavigationStack {
+        if showLoginSignupView {
+            LoginSignupView()
+        } else {
             ZStack {
                 Color.green
                     .ignoresSafeArea()
-                Button(action: { showLoginSignupView = true}) { //this button shows the LoginSignupView
+                Button(action: { showLoginSignupView = true }) {
                     TennisCourt()
                         .stroke(Color.white, lineWidth: 4)
                         .background(Color.brandBlue)
@@ -30,10 +32,6 @@ struct ContentView: View {
                         .italic()
                         .offset(y: -15)
                 }
-         
-            }
-            .navigationDestination(isPresented: $showLoginSignupView) {
-                LoginSignupView()
             }
         }
     }

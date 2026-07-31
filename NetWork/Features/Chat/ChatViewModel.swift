@@ -18,7 +18,6 @@ final class ChatViewModel: ObservableObject {
     private let conversationID: String
     private let currentUserID: String
 
-    // sets up IDs and listens for emssages from Firestore
     init(currentUserID: String, otherUserID: String) {
         self.currentUserID = currentUserID
         self.conversationID = service.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.

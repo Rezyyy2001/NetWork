@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseFirestore
+@preconcurrency import FirebaseFirestore
 
 @MainActor
 final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider {
@@ -44,7 +44,7 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
             let profile = try await service.fetchUserProfile(userID: userID)
             apply(profile)
             
-            self.friendshipStatus = (try await friendService.checkFriendshipStatus(for: userID)) // ?? .none
+            self.friendshipStatus = (try await friendService.checkFriendshipStatus(for: userID))
         } catch {
             self.errorMessage = "Could not find user"
         }

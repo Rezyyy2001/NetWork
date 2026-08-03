@@ -6,14 +6,24 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ServiceView: View {
     @StateObject private var viewModel = ServiceViewModel()
+    @State private var userStub: UserStub?
+    let currentUserID = Auth.auth().currentUser?.uid ?? ""
+    
 
     var body: some View {
         NavigationStack {
-            CardStackView(cards: viewModel.cards)
-                .task { await viewModel.fetchCards() }
+            CardStackView(cards: viewModel.cards, leftSwipe: { stub in
+                userStub = stub
+            })
+            .task { await viewModel.fetchCards() }
+            .navigationDestination(item: $userStub) { user in
+                ChatView(currentUserID: currentUserID, otherUser: user)
+                    .toolbar(.hidden, for: .tabBar)
+            }
         }
     }
 }
@@ -21,3 +31,5 @@ struct ServiceView: View {
 #Preview {
     ServiceView()
 }
+
+

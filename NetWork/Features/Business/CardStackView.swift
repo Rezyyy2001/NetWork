@@ -11,6 +11,7 @@ struct CardStackView: View {
     let cards: [BusinessCard]
     @State private var localCards: [BusinessCard] = []
     @State private var offset: CGSize = .zero
+    var leftSwipe: (UserStub) -> Void = { _ in }
     
     var body: some View {
         ZStack {
@@ -39,6 +40,9 @@ struct CardStackView: View {
                                           offset = CGSize(width: -500, height: value.translation.height)
                                       }
                                       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                          guard let card = localCards.last else { return }
+                                          let stub = UserStub(uid: card.userID, displayName: card.cardName, profilePictureURL: card.profilePicture)
+                                          leftSwipe(stub)
                                           localCards.removeLast()
                                           offset = .zero
                                       }

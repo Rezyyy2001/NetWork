@@ -27,7 +27,7 @@ final class FriendService: Sendable {
         return await fetchStubs(for: senderIDs)
     }
 
-    private func fetchStubs(for userIDs: [String]) async -> [UserStub] {
+    func fetchStubs(for userIDs: [String]) async -> [UserStub] {
         var loadedStubs: [UserStub] = []
 
         for id in userIDs {

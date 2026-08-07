@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import FirebaseFirestore
+@preconcurrency import FirebaseFirestore
 
-struct ChatService {
+struct ChatService: Sendable {
 
     private let db = Firestore.firestore()
 
@@ -46,5 +46,28 @@ struct ChatService {
 
                 onUpdate(messages)
             }
+    }
+    
+    func createConversation(conversationID: String, participants: [String]) async throws {
+        do {
+            let docRef = db.collection("conversations").document(conversationID)
+            try await docRef.setData(["participants": participants], merge: true)
+        } catch {
+            print("Failed to create conversation: \(error)")
+        }
+    }
+    
+    func fetchConversation(for userID: String) async -> [String] {
+        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.conversations)
+            .whereField("participants", arrayContains: userID)
+            .getDocuments()
+        else { return [] }
+        
+        let otherUserIDs = snapshot.documents.compactMap { doc -> String? in
+            let data = doc.data()
+            let participants = data["participants"] as? [String] ?? []
+            return participants.first { $0 != userID }
+        }
+        return otherUserIDs
     }
 }

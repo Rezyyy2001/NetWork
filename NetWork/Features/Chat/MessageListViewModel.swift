@@ -12,11 +12,18 @@ import FirebaseAuth
 final class MessageListViewModel: ObservableObject {
     @Published var friends: [UserStub] = []
     
-    private let service = FriendService()
+    private let friendService = FriendService()
+    private let chatService = ChatService()
     
-    func fetchFriends(for currentUserID: String) {
+    func fetchAllContacts(for currentUserID: String) {
         Task {
-            self.friends = await service.fetchFriends(for: currentUserID)
+            let friends = await friendService.fetchFriends(for: currentUserID)
+            let conversationIDs = await chatService.fetchConversation(for: currentUserID)
+            let conversationUsers = await friendService.fetchStubs(for: conversationIDs)
+            let combined = friends + conversationUsers.filter { user in
+                !friends.contains(where: { $0.id == user.id })
+            }
+            self.friends = combined
         }
     }
 }

@@ -22,6 +22,8 @@ final class ChatViewModel: ObservableObject {
         self.currentUserID = currentUserID
         self.conversationID = service.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.
         listenForMessages()
+        
+        Task { try? await service.createConversation(conversationID: conversationID, participants: [currentUserID, otherUserID]) }
     }
     
     deinit {

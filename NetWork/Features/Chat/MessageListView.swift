@@ -45,7 +45,7 @@ struct MessageListView: View {
                 ChatView(currentUserID: currentUserID, otherUser: user)
             }
             .onAppear {
-                viewModel.fetchFriends(for: currentUserID)
+                viewModel.fetchAllContacts(for: currentUserID)
             }
             .navigationTitle("Messages")
             .navigationBarTitleDisplayMode(.inline)

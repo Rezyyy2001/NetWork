@@ -17,13 +17,9 @@ final class MessageListViewModel: ObservableObject {
     
     func fetchAllContacts(for currentUserID: String) {
         Task {
-            let friends = await friendService.fetchFriends(for: currentUserID)
             let conversationIDs = await chatService.fetchConversation(for: currentUserID)
             let conversationUsers = await friendService.fetchStubs(for: conversationIDs)
-            let combined = friends + conversationUsers.filter { user in
-                !friends.contains(where: { $0.id == user.id })
-            }
-            self.friends = combined
+            self.friends = conversationUsers
         }
     }
 }

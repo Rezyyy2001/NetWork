@@ -14,7 +14,7 @@ struct FriendButtonView: View {
     
     init(targetUserID: String) {
         self.targetUserID = targetUserID
-        _viewModel = StateObject(wrappedValue: FriendButtonViewModel())
+        _viewModel = StateObject(wrappedValue: FriendButtonViewModel(targetUserID: targetUserID))
     }
     
     var body: some View {

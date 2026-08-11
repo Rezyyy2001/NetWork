@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 
 @MainActor
 final class FriendButtonViewModel: ObservableObject {
@@ -13,14 +14,24 @@ final class FriendButtonViewModel: ObservableObject {
     @Published var friendshipStatus: FriendshipStatus = .none
     @Published var errorMessage: String?
     
+    private let friendService = FriendService()
+    private let chatService = ChatService()
     
-
-    private let service = FriendService()
+    let targetUserID: String
+    let currentUserID: String
+    private let conversationID: String
+    
+    init(targetUserID: String) {
+        self.targetUserID = targetUserID
+        let uid = Auth.auth().currentUser?.uid ?? ""
+        self.currentUserID = uid
+        self.conversationID = ChatService().conversationID(for: uid, and: targetUserID)
+    }
     
     func checkFriendshipStatus(for targetUserID: String) {
         Task {
             do {
-                self.friendshipStatus = try await service.checkFriendshipStatus(for: targetUserID)
+                self.friendshipStatus = try await friendService.checkFriendshipStatus(for: targetUserID)
             } catch {
                 self.errorMessage = error.localizedDescription
             }
@@ -30,7 +41,7 @@ final class FriendButtonViewModel: ObservableObject {
     func sendFriendRequest(for targetUserID: String) {
         Task {
             do {
-                try await service.sendFriendRequest(for: targetUserID)
+                try await friendService.sendFriendRequest(for: targetUserID)
                 friendshipStatus = .sent
             } catch {
                 self.errorMessage = error.localizedDescription
@@ -41,8 +52,10 @@ final class FriendButtonViewModel: ObservableObject {
     func acceptFriendRequest(for documentID: String) {
         Task {
             do {
-                try await service.acceptFriendRequest(for: documentID)
+                try await friendService.acceptFriendRequest(for: documentID)
                 friendshipStatus = .friends
+                
+                try await chatService.createConversation(conversationID: conversationID, participants: [currentUserID, targetUserID])
             } catch {
                 self.errorMessage = error.localizedDescription
             }
@@ -52,7 +65,7 @@ final class FriendButtonViewModel: ObservableObject {
     func denyFriendRequest(for documentID: String) {
         Task {
             do {
-                try await service.denyFriendRequest(for: documentID)
+                try await friendService.denyFriendRequest(for: documentID)
                 friendshipStatus = .none
             } catch {
                 self.errorMessage = error.localizedDescription

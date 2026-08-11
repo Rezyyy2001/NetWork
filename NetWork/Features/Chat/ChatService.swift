@@ -24,6 +24,10 @@ struct ChatService: Sendable {
                 .document()
 
             try docRef.setData(from: message, merge: true, completion: completion)
+            
+            db.collection(FirestoreKeys.Collections.conversations)
+                .document(conversationID)
+                .updateData(["lastMessageTimestamp": Date()])
         } catch {
             completion?(error)
         }
@@ -51,23 +55,29 @@ struct ChatService: Sendable {
     func createConversation(conversationID: String, participants: [String]) async throws {
         do {
             let docRef = db.collection("conversations").document(conversationID)
-            try await docRef.setData(["participants": participants], merge: true)
+            try await docRef.setData(["participants": participants,
+                                      "lastMessageTimestamp": Date()], merge: true)
         } catch {
             print("Failed to create conversation: \(error)")
         }
     }
     
     func fetchConversation(for userID: String) async -> [String] {
-        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.conversations)
-            .whereField("participants", arrayContains: userID)
-            .getDocuments()
-        else { return [] }
-        
-        let otherUserIDs = snapshot.documents.compactMap { doc -> String? in
-            let data = doc.data()
-            let participants = data["participants"] as? [String] ?? []
-            return participants.first { $0 != userID }
+        do {
+            let snapshot = try await db.collection(FirestoreKeys.Collections.conversations)
+                .whereField("participants", arrayContains: userID)
+                .order(by: "lastMessageTimestamp", descending: true)
+                .getDocuments()
+    
+            let otherUserIDs = snapshot.documents.compactMap { doc -> String? in
+                let data = doc.data()
+                let participants = data["participants"] as? [String] ?? []
+                return participants.first { $0 != userID }
+            }
+            return otherUserIDs
+        } catch {
+            print("fetchConversation failed \(error)")
+            return []
         }
-        return otherUserIDs
     }
 }

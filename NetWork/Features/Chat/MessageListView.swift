@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// A view of a friends list
 struct MessageListView: View {
     
     let currentUserID: String

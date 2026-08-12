@@ -16,8 +16,9 @@ struct ChatService: Sendable {
         return [user1, user2].sorted().joined(separator: "_")
     }
 
-    func sendMessage(conversationID: String, message: Message, completion: ((Error?) -> Void)? = nil) {
+    func sendMessage(conversationID: String, participants: [String], message: Message, completion: ((Error?) -> Void)? = nil) async throws {
         do {
+            try await createConversation(conversationID: conversationID, participants: participants)
             let docRef = db.collection(FirestoreKeys.Collections.conversations)
                 .document(conversationID)
                 .collection(FirestoreKeys.Collections.messages)
@@ -25,7 +26,7 @@ struct ChatService: Sendable {
 
             try docRef.setData(from: message, merge: true, completion: completion)
             
-            db.collection(FirestoreKeys.Collections.conversations)
+            try await db.collection(FirestoreKeys.Collections.conversations)
                 .document(conversationID)
                 .updateData(["lastMessageTimestamp": Date()])
         } catch {
@@ -55,8 +56,7 @@ struct ChatService: Sendable {
     func createConversation(conversationID: String, participants: [String]) async throws {
         do {
             let docRef = db.collection("conversations").document(conversationID)
-            try await docRef.setData(["participants": participants,
-                                      "lastMessageTimestamp": Date()], merge: true)
+            try await docRef.setData(["participants": participants])
         } catch {
             print("Failed to create conversation: \(error)")
         }

@@ -8,56 +8,51 @@
 import SwiftUI
 
 struct CustomTextbox: View {
+    @State private var editorHeight: CGFloat = 34
+    
     @Binding var text: String
     let placeholder: String
-    let characterLimit: Int
-    
+    var characterLimit: Int? = nil
+
     var body: some View {
-        ZStack (alignment: .topLeading) {
-            VStack(spacing: -10) {
+        VStack(alignment: .trailing, spacing: 4) {
+            ZStack(alignment: .topLeading) {
+                if text.isEmpty {
+                    Text(placeholder)
+                        .font(.custom("Monaco", size: 14, relativeTo: .body))
+                        .foregroundStyle(.tertiary)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .allowsHitTesting(false)
+                }
+
                 TextEditor(text: $text)
-                    .padding(.horizontal, 8)
-                    .font(.custom("Monaco", size: 14))
-                    .scrollDisabled(true)
-                
-                    // Enforces character limit
-                    .onChange(of: text) { oldValue, newValue in
-                        var updated = newValue
-                        if updated.count > characterLimit {
-                            updated = String(updated.prefix(characterLimit))
-                        }
-                        if updated.hasPrefix("\n") {
-                            updated = String(updated.dropFirst())
-                        }
-                        updated = updated.replacingOccurrences(of: "\n\n", with: "\n")
-                        updated = updated.replacingOccurrences(of: "  ", with: " ")
-                        updated = updated.replacingOccurrences(of: "\n \n", with: "\n")
-                        text = updated
-                        
+                    .font(.custom("Monaco", size: 14, relativeTo: .body))
+                    .scrollContentBackground(.hidden)
+                    .frame(minHeight: editorHeight)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 12)
+                    .task {
+                        let lineCount = text.components(separatedBy: "\n").count
+                        editorHeight = max(34, CGFloat(lineCount) * 22)
                     }
-                
-                    .overlay(
-                        Group {
-                            if text.isEmpty {
-                                Text(placeholder)
-                                    .foregroundColor(.gray)
-                                    .padding(.horizontal, 14)
-                                    .padding(.top, 8)
-                                    .font(.custom("Monaco", size: 14))
-                                    .transition(.opacity)
-                            }
-                        },
-                        alignment: .topLeading
-                    )
-                HStack {
-                    Spacer()
-                    Text("\(characterLimit - text.count)")
-                        .font(.custom("Monaco", size: 12))
-                        .padding(5)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .stroke(.quaternary, lineWidth: 1)
+            )
+            .onChange(of: text) { _, newValue in
+                if let limit = characterLimit, newValue.count > limit {
+                    text = String(newValue.prefix(limit))
                 }
             }
+
+            if let limit = characterLimit {
+                Text("\(limit - text.count)")
+                    .font(.custom("Monaco", size: 12, relativeTo: .caption))
+                    .foregroundStyle(text.count >= limit ? .red : .secondary)
+                    .monospacedDigit()
+            }
         }
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color(.white)))
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 1))
     }
 }

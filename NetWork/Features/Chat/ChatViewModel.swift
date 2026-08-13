@@ -17,13 +17,13 @@ final class ChatViewModel: ObservableObject {
     private var listener: ListenerRegistration? // Holds the Firebase listener
     private let conversationID: String
     private let currentUserID: String
+    private let otherUserID: String
 
     init(currentUserID: String, otherUserID: String) {
         self.currentUserID = currentUserID
+        self.otherUserID = otherUserID
         self.conversationID = service.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.
         listenForMessages()
-        
-        Task { try? await service.createConversation(conversationID: conversationID, participants: [currentUserID, otherUserID]) }
     }
     
     deinit {
@@ -43,12 +43,9 @@ final class ChatViewModel: ObservableObject {
         )
 
         // once sent, the textField is empty
-        service.sendMessage(conversationID: conversationID, message: message) { [weak self] error in
-            if error == nil {
-                DispatchQueue.main.async {
-                    self?.newMessage = ""
-                }
-            }
+        Task {
+            try? await service.sendMessage(conversationID: conversationID, participants: [currentUserID, otherUserID], message: message)
+            newMessage = ""
         }
     }
 

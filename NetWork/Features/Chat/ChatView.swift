@@ -14,10 +14,10 @@ struct ChatView: View {
 
     @StateObject private var viewModel: ChatViewModel // keeps the VM alive across renders
 
-    init(currentUserID: String, otherUser: UserStub) {
+    init(currentUserID: String, otherUser: UserStub, businessCardID: String? = nil) {
         self.currentUserID = currentUserID
         self.otherUser = otherUser
-        _viewModel = StateObject(wrappedValue: ChatViewModel(currentUserID: currentUserID, otherUserID: otherUser.id))
+        _viewModel = StateObject(wrappedValue: ChatViewModel(currentUserID: currentUserID, otherUserID: otherUser.id, businessCardID: businessCardID))
     }
 
     var body: some View {

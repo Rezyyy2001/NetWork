@@ -90,4 +90,15 @@ struct BusinessCardService: Sendable {
             backgroundPic: data[FirestoreKeys.BusinessCardFields.backgroundPic] as? String ?? ""
         )
     }
+    
+    func fetchSingleCard(cardID: String) async throws -> BusinessCard {
+        let query: Query = db.collection(FirestoreKeys.Collections.businessCard)
+            .whereField(FieldPath.documentID(), isEqualTo: cardID)
+        
+            let snapshot = try await query.getDocuments()
+            guard let card = snapshot.documents.compactMap(buildCard).first else {
+                throw NSError(domain: "Card not found", code: 404, userInfo: nil)
+            }
+        return card
+    }
 }

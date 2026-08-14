@@ -10,7 +10,7 @@ import Foundation
 
 @MainActor
 final class ChatViewModel: ObservableObject {
-    @Published var messages: [Message] = []
+    @Published var messages: [MessageWithCard] = []
     @Published var newMessage = ""
     @Published var attachedCard: BusinessCard?
 
@@ -52,6 +52,7 @@ final class ChatViewModel: ObservableObject {
             timestamp: Date(),
             businessCardID: businessCardID
         )
+        attachedCard = nil
         businessCardID = nil
 
         // once sent, the textField is empty
@@ -64,7 +65,19 @@ final class ChatViewModel: ObservableObject {
     //Firestore listens to messages collection and updates the messages array
     private func listenForMessages() {
         listener = service.observeMessages(conversationID: conversationID) { [weak self] messages in
-            self?.messages = messages
+            Task { [weak self] in
+                guard let self else { return }
+                var result: [MessageWithCard] = []
+                for message in messages {
+                    if let cardID = message.businessCardID {
+                        let card = try? await BusinessCardService().fetchSingleCard(cardID: cardID)
+                        result.append(MessageWithCard(message: message, card: card))
+                    } else {
+                        result.append(MessageWithCard(message: message, card: nil))
+                    }
+                }
+                self.messages = result
+            }
         }
     }
 }

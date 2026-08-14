@@ -12,6 +12,7 @@ import Foundation
 final class ChatViewModel: ObservableObject {
     @Published var messages: [Message] = []
     @Published var newMessage = ""
+    @Published var attachedCard: BusinessCard?
 
     private let service = ChatService()
     private var listener: ListenerRegistration? // Holds the Firebase listener
@@ -26,6 +27,13 @@ final class ChatViewModel: ObservableObject {
         self.businessCardID = businessCardID
         self.conversationID = service.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.
         listenForMessages()
+        
+        print("businessCardID in init: \(String(describing: businessCardID))")
+        if let cardID = businessCardID {
+            Task {
+                attachedCard = try? await BusinessCardService().fetchSingleCard(cardID: cardID)
+            }
+        }
     }
     
     deinit {

@@ -27,6 +27,11 @@ struct ServiceView: View {
                 ChatView(currentUserID: currentUserID, otherUser: user, businessCardID: selectedCardID)
                     .toolbar(.hidden, for: .tabBar)
             }
+            .onChange(of: userStub) { _, newValue in
+                if newValue == nil {
+                    selectedCardID = nil
+                }
+            }
         }
     }
 }

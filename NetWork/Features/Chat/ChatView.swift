@@ -44,18 +44,27 @@ struct ChatView: View {
                 }
             }
             Divider()
-            HStack {
-                CustomTextbox(
-                    text: $viewModel.newMessage,
-                    placeholder: "Message",
-                    characterLimit: nil
-                )
-                Button("Send") {
-                    viewModel.sendMessage()
+            VStack {
+                if let card = viewModel.attachedCard {
+                    BusinessCardView(card: card)
+                        .scaleEffect(0.5)
+                        .frame(height: 200)
                 }
-                .disabled(viewModel.newMessage.trimmingCharacters(in: .whitespaces).isEmpty)
+                HStack {
+                    CustomTextbox(
+                        text: $viewModel.newMessage,
+                        placeholder: "Message",
+                        characterLimit: nil
+                    )
+                    Button("Send") {
+                        viewModel.sendMessage()
+                    }
+                    .disabled(viewModel.newMessage.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+                .padding()
             }
-            .padding()
+            .padding(.top, 16)
+            .padding(.bottom, -16)
         }
         .navigationTitle(otherUser.displayName ?? "Chat")
         .navigationBarTitleDisplayMode(.inline)

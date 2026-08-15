@@ -14,48 +14,58 @@ struct ChatView: View {
 
     @StateObject private var viewModel: ChatViewModel // keeps the VM alive across renders
 
-    init(currentUserID: String, otherUser: UserStub) {
+    init(currentUserID: String, otherUser: UserStub, businessCardID: String? = nil) {
         self.currentUserID = currentUserID
         self.otherUser = otherUser
-        _viewModel = StateObject(wrappedValue: ChatViewModel(currentUserID: currentUserID, otherUserID: otherUser.id))
+        _viewModel = StateObject(wrappedValue: ChatViewModel(currentUserID: currentUserID, otherUserID: otherUser.id, businessCardID: businessCardID))
     }
 
     var body: some View {
         VStack {
-            ScrollViewReader { proxy in // SCrolls to the latest message
+            ScrollViewReader { proxy in // Scrolls to the latest message
                 ScrollView {
                     VStack {
-                        ForEach(viewModel.messages) { message in
+                        ForEach(viewModel.messages, id: \.message.id) { item in
+                            let isCurrentUser = item.message.senderID == currentUserID
                             MessageBubble(
-                                message: message,
-                                isCurrentUser: message.senderID == currentUserID
+                                message: item.message,
+                                isCurrentUser: isCurrentUser,
+                                card: item.card
                             )
-                            .id(message.id)
+                            .id(item.message.id)
                         }
                     }
                     .padding()
                 }
                 .onChange(of: viewModel.messages) { oldValue, newValue in
-                    if let last = viewModel.messages.last {
-                        withAnimation {
-                            proxy.scrollTo(last.id, anchor: .bottom)
-                        }
+                    guard let last = newValue.last else { return }
+                    withAnimation {
+                            proxy.scrollTo(last.message.id, anchor: .bottom)
                     }
                 }
             }
             Divider()
-            HStack {
-                CustomTextbox(
-                    text: $viewModel.newMessage,
-                    placeholder: "Message",
-                    characterLimit: nil
-                )
-                Button("Send") {
-                    viewModel.sendMessage()
+            VStack {
+                if let card = viewModel.attachedCard {
+                    BusinessCardView(card: card)
+                        .scaleEffect(0.5)
+                        .frame(height: 200)
                 }
-                .disabled(viewModel.newMessage.trimmingCharacters(in: .whitespaces).isEmpty)
+                HStack {
+                    CustomTextbox(
+                        text: $viewModel.newMessage,
+                        placeholder: "Message",
+                        characterLimit: nil
+                    )
+                    Button("Send") {
+                        viewModel.sendMessage()
+                    }
+                    .disabled(viewModel.newMessage.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+                .padding()
             }
-            .padding()
+            .padding(.top, 16)
+            .padding(.bottom, -16)
         }
         .navigationTitle(otherUser.displayName ?? "Chat")
         .navigationBarTitleDisplayMode(.inline)

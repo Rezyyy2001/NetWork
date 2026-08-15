@@ -16,22 +16,18 @@ struct ChatService: Sendable {
         return [user1, user2].sorted().joined(separator: "_")
     }
 
-    func sendMessage(conversationID: String, participants: [String], message: Message, completion: ((Error?) -> Void)? = nil) async throws {
-        do {
-            try await createConversation(conversationID: conversationID, participants: participants)
-            let docRef = db.collection(FirestoreKeys.Collections.conversations)
-                .document(conversationID)
-                .collection(FirestoreKeys.Collections.messages)
-                .document()
+    func sendMessage(conversationID: String, participants: [String], message: Message) async throws {
+        try await createConversation(conversationID: conversationID, participants: participants)
+        let docRef = db.collection(FirestoreKeys.Collections.conversations)
+            .document(conversationID)
+            .collection(FirestoreKeys.Collections.messages)
+            .document()
 
-            try docRef.setData(from: message, merge: true, completion: completion)
-            
-            try await db.collection(FirestoreKeys.Collections.conversations)
-                .document(conversationID)
-                .updateData(["lastMessageTimestamp": Date()])
-        } catch {
-            completion?(error)
-        }
+        try docRef.setData(from: message, merge: true)
+        
+        try await db.collection(FirestoreKeys.Collections.conversations)
+            .document(conversationID)
+            .updateData(["lastMessageTimestamp": Date()])
     }
 
     func observeMessages(conversationID: String, onUpdate: @escaping ([Message]) -> Void) -> ListenerRegistration {
@@ -54,12 +50,8 @@ struct ChatService: Sendable {
     }
     
     func createConversation(conversationID: String, participants: [String]) async throws {
-        do {
-            let docRef = db.collection("conversations").document(conversationID)
-            try await docRef.setData(["participants": participants])
-        } catch {
-            print("Failed to create conversation: \(error)")
-        }
+        let docRef = db.collection(FirestoreKeys.Collections.conversations).document(conversationID)
+        try await docRef.setData(["participants": participants])
     }
     
     func fetchConversation(for userID: String) async -> [String] {

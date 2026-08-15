@@ -19,4 +19,10 @@ struct Message: Identifiable, Hashable, Decodable, Encodable {
     let text: String
     let senderID: String
     let timestamp: Date
+    let businessCardID: String?
+}
+
+struct MessageWithCard: Equatable {
+    let message: Message
+    let card: BusinessCard?
 }

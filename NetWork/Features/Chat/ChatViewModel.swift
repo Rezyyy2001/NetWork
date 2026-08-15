@@ -10,20 +10,30 @@ import Foundation
 
 @MainActor
 final class ChatViewModel: ObservableObject {
-    @Published var messages: [Message] = []
+    @Published var messages: [MessageWithCard] = []
     @Published var newMessage = ""
+    @Published var attachedCard: BusinessCard?
 
     private let service = ChatService()
     private var listener: ListenerRegistration? // Holds the Firebase listener
     private let conversationID: String
     private let currentUserID: String
     private let otherUserID: String
+    private var businessCardID: String?
 
-    init(currentUserID: String, otherUserID: String) {
+    init(currentUserID: String, otherUserID: String, businessCardID: String? = nil) {
         self.currentUserID = currentUserID
         self.otherUserID = otherUserID
+        self.businessCardID = businessCardID
         self.conversationID = service.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.
         listenForMessages()
+        
+        print("businessCardID in init: \(String(describing: businessCardID))")
+        if let cardID = businessCardID {
+            Task {
+                attachedCard = try? await BusinessCardService().fetchSingleCard(cardID: cardID)
+            }
+        }
     }
     
     deinit {
@@ -39,8 +49,11 @@ final class ChatViewModel: ObservableObject {
             id: nil,
             text: trimmed,
             senderID: currentUserID,
-            timestamp: Date()
+            timestamp: Date(),
+            businessCardID: businessCardID
         )
+        attachedCard = nil
+        businessCardID = nil
 
         // once sent, the textField is empty
         Task {
@@ -52,8 +65,18 @@ final class ChatViewModel: ObservableObject {
     //Firestore listens to messages collection and updates the messages array
     private func listenForMessages() {
         listener = service.observeMessages(conversationID: conversationID) { [weak self] messages in
-            DispatchQueue.main.async {
-                self?.messages = messages
+            Task { [weak self] in
+                guard let self else { return }
+                var result: [MessageWithCard] = []
+                for message in messages {
+                    if let cardID = message.businessCardID {
+                        let card = try? await BusinessCardService().fetchSingleCard(cardID: cardID)
+                        result.append(MessageWithCard(message: message, card: card))
+                    } else {
+                        result.append(MessageWithCard(message: message, card: nil))
+                    }
+                }
+                self.messages = result
             }
         }
     }

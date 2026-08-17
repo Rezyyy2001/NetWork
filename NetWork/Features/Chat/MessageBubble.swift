@@ -12,6 +12,8 @@ struct MessageBubble: View {
     let message: Message
     let isCurrentUser: Bool // for alignment we need to know what text belongs to who
     let card: BusinessCard?
+    
+    var onLike: (String) -> Void = { _ in }
 
     //TODO: PUBSUB
     var body: some View {
@@ -25,6 +27,13 @@ struct MessageBubble: View {
                         BusinessCardView(card: card)
                             .scaledLayout(0.5)
                             .frame(maxWidth: .infinity)
+                        // This is where the heart will be
+                        Button {
+                            onLike(card.id)
+                        } label: {
+                            Image(systemName: "heart")
+                                .font(.system(size: 30))
+                        }
                     }
                 }
                 // makes the text in a bubble
@@ -39,4 +48,5 @@ struct MessageBubble: View {
         }
     }
 }
+
 

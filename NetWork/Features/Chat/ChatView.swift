@@ -30,7 +30,8 @@ struct ChatView: View {
                             MessageBubble(
                                 message: item.message,
                                 isCurrentUser: isCurrentUser,
-                                card: item.card
+                                card: item.card,
+                                onLike: { cardID in viewModel.likeCard(cardID) }
                             )
                             .id(item.message.id)
                         }

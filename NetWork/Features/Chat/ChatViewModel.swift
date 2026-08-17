@@ -14,18 +14,20 @@ final class ChatViewModel: ObservableObject {
     @Published var newMessage = ""
     @Published var attachedCard: BusinessCard?
 
-    private let service = ChatService()
+    private let chatService = ChatService()
     private var listener: ListenerRegistration? // Holds the Firebase listener
     private let conversationID: String
     private let currentUserID: String
     private let otherUserID: String
     private var businessCardID: String?
+    
+    private let businessCardService = BusinessCardService()
 
     init(currentUserID: String, otherUserID: String, businessCardID: String? = nil) {
         self.currentUserID = currentUserID
         self.otherUserID = otherUserID
         self.businessCardID = businessCardID
-        self.conversationID = service.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.
+        self.conversationID = chatService.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.
         listenForMessages()
         
         print("businessCardID in init: \(String(describing: businessCardID))")
@@ -57,14 +59,14 @@ final class ChatViewModel: ObservableObject {
 
         // once sent, the textField is empty
         Task {
-            try? await service.sendMessage(conversationID: conversationID, participants: [currentUserID, otherUserID], message: message)
+            try? await chatService.sendMessage(conversationID: conversationID, participants: [currentUserID, otherUserID], message: message)
             newMessage = ""
         }
     }
 
     //Firestore listens to messages collection and updates the messages array
     private func listenForMessages() {
-        listener = service.observeMessages(conversationID: conversationID) { [weak self] messages in
+        listener = chatService.observeMessages(conversationID: conversationID) { [weak self] messages in
             Task { [weak self] in
                 guard let self else { return }
                 var result: [MessageWithCard] = []
@@ -78,6 +80,12 @@ final class ChatViewModel: ObservableObject {
                 }
                 self.messages = result
             }
+        }
+    }
+    
+    func likeCard(_ cardID: String) {
+        Task {
+            try await businessCardService.likeCard(cardID: cardID)
         }
     }
 }

@@ -101,4 +101,15 @@ struct BusinessCardService: Sendable {
             }
         return card
     }
+    
+    func likeCard(cardID: String) async throws {
+        let docRef = db.collection(FirestoreKeys.Collections.businessCard).document(cardID)
+        
+        try await docRef.collection(FirestoreKeys.Collections.likes)
+            .document(Auth.auth().currentUser?.uid ?? "")
+            .setData([:])
+        
+        try await docRef.updateData(["likeCount" : FieldValue.increment(Int64(1))])
+        
+    }
 }

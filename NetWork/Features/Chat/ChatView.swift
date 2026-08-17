@@ -45,11 +45,12 @@ struct ChatView: View {
                 }
             }
             Divider()
-            VStack {
+            VStack(alignment: .center) {
+                //TODO: Dont set the frame
                 if let card = viewModel.attachedCard {
                     BusinessCardView(card: card)
-                        .scaleEffect(0.5)
-                        .frame(height: 200)
+                        .scaledLayout(0.3)
+                        .background(Color.red.opacity(0.3))
                 }
                 HStack {
                     CustomTextbox(
@@ -64,8 +65,6 @@ struct ChatView: View {
                 }
                 .padding()
             }
-            .padding(.top, 16)
-            .padding(.bottom, -16)
         }
         .navigationTitle(otherUser.displayName ?? "Chat")
         .navigationBarTitleDisplayMode(.inline)

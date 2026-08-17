@@ -22,8 +22,9 @@ struct MessageBubble: View {
             VStack(alignment: isCurrentUser ? .trailing : .leading) {
                 if let card = card {
                     HStack {
-                        Spacer()
                         BusinessCardView(card: card)
+                            .scaledLayout(0.5)
+                            .frame(maxWidth: .infinity)
                     }
                 }
                 // makes the text in a bubble

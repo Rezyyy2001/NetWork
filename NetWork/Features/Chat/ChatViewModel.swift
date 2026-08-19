@@ -72,10 +72,11 @@ final class ChatViewModel: ObservableObject {
                 var result: [MessageWithCard] = []
                 for message in messages {
                     if let cardID = message.businessCardID {
-                        let card = try? await BusinessCardService().fetchSingleCard(cardID: cardID)
-                        result.append(MessageWithCard(message: message, card: card))
+                        let card = try? await businessCardService.fetchSingleCard(cardID: cardID)
+                        let hasLiked = await businessCardService.hasLiked(cardID: cardID)
+                        result.append(MessageWithCard(message: message, card: card, isLiked: hasLiked))
                     } else {
-                        result.append(MessageWithCard(message: message, card: nil))
+                        result.append(MessageWithCard(message: message, card: nil, isLiked: false))
                     }
                 }
                 self.messages = result
@@ -86,6 +87,10 @@ final class ChatViewModel: ObservableObject {
     func likeCard(_ cardID: String) {
         Task {
             try await businessCardService.likeCard(cardID: cardID)
+            messages = messages.map { item in
+                guard item.card?.id == cardID else { return item }
+                return MessageWithCard(message: item.message, card: item.card, isLiked: true)
+            }
         }
     }
 }

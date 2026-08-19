@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// The main view for the chat screen
 struct ChatView: View {
     let currentUserID: String
     let otherUser: UserStub
@@ -19,19 +18,39 @@ struct ChatView: View {
         self.otherUser = otherUser
         _viewModel = StateObject(wrappedValue: ChatViewModel(currentUserID: currentUserID, otherUserID: otherUser.id, businessCardID: businessCardID))
     }
+    
+    private var titleText: String { otherUser.displayName ?? "Chat" }
+    
+    private var isSendDisabled: Bool {
+        viewModel.newMessage.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+    
+    private struct MessageRow: View {
+        let item: MessageWithCard
+        let currentUserID: String
+        @ObservedObject var viewModel: ChatViewModel
+
+        var body: some View {
+            MessageBubble(
+                message: item.message,
+                isCurrentUser: item.message.senderID == currentUserID,
+                card: item.card,
+                isLiked: item.isLiked,
+                onLike: { cardID in viewModel.likeCard(cardID) }
+            )
+        }
+    }
 
     var body: some View {
         VStack {
             ScrollViewReader { proxy in // Scrolls to the latest message
                 ScrollView {
                     VStack {
-                        ForEach(viewModel.messages, id: \.message.id) { item in
-                            let isCurrentUser = item.message.senderID == currentUserID
-                            MessageBubble(
-                                message: item.message,
-                                isCurrentUser: isCurrentUser,
-                                card: item.card,
-                                onLike: { cardID in viewModel.likeCard(cardID) }
+                        ForEach(viewModel.messages) { item in
+                            MessageRow(
+                                item: item,
+                                currentUserID: currentUserID,
+                                viewModel: viewModel
                             )
                             .id(item.message.id)
                         }
@@ -62,12 +81,12 @@ struct ChatView: View {
                     Button("Send") {
                         viewModel.sendMessage()
                     }
-                    .disabled(viewModel.newMessage.trimmingCharacters(in: .whitespaces).isEmpty)
+                    .disabled(isSendDisabled)
                 }
                 .padding()
             }
         }
-        .navigationTitle(otherUser.displayName ?? "Chat")
+        .navigationTitle(titleText)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {

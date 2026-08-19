@@ -22,7 +22,9 @@ struct Message: Identifiable, Hashable, Decodable, Encodable {
     let businessCardID: String?
 }
 
-struct MessageWithCard: Equatable {
+struct MessageWithCard: Equatable, Identifiable {
+    var id: String { message.id ?? UUID().uuidString }
     let message: Message
     let card: BusinessCard?
+    let isLiked: Bool
 }

@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-// Reusable view for message bubbles
 struct MessageBubble: View {
     let message: Message
     let isCurrentUser: Bool // for alignment we need to know what text belongs to who
     let card: BusinessCard?
+    let isLiked: Bool
     
     var onLike: (String) -> Void = { _ in }
 
@@ -27,16 +27,16 @@ struct MessageBubble: View {
                         BusinessCardView(card: card)
                             .scaledLayout(0.5)
                             .frame(maxWidth: .infinity)
-                        // This is where the heart will be
                         Button {
                             onLike(card.id)
                         } label: {
-                            Image(systemName: "heart")
+                            Image(systemName: isLiked ? "heart.fill" : "heart")
                                 .font(.system(size: 30))
+                                .foregroundColor(.red)
                         }
+                        .disabled(isLiked)
                     }
                 }
-                // makes the text in a bubble
                 Text(message.text)
                     .padding()
                     .background(isCurrentUser ? Color.blue : Color.gray.opacity(0.3))

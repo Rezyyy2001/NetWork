@@ -110,14 +110,6 @@ struct BusinessCardService: Sendable {
             .setData([:])
         
         try await docRef.updateData(["likeCount" : FieldValue.increment(Int64(1))])
-    }
-    
-    func hasLiked(cardID: String) async -> Bool {
-        let doc = try? await db.collection(FirestoreKeys.Collections.businessCard)
-            .document(cardID)
-            .collection(FirestoreKeys.Collections.likes)
-            .document(Auth.auth().currentUser?.uid ?? "")
-            .getDocument()
-        return doc?.exists ?? false
+        
     }
 }

@@ -9,10 +9,11 @@ import SwiftUI
 
 struct MessageBubble: View {
     let message: Message
-    let isCurrentUser: Bool // for alignment we need to know what text belongs to who
+    let isCurrentUser: Bool
     let card: BusinessCard?
     let isLiked: Bool
-    
+    let currentUserID: String
+
     var onLike: (String) -> Void = { _ in }
 
     //TODO: PUBSUB
@@ -27,14 +28,16 @@ struct MessageBubble: View {
                         BusinessCardView(card: card)
                             .scaledLayout(0.5)
                             .frame(maxWidth: .infinity)
-                        Button {
-                            onLike(card.id)
-                        } label: {
-                            Image(systemName: isLiked ? "heart.fill" : "heart")
-                                .font(.system(size: 30))
-                                .foregroundColor(.red)
+                        if card.userID != currentUserID {
+                            Button {
+                                onLike(card.id)
+                            } label: {
+                                Image(systemName: isLiked ? "heart.fill" : "heart")
+                                    .font(.system(size: 30))
+                                    .foregroundColor(.red)
+                            }
+                            .disabled(isLiked)
                         }
-                        .disabled(isLiked)
                     }
                 }
                 Text(message.text)

@@ -36,6 +36,7 @@ struct ChatView: View {
                 isCurrentUser: item.message.senderID == currentUserID,
                 card: item.card,
                 isLiked: item.isLiked,
+                currentUserID: currentUserID,
                 onLike: { cardID in viewModel.likeCard(cardID) }
             )
         }

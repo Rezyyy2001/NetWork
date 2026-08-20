@@ -18,7 +18,7 @@ struct HitRequestService: Sendable {
             FirestoreKeys.HitRequestFields.postID: postID,
             FirestoreKeys.HitRequestFields.requesterID: Auth.auth().currentUser?.uid ?? "",
             FirestoreKeys.HitRequestFields.posterID: posterID,
-            FirestoreKeys.HitRequestFields.status: "pending"
+            FirestoreKeys.HitRequestFields.status: HitRequestStatus.pending.rawValue
         ]
         try await db.collection(FirestoreKeys.Collections.hitrequests).addDocument(data: hitRequestData)
     }
@@ -41,26 +41,27 @@ struct HitRequestService: Sendable {
 
     func acceptRequest(documentID: String) async throws {
         try await db.collection(FirestoreKeys.Collections.hitrequests).document(documentID).updateData([
-            FirestoreKeys.HitRequestFields.status: "accepted"
+            FirestoreKeys.HitRequestFields.status: HitRequestStatus.accepted.rawValue
         ])
     }
-    
+
     func fetchRequests(for postID: String) async throws -> [HitRequestProfile] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
             .getDocuments()
         else { return [] }
-        
-        let requesterID = snapshot.documents.compactMap { doc -> (userID: String, documentID: String, status: String)? in
+
+        let requesterID = snapshot.documents.compactMap { doc -> (userID: String, documentID: String, status: HitRequestStatus)? in
             guard let requesterID = doc.data()[FirestoreKeys.HitRequestFields.requesterID] as? String,
-                  let status = doc.data()[FirestoreKeys.HitRequestFields.status] as? String
+                  let statusRaw = doc.data()[FirestoreKeys.HitRequestFields.status] as? String,
+                  let status = HitRequestStatus(rawValue: statusRaw)
             else { return nil }
             return (userID: requesterID, documentID: doc.documentID, status: status)
         }
         return await fetchProfiles(for: requesterID)
     }
-    
-    private func fetchProfiles(for requests: [(userID: String, documentID: String, status: String)]) async -> [HitRequestProfile] {
+
+    private func fetchProfiles(for requests: [(userID: String, documentID: String, status: HitRequestStatus)]) async -> [HitRequestProfile] {
         var results: [HitRequestProfile] = []
         
         for request in requests {
@@ -87,10 +88,10 @@ struct HitRequestService: Sendable {
     func confirmedHits(for requesterID: String) async throws -> [ConfirmedHit] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: requesterID)
-            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "accepted")
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: HitRequestStatus.accepted.rawValue)
             .getDocuments()
         else { return [] }
-        
+
         let postID = snapshot.documents.compactMap {
             $0.data()[FirestoreKeys.HitRequestFields.postID] as? String
         }
@@ -131,35 +132,36 @@ struct HitRequestService: Sendable {
     func fetchExistingRequests() async -> [String] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: Auth.auth().currentUser?.uid ?? "")
-            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "pending")
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: HitRequestStatus.pending.rawValue)
             .getDocuments()
         else { return [] }
-        
+
         return snapshot.documents.compactMap {
             $0.data()[FirestoreKeys.HitRequestFields.postID] as? String
         }
     }
-    
+
     func fetchAcceptedRequest(postID: String) async -> [HitRequestProfile] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
-            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "accepted")
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: HitRequestStatus.accepted.rawValue)
             .getDocuments()
         else { return [] }
-        
-        let requesterID = snapshot.documents.compactMap { doc -> (userID: String, documentID: String, status: String)? in
+
+        let requesterID = snapshot.documents.compactMap { doc -> (userID: String, documentID: String, status: HitRequestStatus)? in
             guard let requesterID = doc.data()[FirestoreKeys.HitRequestFields.requesterID] as? String,
-                  let status = doc.data()[FirestoreKeys.HitRequestFields.status] as? String
+                  let statusRaw = doc.data()[FirestoreKeys.HitRequestFields.status] as? String,
+                  let status = HitRequestStatus(rawValue: statusRaw)
             else { return nil }
             return (userID: requesterID, documentID: doc.documentID, status: status)
         }
         return await fetchProfiles(for: requesterID)
     }
-    
+
     func fetchAcceptedRequests() async -> [String] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: Auth.auth().currentUser?.uid ?? "")
-            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: "accepted")
+            .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: HitRequestStatus.accepted.rawValue)
             .getDocuments()
         else { return [] }
         

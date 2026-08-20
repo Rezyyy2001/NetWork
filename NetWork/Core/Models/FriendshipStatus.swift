@@ -8,6 +8,6 @@
 enum FriendshipStatus: Equatable {
     case none
     case sent
-    case recieved(documentID: String)
+    case received(documentID: String)
     case friends
 }

@@ -76,7 +76,7 @@ final class FriendService: Sendable {
         }
 
         if let result = await findFriendship(userID1: targetUserID, userID2: currentUserID) {
-            if result.status == "pending" { return .recieved(documentID: result.documentID) }
+            if result.status == "pending" { return .received(documentID: result.documentID) }
             if result.status == "accepted" { return .friends }
         }
 

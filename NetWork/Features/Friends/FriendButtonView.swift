@@ -19,7 +19,7 @@ struct FriendButtonView: View {
     
     var body: some View {
         VStack {
-            if case .recieved(let documentID) = viewModel.friendshipStatus { // meaning you recieved the friend request
+            if case .received(let documentID) = viewModel.friendshipStatus { // meaning you received the friend request
                 //receivedPending is just a prefix
                 
                 // Show Accept / Deny buttons
@@ -77,7 +77,7 @@ struct FriendButtonView: View {
         switch viewModel.friendshipStatus {
         case .sent: return "Pending"
         case .friends: return "Friends"
-        case .recieved: return "Accept / Deny"
+        case .received: return "Accept / Deny"
         default: return "Add Friend"
         }
     }

@@ -12,10 +12,10 @@ struct HitRequest {
     let requesterID: String
     let posterID: String
     let status: HitRequestStatus
-    
-    enum HitRequestStatus {
-        case expired
-        case pending
-        case accepted
-    }
+}
+
+enum HitRequestStatus: String {
+    case expired
+    case pending
+    case accepted
 }

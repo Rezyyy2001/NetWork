@@ -41,7 +41,7 @@ struct UserProfile {
 struct HitRequestProfile {
     let documentID: String
     let userProfile: UserProfile
-    let status: String
+    let status: HitRequestStatus
 }
 
 

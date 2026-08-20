@@ -37,7 +37,7 @@ struct AvatarClusterSheetView: View {
                     
                     Spacer()
                     if viewModel.isOwner {
-                        if profile.status == "accepted" || acceptedIDs.contains(profile.documentID) {
+                        if profile.status == .accepted || acceptedIDs.contains(profile.documentID) {
                             Text("Accepted")
                                 .foregroundColor(.gray)
                         } else {

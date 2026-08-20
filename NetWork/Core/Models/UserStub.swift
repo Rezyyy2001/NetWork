@@ -8,7 +8,7 @@
 import Foundation
 
 // Just a data model
-struct UserStub: Identifiable, Hashable, Decodable {
+struct UserStub: Identifiable, Hashable {
     
     let id: String  // Conforms to Identifiable for SwiftUI lists
     let displayName: String?

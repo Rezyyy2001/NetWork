@@ -20,7 +20,7 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
     @Published var usualSpot: String? = "Unknown location."
     @Published var utr: Double? = 0.0
     @Published var usta: Double? = 0.0
-    @Published var age: Int = 0
+    @Published var birthday: Date? = nil
     @Published var profilePictureURL: String? = nil
     
     @Published var errorMessage: String? = nil

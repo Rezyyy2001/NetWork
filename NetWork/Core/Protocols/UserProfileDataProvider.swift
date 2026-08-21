@@ -16,19 +16,23 @@ protocol UserProfileDataProvider: AnyObject {
     var usualSpot: String? { get set }
     var utr: Double? { get set }
     var usta: Double? { get set }
-    var age: Int { get set }
+    var birthday: Date? { get set }
     var uid: String { get }
     var profilePictureURL: String? { get set }
 }
 
 extension UserProfileDataProvider {
+    var age: Int {
+        birthday?.age ?? 0
+    }
+
     func apply(_ profile: UserProfile) {
         displayName = profile.name
         bio = profile.bio
         usualSpot = profile.usualSpot
         utr = profile.UTR
         usta = profile.USTA
-        age = profile.birthday?.age ?? 0
+        birthday = profile.birthday
         profilePictureURL = profile.profilePictureURL
     }
 }

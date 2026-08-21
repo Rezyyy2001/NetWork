@@ -20,7 +20,7 @@ final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
     @Published var usta: Double? = 0.0
     @Published var usualSpot: String? = nil
     @Published var bio: String? = nil
-    @Published var age: Int = 0
+    @Published var birthday: Date? = nil
     @Published var profilePictureURL: String? = nil
     
     @Published var uid: String = ""

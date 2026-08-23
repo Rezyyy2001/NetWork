@@ -18,13 +18,13 @@ struct LoginView: View {
                           title: "Email address",
                           placeholder: "name@example.com")
                     .autocapitalization(.none)
-                    .frame(width: UIScreen.main.bounds.width - 200, height: 50)
+                    .frame(maxWidth: .infinity)
                 
                 InputView(text: $viewModel.password, // binds text to viewModel.password
                           title: "Password",
                           placeholder: "Enter Password",
                           isSecureField: true)
-                    .frame(width: UIScreen.main.bounds.width - 200, height: 50)
+                    .frame(maxWidth: .infinity)
                 
                 Button {
                     viewModel.signIn()
@@ -33,7 +33,8 @@ struct LoginView: View {
                     Text("LOG IN")
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
-                        .frame(width: UIScreen.main.bounds.width - 200, height: 50)
+                        .padding(.vertical, 18)
+                        .padding(.horizontal, 50)
                         .background(Color(.systemBlue))
                         .cornerRadius(10)
                 }
@@ -51,7 +52,7 @@ struct LoginView: View {
                     .cornerRadius(16)
             )
             .padding(.horizontal, 40)
-            .padding(.top, 100)
+            .padding(.top, 20)
             
             Spacer()
             

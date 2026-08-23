@@ -62,7 +62,7 @@ struct CustomTabView: View {
             .clipShape(Capsule())
         }
         .padding(.horizontal)
-        .offset(y: items.count <= 2 ? 80 : 0)
+        .offset(y: items.count <= 2 ? 10 : 0)
         .frame(maxHeight: items.count > 2 ? .infinity : nil, alignment: .bottom)
     }
 }

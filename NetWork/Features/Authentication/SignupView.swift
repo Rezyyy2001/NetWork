@@ -14,13 +14,13 @@ struct SignupView: View {
 
     var body: some View {
         VStack {
-            VStack(spacing: 24) {
+            VStack(spacing: 14) {
                 InputView(text: $viewModel.name, // binds text to viewModel.name
                           title: "Name",
                           placeholder: "First Last")
                 .autocapitalization(.words)
                 .disableAutocorrection(true)
-                .frame(width: UIScreen.main.bounds.width - 200, height: 50)
+                .frame(maxWidth: .infinity)
                 
                 VStack(alignment: .center, spacing: 8) { // binds date to viewModel.birthday
                     Text("Birthday")
@@ -45,26 +45,26 @@ struct SignupView: View {
                         displayedComponents: [.date]
                     )
                     .labelsHidden()
-                    .frame(width: UIScreen.main.bounds.width - 200)
+                    .frame(maxWidth: .infinity)
                 }
                 
                 InputView(text: $viewModel.email, // binds text to viewModel.email
                           title: "Email address",
                           placeholder: "name@example.com")
                 .autocapitalization(.none)
-                .frame(width: UIScreen.main.bounds.width - 200, height: 50)
+                .frame(maxWidth: .infinity)
                 
                 InputView(text: $viewModel.password, // binds text to viewModel.password
                           title: "Password",
                           placeholder: "Enter Password",
                           isSecureField: true)
-                .frame(width: UIScreen.main.bounds.width - 200, height: 50)
+                .frame(maxWidth: .infinity)
                 
                 InputView(text: $viewModel.confirmPassword, // binds text viewModel.confirmPassword for authentication
                           title: "Confirm Password",
                           placeholder: "Re-enter Password",
                           isSecureField: true)
-                .frame(width: UIScreen.main.bounds.width - 200, height: 50)
+                .frame(maxWidth: .infinity)
                 
                 Button {
                     viewModel.signUp() // calls viewModel.signUp when button tapped
@@ -73,11 +73,12 @@ struct SignupView: View {
                     Text("SIGN UP")
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
-                        .frame(width: UIScreen.main.bounds.width - 200, height: 50)
+                        .padding(.vertical, 18)
+                        .padding(.horizontal, 50)
                         .background(Color(.systemBlue))
                         .cornerRadius(10)
                 }
-                .padding(.top, 24)
+                .padding(.top, 8)
                 .onChange(of: viewModel.showHomeView) { _, show in
                     if show { authState.isAuthenticated = true }
                 }
@@ -90,7 +91,7 @@ struct SignupView: View {
                     .cornerRadius(16)
             )
             .padding(.horizontal, 40)
-            .padding(.top, 100)
+            .padding(.top, 20)
             
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)

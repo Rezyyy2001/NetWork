@@ -28,4 +28,8 @@ final class AuthenticationManager: Sendable { // for firebase authentication log
     func signOut() throws {
         try Auth.auth().signOut() // calls firebase signOut method
     }
+
+    func deleteCurrentUser() async throws {
+        try await Auth.auth().currentUser?.delete()
+    }
 }

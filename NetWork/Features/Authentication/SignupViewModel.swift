@@ -35,11 +35,19 @@ final class SignupViewModel: ObservableObject { // observableObject allows the c
         Task {
             do {
                 try await AuthenticationManager.shared.signUp(name: name, email: email, password: password, birthday: birthday, usualSpot: usualSpot)
-                try await CurrentUserService.shared.createUserProfile(name: name, email: email, birthday: birthday, usualSpot: usualSpot)
-                isLoading = false
-                showHomeView = true // after account created shows home view
             } catch {
                 errorMessage = error.localizedDescription
+                isLoading = false
+                return
+            }
+
+            do {
+                try await CurrentUserService.shared.createUserProfile(name: name, email: email, birthday: birthday, usualSpot: usualSpot)
+                isLoading = false
+                showHomeView = true
+            } catch {
+                try? await AuthenticationManager.shared.deleteCurrentUser()
+                errorMessage = "Something went wrong creating your profile. Please try again."
                 isLoading = false
             }
         }

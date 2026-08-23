@@ -27,7 +27,7 @@ struct LoginView: View {
                     .frame(width: UIScreen.main.bounds.width - 200, height: 50)
                 
                 Button {
-                    Task { await viewModel.signIn() } // calls viewModel.signIn for async execution
+                    viewModel.signIn()
                 } label: {
                     // add a loading screen
                     Text("LOG IN")

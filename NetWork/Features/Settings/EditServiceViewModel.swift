@@ -34,10 +34,7 @@ final class EditServiceViewModel: ObservableObject {
     @Published var selectedServiceType: ServiceType? = nil
     
     private var cardID: String? = nil
-    private var likeCount: Int = 0
 
-   
-    
     private let service = BusinessCardService()
     
     func saveBusinessCard() async {
@@ -49,7 +46,6 @@ final class EditServiceViewModel: ObservableObject {
                 city: city,
                 serviceType: serviceType.rawValue,
                 pricing: pricing,
-                likeCount: likeCount,
                 description: description,
                 tags: selectedTags.map { $0.rawValue },
                 phoneNumber: phoneNumber,
@@ -69,7 +65,6 @@ final class EditServiceViewModel: ObservableObject {
             let cards = try await service.fetchUserCard()
             if let card = cards.first(where: { $0.serviceType == serviceType }) {
                 cardID = card.id
-                likeCount = card.likeCount
                 self.isActive = card.isActive
                 self.city = card.city
                 self.pricing = card.pricing
@@ -81,7 +76,6 @@ final class EditServiceViewModel: ObservableObject {
                 self.backgroundPic = card.backgroundPic
             } else {
                 cardID = nil
-                likeCount = 0
                 self.isActive = false
                 self.city = ""
                 self.pricing = 0

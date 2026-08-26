@@ -13,22 +13,21 @@ struct BusinessCardService: Sendable {
     
     private let db = Firestore.firestore()
     
-    func saveBusinessCard(cardID: String?, isActive: Bool, city: String, serviceType: String, pricing: Int, likeCount: Int, description: String, tags: [String], phoneNumber: String?, email: String?, insta: String?, backgroundPic: String?) async throws {
+    func saveBusinessCard(cardID: String?, isActive: Bool, city: String, serviceType: String, pricing: Int, description: String, tags: [String], phoneNumber: String?, email: String?, insta: String?, backgroundPic: String?) async throws {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
         }
-        
+
         let userDoc = try await db.collection(FirestoreKeys.Collections.users).document(user.uid).getDocument()
         let cardName = userDoc.data()?[FirestoreKeys.UserFields.name] as? String ?? ""
         let profilePicture = userDoc.data()?[FirestoreKeys.UserFields.profilePictureURL] as? String ?? ""
 
-        let userData: [String: Any] = [
+        var userData: [String: Any] = [
             FirestoreKeys.BusinessCardFields.userID: user.uid,
             FirestoreKeys.BusinessCardFields.isActive: isActive,
             FirestoreKeys.BusinessCardFields.city: city,
             FirestoreKeys.BusinessCardFields.serviceType: serviceType,
             FirestoreKeys.BusinessCardFields.pricing: pricing,
-            FirestoreKeys.BusinessCardFields.likeCount: likeCount,
             FirestoreKeys.BusinessCardFields.description: description,
             FirestoreKeys.BusinessCardFields.tags: tags,
             FirestoreKeys.BusinessCardFields.phoneNumber: phoneNumber ?? "",
@@ -38,11 +37,15 @@ struct BusinessCardService: Sendable {
             FirestoreKeys.BusinessCardFields.cardName: cardName,
             FirestoreKeys.BusinessCardFields.profilePicture: profilePicture
         ]
-        
-        let ref = cardID != nil
-            ? Firestore.firestore().collection(FirestoreKeys.Collections.businessCard).document(cardID!)
-            : Firestore.firestore().collection(FirestoreKeys.Collections.businessCard).document()
-        try await ref.setData(userData)
+
+        let collection = db.collection(FirestoreKeys.Collections.businessCard)
+        if let cardID {
+            // Merge so fields not listed above (notably likeCount) are preserved.
+            try await collection.document(cardID).setData(userData, merge: true)
+        } else {
+            userData[FirestoreKeys.BusinessCardFields.likeCount] = 0
+            try await collection.document().setData(userData)
+        }
     }
     
     func fetchUserCard() async throws -> [BusinessCard] {
@@ -103,13 +106,26 @@ struct BusinessCardService: Sendable {
     }
     
     func likeCard(cardID: String) async throws {
-        let docRef = db.collection(FirestoreKeys.Collections.businessCard).document(cardID)
-        
-        try await docRef.collection(FirestoreKeys.Collections.likes)
-            .document(Auth.auth().currentUser?.uid ?? "")
-            .setData([:])
-        
-        try await docRef.updateData(["likeCount" : FieldValue.increment(Int64(1))])
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
+        }
+        let cardRef = db.collection(FirestoreKeys.Collections.businessCard).document(cardID)
+        let likeRef = cardRef.collection(FirestoreKeys.Collections.likes).document(uid)
+
+        _ = try await db.runTransaction { transaction, errorPointer in
+            do {
+                let likeDoc = try transaction.getDocument(likeRef)
+                guard !likeDoc.exists else { return nil }
+                transaction.setData([:], forDocument: likeRef)
+                transaction.updateData(
+                    [FirestoreKeys.BusinessCardFields.likeCount: FieldValue.increment(Int64(1))],
+                    forDocument: cardRef
+                )
+            } catch {
+                errorPointer?.pointee = error as NSError
+            }
+            return nil
+        }
     }
     
     func hasLiked(cardID: String) async -> Bool {

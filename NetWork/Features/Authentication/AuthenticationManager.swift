@@ -7,7 +7,6 @@
 
 import Foundation
 import FirebaseAuth
-import FirebaseFirestore
 
 final class AuthenticationManager: Sendable { // for firebase authentication logic
     

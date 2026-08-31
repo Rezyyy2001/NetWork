@@ -17,6 +17,7 @@ enum FirestoreKeys {
         static let hitrequests = "hitrequests"
         static let businessCard = "businessCard"
         static let likes = "likes"
+        static let swipedCards = "swipedCards"
     }
     enum UserFields {
         static let name = "name"
@@ -78,5 +79,10 @@ enum FirestoreKeys {
         static let cardName = "cardName"
         static let profilePicture = "profilePicture"
         static let backgroundPic = "backgroundPic"
+    }
+    enum SwipedCardFields {
+        static let direction = "direction"
+        static let timestamp = "timestamp"
+        static let expiresAt = "expiresAt"
     }
 }

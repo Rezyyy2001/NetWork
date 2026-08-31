@@ -46,6 +46,8 @@ final class ChatViewModel: ObservableObject {
         let trimmed = newMessage.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
+        let swipedCardID = businessCardID
+
         // builds message object to store in Firestore
         let message = Message(
             id: nil,
@@ -61,6 +63,9 @@ final class ChatViewModel: ObservableObject {
         Task {
             try? await chatService.sendMessage(conversationID: conversationID, participants: [currentUserID, otherUserID], message: message)
             newMessage = ""
+            if let swipedCardID {
+                try? await businessCardService.recordSwipe(cardID: swipedCardID, direction: .left)
+            }
         }
     }
 

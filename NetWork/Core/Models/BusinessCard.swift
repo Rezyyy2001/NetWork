@@ -93,3 +93,8 @@ enum ServiceTag: String, Codable, CaseIterable {
     case bulkDiscount = "Bulk Discount"
     case freeTrial = "Free Trial"
 }
+
+enum SwipeDirection: String, Codable {
+    case left
+    case right
+}

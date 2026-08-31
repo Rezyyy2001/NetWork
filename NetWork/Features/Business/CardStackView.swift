@@ -9,21 +9,31 @@ import SwiftUI
 
 struct CardStackView: View {
     let cards: [BusinessCard]
-    @State private var localCards: [BusinessCard] = []
+    var onSwipeLeft:  (BusinessCard) -> Void = { _ in }
+    var onSwipeRight: (BusinessCard) -> Void = { _ in }
+
     @State private var offset: CGSize = .zero
-    var leftSwipe: (UserStub, String) -> Void = { _, _ in }
-    
+    @State private var draggedCardID: String?
+
     var body: some View {
         ZStack {
-            ForEach(localCards.indices, id: \.self) { index in
-                BusinessCardView(card: localCards[index])
-                    .scaleEffect(index == localCards.count - 1 ? 1.0 : 0.95)
-                    .offset(index == localCards.count - 1 ? offset : CGSize(width: 0, height: CGFloat(localCards.count - 1 - index) * 10))
-                    .rotation3DEffect(.degrees(index == localCards.count - 1 ? Double(offset.width / 20) : 0), axis: (x: 0, y: 0, z: 1))
-                    .opacity(index == localCards.count - 1 ? 1.0 : Double(abs(offset.width)) / 150)
+            ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
+                let isTop = index == cards.count - 1
+                let isSecond = index == cards.count - 2
+                let isDragging = card.id == draggedCardID
+
+                BusinessCardView(card: card)
+                    .scaleEffect(isTop ? 1.0 : 0.95)
+                    .offset(isDragging ? offset : CGSize(width: 0, height: CGFloat(cards.count - 1 - index) * 10))
+                    .rotation3DEffect(.degrees(isDragging ? Double(offset.width / 20) : 0), axis: (x: 0, y: 0, z: 1))
+                    .opacity(
+                        isTop ? 1.0 :
+                        (isSecond && draggedCardID != nil) ? Double(abs(offset.width)) / 150 : 0
+                    )
                     .gesture(
                         DragGesture()
                             .onChanged { value in
+                                draggedCardID = card.id
                                 offset = value.translation
                             }
                             .onEnded { value in
@@ -32,31 +42,29 @@ struct CardStackView: View {
                                         offset = CGSize(width: 500, height: value.translation.height)
                                     }
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                        localCards.removeLast()
+                                        onSwipeRight(card)
                                         offset = .zero
+                                        draggedCardID = nil
                                     }
                                 } else if value.translation.width < -150 {
-                                      withAnimation(.easeOut(duration: 0.3)) {
-                                          offset = CGSize(width: -500, height: value.translation.height)
-                                      }
-                                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                          guard let card = localCards.last else { return }
-                                          let stub = UserStub(uid: card.userID, displayName: card.cardName, profilePictureURL: card.profilePicture)
-                                          leftSwipe(stub, card.id)
-                                          localCards.removeLast()
-                                          offset = .zero
-                                      }
+                                    withAnimation(.easeOut(duration: 0.3)) {
+                                        offset = CGSize(width: -500, height: value.translation.height)
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        onSwipeLeft(card)
+                                        offset = .zero
+                                        draggedCardID = nil
+                                    }
                                 } else {
                                     withAnimation(.spring()) {
                                         offset = .zero
+                                        draggedCardID = nil
                                     }
                                 }
                             }
                     )
             }
         }
-        .animation(.easeOut(duration: 0.3), value: localCards.count)
-        .onAppear { localCards = cards }
-        .onChange(of: cards) { _, newValue in localCards = newValue }
+        .animation(.easeOut(duration: 0.3), value: cards.count)
     }
 }

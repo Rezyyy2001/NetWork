@@ -10,9 +10,14 @@ import Foundation
 import FirebaseAuth
 
 struct BusinessCardService: Sendable {
-    
+
+    static let rightSwipeCooldownDays = 21
+    private static let maxReviewCards = 50
+    private static let idQueryChunkSize = 30
+    private static let maxDiscoveryPool = 200
+
     private let db = Firestore.firestore()
-    
+
     func saveBusinessCard(cardID: String?, isActive: Bool, city: String, serviceType: String, pricing: Int, description: String, tags: [String], phoneNumber: String?, email: String?, insta: String?, backgroundPic: String?) async throws {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
@@ -61,16 +66,93 @@ struct BusinessCardService: Sendable {
         }
     }
 
-    func fetchAllActiveCards() async throws -> [BusinessCard] {
-        let query: Query = db.collection(FirestoreKeys.Collections.businessCard)
+    func fetchActiveCards() async throws -> [BusinessCard] {
+        let snapshot = try await db.collection(FirestoreKeys.Collections.businessCard)
             .whereField(FirestoreKeys.BusinessCardFields.isActive, isEqualTo: true)
-        do {
-            let snapshot = try await query.getDocuments()
-            return snapshot.documents.compactMap(buildCard)
-        } catch {
-            print("Could not fetch cards (error: \(error))")
-            return []
+            .limit(to: Self.maxDiscoveryPool)
+            .getDocuments()
+        let currentUID = Auth.auth().currentUser?.uid
+        return snapshot.documents
+            .compactMap(buildCard)
+            .filter { $0.userID != currentUID }
+    }
+
+    func fetchCards(withIDs ids: [String]) async throws -> [BusinessCard] {
+        let capped = Array(ids.prefix(Self.maxReviewCards))
+        guard !capped.isEmpty else { return [] }
+
+        var fetched: [BusinessCard] = []
+        var start = 0
+        while start < capped.count {
+            let chunk = Array(capped[start ..< min(start + Self.idQueryChunkSize, capped.count)])
+            start += Self.idQueryChunkSize
+            let snapshot = try await db.collection(FirestoreKeys.Collections.businessCard)
+                .whereField(FieldPath.documentID(), in: chunk)
+                .whereField(FirestoreKeys.BusinessCardFields.isActive, isEqualTo: true)
+                .getDocuments()
+            fetched.append(contentsOf: snapshot.documents.compactMap(buildCard))
         }
+
+        let rank = Dictionary(uniqueKeysWithValues: capped.enumerated().map { ($1, $0) })
+        return fetched.sorted { (rank[$0.id] ?? .max) < (rank[$1.id] ?? .max) }
+    }
+
+    func recordSwipe(cardID: String, direction: SwipeDirection) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "No authenticated user found.", code: 0, userInfo: nil)
+        }
+        let ref = db.collection(FirestoreKeys.Collections.users).document(uid)
+            .collection(FirestoreKeys.Collections.swipedCards).document(cardID)
+
+        var data: [String: Any] = [
+            FirestoreKeys.SwipedCardFields.direction: direction.rawValue,
+            FirestoreKeys.SwipedCardFields.timestamp: FieldValue.serverTimestamp()
+        ]
+        if direction == .right {
+            let expiry = Calendar.current.date(
+                byAdding: .day, value: Self.rightSwipeCooldownDays, to: Date()
+            ) ?? Date()
+            data[FirestoreKeys.SwipedCardFields.expiresAt] = Timestamp(date: expiry)
+        }
+        try await ref.setData(data)
+    }
+
+    func fetchSwipeHistory() async throws -> (excluded: Set<String>, skipped: [String]) {
+        guard let uid = Auth.auth().currentUser?.uid else { return ([], []) }
+        let collection = db.collection(FirestoreKeys.Collections.users).document(uid)
+            .collection(FirestoreKeys.Collections.swipedCards)
+        let snapshot = try await collection.getDocuments()
+
+        let now = Date()
+        var excluded: Set<String> = []
+        var skipped: [(id: String, date: Date)] = []
+        var expired: [String] = []
+
+        for doc in snapshot.documents {
+            let data = doc.data()
+            let direction = data[FirestoreKeys.SwipedCardFields.direction] as? String
+            if direction == SwipeDirection.left.rawValue {
+                excluded.insert(doc.documentID)
+            } else if direction == SwipeDirection.right.rawValue {
+                let expiresAt = (data[FirestoreKeys.SwipedCardFields.expiresAt] as? Timestamp)?.dateValue()
+                if let expiresAt, expiresAt > now {
+                    excluded.insert(doc.documentID)
+                    let swipedAt = (data[FirestoreKeys.SwipedCardFields.timestamp] as? Timestamp)?.dateValue()
+                    skipped.append((doc.documentID, swipedAt ?? .distantPast))
+                } else {
+                    expired.append(doc.documentID)
+                }
+            }
+        }
+
+        if !expired.isEmpty {
+            let batch = db.batch()
+            for id in expired { batch.deleteDocument(collection.document(id)) }
+            try? await batch.commit()
+        }
+
+        let skippedIDs = skipped.sorted { $0.date < $1.date }.map(\.id)
+        return (excluded, skippedIDs)
     }
 
     private func buildCard(_ doc: QueryDocumentSnapshot) -> BusinessCard {

@@ -207,5 +207,10 @@ public struct EditServiceSection: View {
                 }
             }
         }
+        .alert("Error", isPresented: $viewModel.showErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.errorMessage)
+        }
     }
 }

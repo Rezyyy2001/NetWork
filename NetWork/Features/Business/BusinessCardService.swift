@@ -155,13 +155,18 @@ struct BusinessCardService: Sendable {
         return (excluded, skippedIDs)
     }
 
-    private func buildCard(_ doc: QueryDocumentSnapshot) -> BusinessCard {
+    private func buildCard(_ doc: QueryDocumentSnapshot) -> BusinessCard? {
         let data = doc.data()
+        guard let serviceType = ServiceType(
+            rawValue: data[FirestoreKeys.BusinessCardFields.serviceType] as? String ?? ""
+        ) else {
+            return nil
+        }
         return BusinessCard(
             id: doc.documentID,
             userID: data[FirestoreKeys.BusinessCardFields.userID] as? String ?? "",
             isActive: data[FirestoreKeys.BusinessCardFields.isActive] as? Bool ?? false,
-            serviceType: ServiceType(rawValue: data[FirestoreKeys.BusinessCardFields.serviceType] as? String ?? "") ?? .stringing,
+            serviceType: serviceType,
             pricing: data[FirestoreKeys.BusinessCardFields.pricing] as? Int ?? 0,
             city: data[FirestoreKeys.BusinessCardFields.city] as? String ?? "",
             likeCount: data[FirestoreKeys.BusinessCardFields.likeCount] as? Int ?? 0,

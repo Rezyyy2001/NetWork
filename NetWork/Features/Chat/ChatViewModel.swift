@@ -23,17 +23,20 @@ final class ChatViewModel: ObservableObject {
     
     private let businessCardService = BusinessCardService()
 
+    private var cardCache: [String: BusinessCard] = [:]
+    private var likedCache: [String: Bool] = [:]
+    private var fetchedCardIDs: Set<String> = []
+
     init(currentUserID: String, otherUserID: String, businessCardID: String? = nil) {
         self.currentUserID = currentUserID
         self.otherUserID = otherUserID
         self.businessCardID = businessCardID
         self.conversationID = chatService.conversationID(for: currentUserID, and: otherUserID) // so that the conversation path is the same no matter the order.
         listenForMessages()
-        
-        print("businessCardID in init: \(String(describing: businessCardID))")
+
         if let cardID = businessCardID {
             Task {
-                attachedCard = try? await BusinessCardService().fetchSingleCard(cardID: cardID)
+                attachedCard = try? await businessCardService.fetchSingleCard(cardID: cardID)
             }
         }
     }
@@ -76,13 +79,20 @@ final class ChatViewModel: ObservableObject {
                 guard let self else { return }
                 var result: [MessageWithCard] = []
                 for message in messages {
-                    if let cardID = message.businessCardID {
-                        let card = try? await businessCardService.fetchSingleCard(cardID: cardID)
-                        let hasLiked = await businessCardService.hasLiked(cardID: cardID)
-                        result.append(MessageWithCard(message: message, card: card, isLiked: hasLiked))
-                    } else {
+                    guard let cardID = message.businessCardID else {
                         result.append(MessageWithCard(message: message, card: nil, isLiked: false))
+                        continue
                     }
+                    if !fetchedCardIDs.contains(cardID) {
+                        cardCache[cardID] = try? await businessCardService.fetchSingleCard(cardID: cardID)
+                        likedCache[cardID] = await businessCardService.hasLiked(cardID: cardID)
+                        fetchedCardIDs.insert(cardID)
+                    }
+                    result.append(MessageWithCard(
+                        message: message,
+                        card: cardCache[cardID],
+                        isLiked: likedCache[cardID] ?? false
+                    ))
                 }
                 self.messages = result
             }
@@ -92,6 +102,7 @@ final class ChatViewModel: ObservableObject {
     func likeCard(_ cardID: String) {
         Task {
             try await businessCardService.likeCard(cardID: cardID)
+            likedCache[cardID] = true   // keep the cache in sync so the next snapshot doesn't revert it
             messages = messages.map { item in
                 guard item.card?.id == cardID else { return item }
                 return MessageWithCard(message: item.message, card: item.card, isLiked: true)

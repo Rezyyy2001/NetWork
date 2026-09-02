@@ -71,6 +71,7 @@ public struct EditServiceSection: View {
                             .frame(height: 120)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     } else {
+                        // TODO: Give the user the option to remove background
                         KFImage(URL(string: viewModel.backgroundPic ?? ""))
                             .placeholder {
                                 RoundedRectangle(cornerRadius: 10)

@@ -15,6 +15,7 @@ struct BusinessCardView: View {
         VStack(spacing: 0) {
             ZStack {
                 KFImage(URL(string: card.backgroundPic ?? ""))
+                    .placeholder { Color(.systemGray5) }
                     .resizable()
                     .scaledToFill()
                     .frame(width: UIScreen.main.bounds.width - 40, height: 300)
@@ -28,7 +29,7 @@ struct BusinessCardView: View {
                             .font(.callout)
                             .bold()
                             .background(.ultraThinMaterial)
-                            .cornerRadius(20)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
                         
                         Spacer()
                         Text("$\(card.pricing)/hr")
@@ -37,7 +38,7 @@ struct BusinessCardView: View {
                             .font(.callout)
                             .bold()
                             .background(.ultraThinMaterial)
-                            .cornerRadius(20)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
                     }
                     .padding(10)
                     Spacer()
@@ -64,7 +65,7 @@ struct BusinessCardView: View {
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(.ultraThinMaterial)
-                        .cornerRadius(10)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                         
                         Spacer()
                         VStack {
@@ -76,7 +77,7 @@ struct BusinessCardView: View {
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(.ultraThinMaterial)
-                        .cornerRadius(10)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                     .padding(.horizontal, 10)
                     .padding(.bottom, 20)
@@ -100,7 +101,7 @@ struct BusinessCardView: View {
                             .padding(.horizontal, 10)
                             .padding(.vertical, 3)
                             .background(Color(.systemGray5))
-                            .cornerRadius(20)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
                     }
                 }
                 .padding(.horizontal, 10)
@@ -109,26 +110,15 @@ struct BusinessCardView: View {
                 
                 HStack(spacing: 2) {
                     if let phone = card.phoneNumber, !phone.isEmpty {
-                        Image(systemName: "phone")
-                            .font(.system(size: 10))
-                        Text(phone)
-                            .font(.system(size: 10))
+                        ContactItem(icon: "phone", text: phone)
                     }
                     if let email = card.email, !email.isEmpty {
-                        Divider()
-                            .padding(.horizontal, 4)
-                        Image(systemName: "envelope")
-                            .font(.system(size: 10))
-                        Text(email)
-                            .font(.system(size: 10))
+                        Divider().padding(.horizontal, 4)
+                        ContactItem(icon: "envelope", text: email)
                     }
                     if let insta = card.insta, !insta.isEmpty {
-                        Divider()
-                            .padding(.horizontal, 4)
-                        Image(systemName: "camera")
-                            .font(.system(size: 10))
-                        Text(insta)
-                            .font(.system(size: 10))
+                        Divider().padding(.horizontal, 4)
+                        ContactItem(icon: "camera", text: insta)
                     }
                 }
                 .fixedSize(horizontal: false, vertical: true)
@@ -142,5 +132,14 @@ struct BusinessCardView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color(.systemGray4), lineWidth: 1)
         )
+    }
+    
+    private struct ContactItem: View {
+        let icon: String
+        let text: String
+        var body: some View {
+            Image(systemName: icon).font(.system(size: 10))
+            Text(text).font(.system(size: 10))
+        }
     }
 }

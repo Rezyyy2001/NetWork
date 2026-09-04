@@ -10,7 +10,8 @@ import Kingfisher
 
 struct BusinessCardView: View {
     let card: BusinessCard
-    
+    let cardWidth: CGFloat
+
     // TODO: If user has max sized text, find a way to fit text without ...
     var body: some View {
         VStack(spacing: 0) {
@@ -19,9 +20,9 @@ struct BusinessCardView: View {
                     .placeholder { Color(.systemGray5) }
                     .resizable()
                     .scaledToFill()
-                    .frame(width: UIScreen.main.bounds.width - 40, height: 300)
+                    .frame(width: cardWidth, height: 300)
                     .clipped()
-                
+
                 VStack {
                     HStack {
                         Text(card.serviceType.rawValue)
@@ -31,7 +32,7 @@ struct BusinessCardView: View {
                             .bold()
                             .background(.ultraThinMaterial)
                             .clipShape(RoundedRectangle(cornerRadius: 20))
-                        
+
                         Spacer()
                         Text("$\(card.pricing)/hr")
                             .padding(.horizontal, 10)
@@ -43,7 +44,7 @@ struct BusinessCardView: View {
                     }
                     .padding(10)
                     Spacer()
-                    
+
                     HStack {
                         KFImage(URL(string: card.profilePicture ?? ""))
                             .placeholder {
@@ -56,7 +57,7 @@ struct BusinessCardView: View {
                             .frame(width: 60, height: 60)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.brandBlue, lineWidth: 2))
-                        
+
                         VStack(alignment: .leading) {
                             Text(card.cardName)
                                 .font(.title3.bold())
@@ -67,7 +68,7 @@ struct BusinessCardView: View {
                         .padding(.vertical, 4)
                         .background(.ultraThinMaterial)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
-                        
+
                         Spacer()
                         VStack {
                             Text("Likes")
@@ -83,17 +84,17 @@ struct BusinessCardView: View {
                     .padding(.horizontal, 10)
                     .padding(.bottom, 20)
                 }
-                .frame(width: UIScreen.main.bounds.width - 40, height: 300)
+                .frame(width: cardWidth, height: 300)
             }
             .frame(height: 300)
-            
+
             VStack(spacing: 2) {
                 Text(card.description)
                     .font(.caption)
                     .padding(.horizontal, 10)
                     .padding(.top, 8)
                     .padding(.bottom, 0)
-                
+
                 FlowLayout(horizontalSpacing: 6, verticalSpacing: 6) {
                     ForEach(card.tags, id: \.self) { tag in
                         Text(tag.rawValue)
@@ -105,42 +106,35 @@ struct BusinessCardView: View {
                     }
                 }
                 .padding(.horizontal, 10)
-                
+
                 Divider()
-                
-                HStack(spacing: 2) {
-                    if let phone = card.phoneNumber, !phone.isEmpty {
-                        ContactItem(icon: "phone", text: phone)
-                    }
-                    if let email = card.email, !email.isEmpty {
-                        Divider().padding(.horizontal, 4)
-                        ContactItem(icon: "envelope", text: email)
-                    }
-                    if let insta = card.insta, !insta.isEmpty {
-                        Divider().padding(.horizontal, 4)
-                        ContactItem(icon: "camera", text: insta)
+
+                FlowLayout(horizontalSpacing: 10, verticalSpacing: 6) {
+                    ForEach(contacts, id: \.text) { item in
+                        Label(item.text, systemImage: item.icon)
+                            .font(.caption2)
+                            .labelStyle(.titleAndIcon)
                     }
                 }
-                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 10)
                 .padding(.vertical)
             }
             .background(Color(.systemBackground))
         }
-        .frame(width: UIScreen.main.bounds.width - 40)
+        .frame(width: cardWidth)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color(.systemGray4), lineWidth: 1)
         )
     }
-    
-    private struct ContactItem: View {
-        let icon: String
-        let text: String
-        var body: some View {
-            Image(systemName: icon).font(.caption2)
-            Text(text).font(.caption2)
-        }
+
+    private var contacts: [(icon: String, text: String)] {
+        [("phone", card.phoneNumber), ("envelope", card.email), ("camera", card.insta)]
+            .compactMap { icon, value in
+                guard let value, !value.isEmpty else { return nil }
+                return (icon, value)
+            }
     }
 }
 

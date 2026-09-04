@@ -11,6 +11,7 @@ import Kingfisher
 struct BusinessCardView: View {
     let card: BusinessCard
     
+    // TODO: If user has max sized text, find a way to fit text without ...
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -48,7 +49,7 @@ struct BusinessCardView: View {
                             .placeholder {
                                 Image(systemName: "person")
                                     .foregroundColor(Color.brandBlue)
-                                    .font(.system(size: 35))
+                                    .font(.largeTitle)
                             }
                             .resizable()
                             .scaledToFill()
@@ -88,16 +89,15 @@ struct BusinessCardView: View {
             
             VStack(spacing: 2) {
                 Text(card.description)
-                    .font(.system(size: 12))
+                    .font(.caption)
                     .padding(.horizontal, 10)
                     .padding(.top, 8)
                     .padding(.bottom, 0)
                 
-                // TODO: WrappingHStack or some other efficient chips lineup
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 6) {
+                FlowLayout(horizontalSpacing: 6, verticalSpacing: 6) {
                     ForEach(card.tags, id: \.self) { tag in
                         Text(tag.rawValue)
-                            .font(.system(size: 10))
+                            .font(.caption2)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 3)
                             .background(Color(.systemGray5))
@@ -138,8 +138,54 @@ struct BusinessCardView: View {
         let icon: String
         let text: String
         var body: some View {
-            Image(systemName: icon).font(.system(size: 10))
-            Text(text).font(.system(size: 10))
+            Image(systemName: icon).font(.caption2)
+            Text(text).font(.caption2)
+        }
+    }
+}
+
+struct FlowLayout: Layout {
+    var horizontalSpacing: CGFloat = 6
+    var verticalSpacing: CGFloat = 6
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let maxWidth = proposal.width ?? .greatestFiniteMagnitude
+        var x: CGFloat = 0
+        var y: CGFloat = 0
+        var rowHeight: CGFloat = 0
+        var widestRow: CGFloat = 0
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if x > 0, x + size.width > maxWidth {
+                widestRow = max(widestRow, x - horizontalSpacing)
+                y += rowHeight + verticalSpacing
+                x = 0
+                rowHeight = 0
+            }
+            x += size.width + horizontalSpacing
+            rowHeight = max(rowHeight, size.height)
+        }
+        widestRow = max(widestRow, x - horizontalSpacing)
+
+        return CGSize(width: proposal.width ?? max(widestRow, 0), height: y + rowHeight)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var x = bounds.minX
+        var y = bounds.minY
+        var rowHeight: CGFloat = 0
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if x > bounds.minX, x + size.width > bounds.maxX {
+                x = bounds.minX
+                y += rowHeight + verticalSpacing
+                rowHeight = 0
+            }
+            subview.place(at: CGPoint(x: x, y: y), anchor: .topLeading, proposal: ProposedViewSize(size))
+            x += size.width + horizontalSpacing
+            rowHeight = max(rowHeight, size.height)
         }
     }
 }

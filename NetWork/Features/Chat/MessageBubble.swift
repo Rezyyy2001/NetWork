@@ -25,7 +25,7 @@ struct MessageBubble: View {
             VStack(alignment: isCurrentUser ? .trailing : .leading) {
                 if let card = card {
                     HStack {
-                        BusinessCardView(card: card)
+                        BusinessCardView(card: card, cardWidth: 350)
                             .scaledLayout(0.5)
                             .frame(maxWidth: .infinity)
                         if card.userID != currentUserID {

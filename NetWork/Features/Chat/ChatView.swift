@@ -95,5 +95,13 @@ struct ChatView: View {
                 BackButton(padded: false)
             }
         }
+        .alert("Couldn't send", isPresented: Binding(
+            get: { viewModel.sendError != nil },
+            set: { if !$0 { viewModel.sendError = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.sendError ?? "")
+        }
     }
 }

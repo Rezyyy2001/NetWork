@@ -71,7 +71,6 @@ struct ChatView: View {
                 if let card = viewModel.attachedCard {
                     BusinessCardView(card: card, cardWidth: 350)
                         .scaledLayout(0.3)
-                        .background(Color.red.opacity(0.3))
                 }
                 HStack {
                     CustomTextbox(

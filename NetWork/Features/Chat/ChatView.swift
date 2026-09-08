@@ -28,7 +28,7 @@ struct ChatView: View {
     private struct MessageRow: View {
         let item: MessageWithCard
         let currentUserID: String
-        @ObservedObject var viewModel: ChatViewModel
+        let onLike: (String) -> Void
 
         var body: some View {
             MessageBubble(
@@ -37,7 +37,7 @@ struct ChatView: View {
                 card: item.card,
                 isLiked: item.isLiked,
                 currentUserID: currentUserID,
-                onLike: { cardID in viewModel.likeCard(cardID) }
+                onLike: onLike
             )
         }
     }
@@ -51,7 +51,7 @@ struct ChatView: View {
                             MessageRow(
                                 item: item,
                                 currentUserID: currentUserID,
-                                viewModel: viewModel
+                                onLike: { cardID in viewModel.likeCard(cardID) }
                             )
                             .id(item.message.id)
                         }
@@ -71,7 +71,6 @@ struct ChatView: View {
                 if let card = viewModel.attachedCard {
                     BusinessCardView(card: card, cardWidth: 350)
                         .scaledLayout(0.3)
-                        .background(Color.red.opacity(0.3))
                 }
                 HStack {
                     CustomTextbox(
@@ -94,6 +93,14 @@ struct ChatView: View {
             ToolbarItem (placement: .navigationBarLeading) {
                 BackButton(padded: false)
             }
+        }
+        .alert("Couldn't send", isPresented: Binding(
+            get: { viewModel.sendError != nil },
+            set: { if !$0 { viewModel.sendError = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.sendError ?? "")
         }
     }
 }

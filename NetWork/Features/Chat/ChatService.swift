@@ -51,19 +51,30 @@ struct ChatService: Sendable {
     
     func createConversation(conversationID: String, participants: [String]) async throws {
         let docRef = db.collection(FirestoreKeys.Collections.conversations).document(conversationID)
-        try await docRef.setData(["participants": participants])
+        let exists = (try? await docRef.getDocument())?.exists ?? false
+
+        var data: [String: Any] = ["participants": participants]
+        
+        if !exists {
+            data["lastMessageTimestamp"] = Date()
+        }
+        try await docRef.setData(data, merge: true)
     }
     
     func fetchConversation(for userID: String) async -> [String] {
         do {
             let snapshot = try await db.collection(FirestoreKeys.Collections.conversations)
                 .whereField("participants", arrayContains: userID)
-                .order(by: "lastMessageTimestamp", descending: true)
                 .getDocuments()
-    
-            let otherUserIDs = snapshot.documents.compactMap { doc -> String? in
-                let data = doc.data()
-                let participants = data["participants"] as? [String] ?? []
+            
+            let sorted = snapshot.documents.sorted { a, b in
+                let ta = (a.data()["lastMessageTimestamp"] as? Timestamp)?.dateValue() ?? .distantPast
+                let tb = (b.data()["lastMessageTimestamp"] as? Timestamp)?.dateValue() ?? .distantPast
+                return ta > tb   // newest first; message-less conversations sink to the bottom
+            }
+
+            let otherUserIDs = sorted.compactMap { doc -> String? in
+                let participants = doc.data()["participants"] as? [String] ?? []
                 return participants.first { $0 != userID }
             }
             return otherUserIDs

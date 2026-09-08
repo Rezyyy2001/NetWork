@@ -13,6 +13,7 @@ final class ChatViewModel: ObservableObject {
     @Published var messages: [MessageWithCard] = []
     @Published var newMessage = ""
     @Published var attachedCard: BusinessCard?
+    @Published var sendError: String?
 
     private let chatService = ChatService()
     private var listener: ListenerRegistration? // Holds the Firebase listener
@@ -59,15 +60,19 @@ final class ChatViewModel: ObservableObject {
             timestamp: Date(),
             businessCardID: businessCardID
         )
-        attachedCard = nil
-        businessCardID = nil
 
-        // once sent, the textField is empty
         Task {
-            try? await chatService.sendMessage(conversationID: conversationID, participants: [currentUserID, otherUserID], message: message)
-            newMessage = ""
-            if let swipedCardID {
-                try? await businessCardService.recordSwipe(cardID: swipedCardID, direction: .left)
+            do {
+                try await chatService.sendMessage(conversationID: conversationID, participants: [currentUserID, otherUserID], message: message)
+                // only clear the compose state once the write has committed
+                newMessage = ""
+                attachedCard = nil
+                businessCardID = nil
+                if let swipedCardID {
+                    try? await businessCardService.recordSwipe(cardID: swipedCardID, direction: .left)
+                }
+            } catch {
+                sendError = "Message failed to send"
             }
         }
     }

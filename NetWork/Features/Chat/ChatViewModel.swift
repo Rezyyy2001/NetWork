@@ -57,7 +57,7 @@ final class ChatViewModel: ObservableObject {
             id: nil,
             text: trimmed,
             senderID: currentUserID,
-            timestamp: Date(),
+            timestamp: nil, 
             businessCardID: businessCardID
         )
 

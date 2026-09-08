@@ -18,7 +18,7 @@ struct Message: Identifiable, Hashable, Decodable, Encodable {
     @DocumentID var id: String? 
     let text: String
     let senderID: String
-    let timestamp: Date
+    @ServerTimestamp var timestamp: Date?
     let businessCardID: String?
 }
 

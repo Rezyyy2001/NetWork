@@ -28,7 +28,7 @@ struct ChatView: View {
     private struct MessageRow: View {
         let item: MessageWithCard
         let currentUserID: String
-        @ObservedObject var viewModel: ChatViewModel
+        let onLike: (String) -> Void
 
         var body: some View {
             MessageBubble(
@@ -37,7 +37,7 @@ struct ChatView: View {
                 card: item.card,
                 isLiked: item.isLiked,
                 currentUserID: currentUserID,
-                onLike: { cardID in viewModel.likeCard(cardID) }
+                onLike: onLike
             )
         }
     }
@@ -51,7 +51,7 @@ struct ChatView: View {
                             MessageRow(
                                 item: item,
                                 currentUserID: currentUserID,
-                                viewModel: viewModel
+                                onLike: { cardID in viewModel.likeCard(cardID) }
                             )
                             .id(item.message.id)
                         }

@@ -27,7 +27,7 @@ struct ChatService: Sendable {
         
         try await db.collection(FirestoreKeys.Collections.conversations)
             .document(conversationID)
-            .updateData(["lastMessageTimestamp": Date()])
+            .updateData(["lastMessageTimestamp": FieldValue.serverTimestamp()])
     }
 
     func observeMessages(conversationID: String, onUpdate: @escaping ([Message]) -> Void) -> ListenerRegistration {
@@ -56,7 +56,7 @@ struct ChatService: Sendable {
         var data: [String: Any] = ["participants": participants]
         
         if !exists {
-            data["lastMessageTimestamp"] = Date()
+            data["lastMessageTimestamp"] = FieldValue.serverTimestamp()
         }
         try await docRef.setData(data, merge: true)
     }

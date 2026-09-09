@@ -41,13 +41,19 @@ struct PostService: Sendable {
     
     func fetchPosts(isNewest: Bool, numberOfPeople: Int, isFriends: Bool, utrRange: [CGFloat], ustaRange: [CGFloat], friendIDs: [String]) async throws -> [HitPost] {
         
+        if isFriends && friendIDs.isEmpty {
+            return []
+        }
+
         var query: Query = db.collection(FirestoreKeys.Collections.posts)
             .order(by: FirestoreKeys.PostFields.date, descending: !isNewest)
             .whereField(FirestoreKeys.PostFields.date, isGreaterThanOrEqualTo: Date())
             .limit(to: 20)
-        
-        if isFriends && !friendIDs.isEmpty {
+
+        if isFriends {
             query = query.whereField(FirestoreKeys.PostFields.userID, in: friendIDs)
+        } else {
+            query = query.whereField(FirestoreKeys.PostFields.isPublic, isEqualTo: true)
         }
         
         do {

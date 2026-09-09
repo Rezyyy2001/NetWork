@@ -68,7 +68,7 @@ final class FriendService: Sendable {
     }
 
     func checkFriendshipStatus(for targetUserID: String) async throws -> FriendshipStatus {
-        let currentUserID = Auth.auth().currentUser?.uid ?? ""
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return .none }
 
         if let result = await findFriendship(userID1: currentUserID, userID2: targetUserID) {
             if result.status == "pending" { return .sent }
@@ -84,13 +84,26 @@ final class FriendService: Sendable {
     }
 
     func sendFriendRequest(for targetUserID: String) async throws {
-        let friendshipData: [String: Any] = [
-            FirestoreKeys.FriendshipFields.userID1: Auth.auth().currentUser?.uid ?? "",
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "FriendService", code: 0,
+                          userInfo: [NSLocalizedDescriptionKey: "Not signed in"])
+        }
+        guard currentUserID != targetUserID else {
+            throw NSError(domain: "FriendService", code: 1,
+                          userInfo: [NSLocalizedDescriptionKey: "You can't add yourself"])
+        }
+        
+        let existing = await findFriendship(userID1: currentUserID, userID2: targetUserID)
+        let existingReverse = await findFriendship(userID1: targetUserID, userID2: currentUserID)
+        if existing != nil || existingReverse != nil {
+            return
+        }
+
+        try await db.collection(FirestoreKeys.Collections.friendships).addDocument(data: [
+            FirestoreKeys.FriendshipFields.userID1: currentUserID,
             FirestoreKeys.FriendshipFields.userID2: targetUserID,
             FirestoreKeys.FriendshipFields.status: "pending"
-        ]
-
-        try await db.collection(FirestoreKeys.Collections.friendships).addDocument(data: friendshipData)
+        ])
     }
 
     func acceptFriendRequest(for documentID: String) async throws {

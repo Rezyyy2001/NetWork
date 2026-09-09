@@ -54,11 +54,11 @@ final class FriendButtonViewModel: ObservableObject {
             do {
                 try await friendService.acceptFriendRequest(for: documentID)
                 friendshipStatus = .friends
-                
-                try await chatService.createConversation(conversationID: conversationID, participants: [currentUserID, targetUserID])
             } catch {
                 self.errorMessage = error.localizedDescription
+                return
             }
+            try? await chatService.createConversation(conversationID: conversationID, participants: [currentUserID, targetUserID])
         }
     }
     

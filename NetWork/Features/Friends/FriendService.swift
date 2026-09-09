@@ -104,39 +104,24 @@ final class FriendService: Sendable {
     }
 
     func fetchFriends(for currentUserID: String) async -> [UserStub] {
-
-        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.friendships)
-            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "accepted")
-            .getDocuments()
-        else { return [] }
-
-        let friendIDs = snapshot.documents.compactMap { doc -> String? in
-            let data = doc.data()
-            let userID1 = data[FirestoreKeys.FriendshipFields.userID1] as? String ?? ""
-            let userID2 = data[FirestoreKeys.FriendshipFields.userID2] as? String ?? ""
-
-            if userID1 == currentUserID { return userID2 }
-            else if userID2 == currentUserID { return userID1 }
-            return nil
-        }
-        return await fetchStubs(for: friendIDs)
+        await fetchStubs(for: fetchFriendIDs(for: currentUserID))
     }
-    
+
     public func fetchFriendIDs(for currentUserID: String) async -> [String] {
-        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.friendships)
+        async let asUser1 = db.collection(FirestoreKeys.Collections.friendships)
+            .whereField(FirestoreKeys.FriendshipFields.userID1, isEqualTo: currentUserID)
             .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "accepted")
             .getDocuments()
-        else { return [] }
-        
-        let friendIDs = snapshot.documents.compactMap { doc -> String? in
-            let data = doc.data()
-            let userID1 = data[FirestoreKeys.FriendshipFields.userID1] as? String ?? ""
-            let userID2 = data[FirestoreKeys.FriendshipFields.userID2] as? String ?? ""
+        async let asUser2 = db.collection(FirestoreKeys.Collections.friendships)
+            .whereField(FirestoreKeys.FriendshipFields.userID2, isEqualTo: currentUserID)
+            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "accepted")
+            .getDocuments()
 
-            if userID1 == currentUserID { return userID2 }
-            else if userID2 == currentUserID { return userID1 }
-            return nil
-        }
-        return friendIDs
+        let friendsFromUser1 = ((try? await asUser1)?.documents ?? [])
+            .compactMap { $0.data()[FirestoreKeys.FriendshipFields.userID2] as? String }
+        let friendsFromUser2 = ((try? await asUser2)?.documents ?? [])
+            .compactMap { $0.data()[FirestoreKeys.FriendshipFields.userID1] as? String }
+
+        return Array(Set(friendsFromUser1 + friendsFromUser2))
     }
 }

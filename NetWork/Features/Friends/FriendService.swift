@@ -68,7 +68,7 @@ final class FriendService: Sendable {
     }
 
     func checkFriendshipStatus(for targetUserID: String) async throws -> FriendshipStatus {
-        let currentUserID = Auth.auth().currentUser?.uid ?? ""
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return .none }
 
         if let result = await findFriendship(userID1: currentUserID, userID2: targetUserID) {
             if result.status == "pending" { return .sent }

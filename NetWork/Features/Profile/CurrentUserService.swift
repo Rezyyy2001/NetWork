@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import FirebaseAuth
-import FirebaseFirestore
+@preconcurrency import FirebaseAuth
+@preconcurrency import FirebaseFirestore
 
 final class CurrentUserService: Sendable {
 

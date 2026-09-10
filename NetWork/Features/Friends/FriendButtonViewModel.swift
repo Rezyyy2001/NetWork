@@ -18,14 +18,15 @@ final class FriendButtonViewModel: ObservableObject {
     private let chatService = ChatService()
     
     let targetUserID: String
-    let currentUserID: String
-    private let conversationID: String
-    
+    private let currentUserID: String
+
+    private var conversationID: String {
+        chatService.conversationID(for: currentUserID, and: targetUserID)
+    }
+
     init(targetUserID: String) {
         self.targetUserID = targetUserID
-        let uid = Auth.auth().currentUser?.uid ?? ""
-        self.currentUserID = uid
-        self.conversationID = ChatService().conversationID(for: uid, and: targetUserID)
+        self.currentUserID = Auth.auth().currentUser?.uid ?? ""
     }
     
     func checkFriendshipStatus() {

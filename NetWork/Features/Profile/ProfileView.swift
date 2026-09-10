@@ -98,10 +98,6 @@ struct ProfileView: View {
                 .sheet(isPresented: $currentUserViewModel.showConfirmedHits) {
                     ConfirmedHitsView()
                 }
-                .task {
-                    await currentUserViewModel.fetchCurrentUserProfile()
-                    try? await userPostsViewModel.fetchUserPosts()
-                }
             }
         }
     }

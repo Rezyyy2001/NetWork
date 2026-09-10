@@ -50,9 +50,6 @@ struct UserProfileView: View {
                 }
             }
             .navigationBarBackButtonHidden(true)
-            .task {
-                try? await userPostsViewModel.fetchUserPosts()
-            }
         }
     }
 }

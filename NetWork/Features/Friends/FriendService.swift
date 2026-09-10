@@ -42,18 +42,17 @@ final class FriendService: Sendable {
     }
 
     private func friendshipCount(field: String, userID: String) async -> Int {
-        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.friendships)
+        let query = db.collection(FirestoreKeys.Collections.friendships)
             .whereField(field, isEqualTo: userID)
             .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "accepted")
-            .getDocuments()
-        else { return 0 }
-        return snapshot.documents.count
+        guard let snapshot = try? await query.count.getAggregation(source: .server) else { return 0 }
+        return snapshot.count.intValue
     }
 
     func fetchFriendCount(for userID: String) async throws -> Int {
-        let count1 = await friendshipCount(field: FirestoreKeys.FriendshipFields.userID1, userID: userID)
-        let count2 = await friendshipCount(field: FirestoreKeys.FriendshipFields.userID2, userID: userID)
-        return count1 + count2
+        async let count1 = friendshipCount(field: FirestoreKeys.FriendshipFields.userID1, userID: userID)
+        async let count2 = friendshipCount(field: FirestoreKeys.FriendshipFields.userID2, userID: userID)
+        return await count1 + count2
     }
 
     private func findFriendship(userID1: String, userID2: String) async -> (status: String, documentID: String)? {

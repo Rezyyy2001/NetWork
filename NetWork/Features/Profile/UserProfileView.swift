@@ -15,7 +15,7 @@ struct UserProfileView: View {
     
     init(userID: String) {
         _otherUserProfileViewModel = StateObject(wrappedValue: OtherUserProfileViewModel(userID: userID))
-        _userPostsViewModel = StateObject(wrappedValue: UserPostsViewModel(userID: userID))
+        _userPostsViewModel = StateObject(wrappedValue: UserPostsViewModel(userID: userID, autoFetch: false))
     }
     
     var body: some View {
@@ -26,16 +26,16 @@ struct UserProfileView: View {
                 BiographyView(viewModel: otherUserProfileViewModel)
                 FriendButtonView(targetUserID: otherUserProfileViewModel.uid)
                 
-                Picker("Order", selection: $userPostsViewModel.active) {
-                    Text("Active").tag(true)
-                    Text("Past").tag(false)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .onChange(of: userPostsViewModel.active) {
-                      Task { try? await userPostsViewModel.fetchUserPosts() }
-                }
-                
                 if otherUserProfileViewModel.friendshipStatus == .friends {
+                    Picker("Order", selection: $userPostsViewModel.active) {
+                        Text("Active").tag(true)
+                        Text("Past").tag(false)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .onChange(of: userPostsViewModel.active) {
+                          Task { try? await userPostsViewModel.fetchUserPosts() }
+                    }
+
                     ForEach(userPostsViewModel.hits) { post in
                         PostPreviewCard(post: post, showConfirm: false, onConfirm: {}, onJoinRequest: {}, onCancelRequest: {})
                     }
@@ -44,6 +44,11 @@ struct UserProfileView: View {
             }
             .padding(.horizontal, 2)
             .ignoresSafeArea(.container, edges: .horizontal)
+            .onChange(of: otherUserProfileViewModel.friendshipStatus) { _, status in
+                if status == .friends {
+                    Task { try? await userPostsViewModel.fetchUserPosts() }
+                }
+            }
             .toolbar {
                 ToolbarItem (placement: .navigationBarLeading) {
                     BackButton(padded: false)

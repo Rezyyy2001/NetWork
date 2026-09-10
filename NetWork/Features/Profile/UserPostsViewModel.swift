@@ -17,9 +17,11 @@ final class UserPostsViewModel: ObservableObject {
     
     private let userID: String
     
-    init(userID: String) {
+    init(userID: String, autoFetch: Bool = true) {
         self.userID = userID
-        Task { try? await fetchUserPosts() }
+        if autoFetch {
+            Task { try? await fetchUserPosts() }
+        }
     }
     
     func fetchUserPosts() async throws {

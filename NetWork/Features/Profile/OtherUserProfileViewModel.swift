@@ -36,17 +36,18 @@ final class OtherUserProfileViewModel: ObservableObject, UserProfileDataProvider
     // Needs an init to know what user to fetch
     init(userID: String) {
         self.userID = userID
-        Task { await fetchUserProfile(for: userID) }
+        Task { await fetchUserProfile() }
     }
 
-    func fetchUserProfile(for userID: String) async {
+    func fetchUserProfile() async {
         do {
             let profile = try await service.fetchUserProfile(userID: userID)
             apply(profile)
-            
-            self.friendshipStatus = (try await friendService.checkFriendshipStatus(for: userID))
         } catch {
             self.errorMessage = "Could not find user"
+            return
         }
+
+        self.friendshipStatus = (try? await friendService.checkFriendshipStatus(for: userID)) ?? .none
     }
 }

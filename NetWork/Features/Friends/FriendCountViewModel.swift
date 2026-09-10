@@ -14,14 +14,14 @@ final class FriendCountViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     private let service = FriendService()
-    
-    var userID: String
-    
+
+    private let userID: String
+
     init(userID: String) {
         self.userID = userID
     }
-    
-    func fetchFriendCount(for userID: String) {
+
+    func fetchFriendCount() {
         Task {
             do {
                 self.friendCount = try await service.fetchFriendCount(for: userID)

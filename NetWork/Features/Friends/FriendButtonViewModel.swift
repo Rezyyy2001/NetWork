@@ -28,7 +28,7 @@ final class FriendButtonViewModel: ObservableObject {
         self.conversationID = ChatService().conversationID(for: uid, and: targetUserID)
     }
     
-    func checkFriendshipStatus(for targetUserID: String) {
+    func checkFriendshipStatus() {
         Task {
             do {
                 self.friendshipStatus = try await friendService.checkFriendshipStatus(for: targetUserID)
@@ -37,8 +37,8 @@ final class FriendButtonViewModel: ObservableObject {
             }
         }
     }
-    
-    func sendFriendRequest(for targetUserID: String) {
+
+    func sendFriendRequest() {
         Task {
             do {
                 try await friendService.sendFriendRequest(for: targetUserID)

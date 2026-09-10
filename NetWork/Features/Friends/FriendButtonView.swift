@@ -45,7 +45,7 @@ struct FriendButtonView: View {
             } else {
                 // Add Friend / Pending / Friends button
                 Button(action: {
-                    viewModel.sendFriendRequest(for: targetUserID)
+                    viewModel.sendFriendRequest()
                 }) {
                     Text(buttonTitle)
                         .foregroundColor(.white)
@@ -68,7 +68,7 @@ struct FriendButtonView: View {
             }
         }
         .onAppear {
-            viewModel.checkFriendshipStatus(for: targetUserID)
+            viewModel.checkFriendshipStatus()
         }
     }
 

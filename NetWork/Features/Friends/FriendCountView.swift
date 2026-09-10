@@ -29,7 +29,7 @@ struct FriendCountView: View {
             }
         }
         .onAppear {
-            viewModel.fetchFriendCount(for: viewModel.userID)
+            viewModel.fetchFriendCount()
         }
     }
 }

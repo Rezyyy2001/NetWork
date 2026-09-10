@@ -8,16 +8,18 @@
 import SwiftUI
 import FirebaseAuth
 
+enum ProfileSheet: Identifiable {
+    case settings, friendRequests, messages, confirmedHits
+    var id: Self { self }
+}
+
 @MainActor
 final class CurrentUserProfileViewModel: ObservableObject, UserProfileDataProvider {
-    
+
     private let service = CurrentUserService.shared
-    
+
     // UI State
-    @Published var showSettings = false
-    @Published var showFriendRequests = false
-    @Published var showMessageView = false
-    @Published var showConfirmedHits = false
+    @Published var activeSheet: ProfileSheet?
     @Published var errorMessage: String? = nil
 
     // Auth info

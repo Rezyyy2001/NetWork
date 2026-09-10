@@ -50,47 +50,47 @@ struct ProfileView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button {
-                            currentUserViewModel.showMessageView = true
+                            currentUserViewModel.activeSheet = .messages
                         } label: {
                             Image(systemName: "message")
                                 .font(.headline)
                         }
                         Button {
-                            currentUserViewModel.showFriendRequests = true
+                            currentUserViewModel.activeSheet = .friendRequests
                         } label: {
                             Image(systemName: "tray")
                                 .font(.headline)
                         }
                         Button {
-                            currentUserViewModel.showConfirmedHits = true
+                            currentUserViewModel.activeSheet = .confirmedHits
                         } label: {
                             Image(systemName: "checkmark.square")
                                 .font(.headline)
                         }
                         Button {
-                            currentUserViewModel.showSettings = true
+                            currentUserViewModel.activeSheet = .settings
                         } label: {
                             Image(systemName: "gearshape")
                                 .font(.headline)
                         }
                     }
                 }
-                
+
                 .navigationBarTitleDisplayMode(.inline)
-                
-                .sheet(isPresented: $currentUserViewModel.showMessageView) {
-                    MessageListView(currentUserID: currentUserViewModel.uid)
-                }
-                .sheet(isPresented: $currentUserViewModel.showFriendRequests) {
-                    FriendInboxView()
-                }
-                .sheet(isPresented: $currentUserViewModel.showSettings, onDismiss: {
+
+                .sheet(item: $currentUserViewModel.activeSheet, onDismiss: {
                     Task { await currentUserViewModel.fetchCurrentUserProfile() }
-                }) {
-                    SettingsView(authState: authState)
-                }
-                .sheet(isPresented: $currentUserViewModel.showConfirmedHits) {
-                    ConfirmedHitsView()
+                }) { sheet in
+                    switch sheet {
+                    case .messages:
+                        MessageListView(currentUserID: currentUserViewModel.uid)
+                    case .friendRequests:
+                        FriendInboxView()
+                    case .settings:
+                        SettingsView(authState: authState)
+                    case .confirmedHits:
+                        ConfirmedHitsView()
+                    }
                 }
             }
         }

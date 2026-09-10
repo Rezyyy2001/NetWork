@@ -16,7 +16,7 @@ final class FriendService: Sendable {
 
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.friendships)
             .whereField(FirestoreKeys.FriendshipFields.userID2, isEqualTo: currentUserID)
-            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "pending")
+            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: FirestoreKeys.FriendshipStatusValue.pending)
             .getDocuments()
         else { return [] }
 
@@ -44,7 +44,7 @@ final class FriendService: Sendable {
     private func friendshipCount(field: String, userID: String) async -> Int {
         let query = db.collection(FirestoreKeys.Collections.friendships)
             .whereField(field, isEqualTo: userID)
-            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "accepted")
+            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: FirestoreKeys.FriendshipStatusValue.accepted)
         guard let snapshot = try? await query.count.getAggregation(source: .server) else { return 0 }
         return snapshot.count.intValue
     }
@@ -70,13 +70,13 @@ final class FriendService: Sendable {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return .none }
 
         if let result = await findFriendship(userID1: currentUserID, userID2: targetUserID) {
-            if result.status == "pending" { return .sent }
-            if result.status == "accepted" { return .friends }
+            if result.status == FirestoreKeys.FriendshipStatusValue.pending { return .sent }
+            if result.status == FirestoreKeys.FriendshipStatusValue.accepted { return .friends }
         }
 
         if let result = await findFriendship(userID1: targetUserID, userID2: currentUserID) {
-            if result.status == "pending" { return .received(documentID: result.documentID) }
-            if result.status == "accepted" { return .friends }
+            if result.status == FirestoreKeys.FriendshipStatusValue.pending { return .received(documentID: result.documentID) }
+            if result.status == FirestoreKeys.FriendshipStatusValue.accepted { return .friends }
         }
 
         return .none
@@ -101,13 +101,13 @@ final class FriendService: Sendable {
         try await db.collection(FirestoreKeys.Collections.friendships).addDocument(data: [
             FirestoreKeys.FriendshipFields.userID1: currentUserID,
             FirestoreKeys.FriendshipFields.userID2: targetUserID,
-            FirestoreKeys.FriendshipFields.status: "pending"
+            FirestoreKeys.FriendshipFields.status: FirestoreKeys.FriendshipStatusValue.pending
         ])
     }
 
     func acceptFriendRequest(for documentID: String) async throws {
         try await db.collection(FirestoreKeys.Collections.friendships).document(documentID).updateData([
-            FirestoreKeys.FriendshipFields.status: "accepted"
+            FirestoreKeys.FriendshipFields.status: FirestoreKeys.FriendshipStatusValue.accepted
         ])
     }
 
@@ -122,11 +122,11 @@ final class FriendService: Sendable {
     public func fetchFriendIDs(for currentUserID: String) async -> [String] {
         async let asUser1 = db.collection(FirestoreKeys.Collections.friendships)
             .whereField(FirestoreKeys.FriendshipFields.userID1, isEqualTo: currentUserID)
-            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "accepted")
+            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: FirestoreKeys.FriendshipStatusValue.accepted)
             .getDocuments()
         async let asUser2 = db.collection(FirestoreKeys.Collections.friendships)
             .whereField(FirestoreKeys.FriendshipFields.userID2, isEqualTo: currentUserID)
-            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: "accepted")
+            .whereField(FirestoreKeys.FriendshipFields.status, isEqualTo: FirestoreKeys.FriendshipStatusValue.accepted)
             .getDocuments()
 
         let friendsFromUser1 = ((try? await asUser1)?.documents ?? [])

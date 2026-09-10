@@ -37,6 +37,10 @@ enum FirestoreKeys {
         static let userID2 = "userID2"
         static let status = "status"
     }
+    enum FriendshipStatusValue {
+        static let pending = "pending"
+        static let accepted = "accepted"
+    }
     enum PostFields {
         static let userID = "userID"
         static let posterName = "posterName"

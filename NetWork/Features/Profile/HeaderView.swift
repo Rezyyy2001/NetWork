@@ -34,7 +34,7 @@ struct HeaderView<T: UserProfileDataProvider & ObservableObject>: View { // Head
                 //TODO: UTR should be a Float for two decimal points
                 
                 if let utr = viewModel.utr {
-                    Text("UTR: \(utr, specifier: "%.01f")") //specifies the detail of one decimal point
+                    Text("UTR: \(utr, specifier: "%.1f")")
                 }
                 
                 if let usta = viewModel.usta {

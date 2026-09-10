@@ -48,31 +48,25 @@ struct ProfileView: View {
                 .padding(.horizontal, 2)
                 .ignoresSafeArea(.container, edges: .horizontal)
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button {
                             currentUserViewModel.showMessageView = true
                         } label: {
                             Image(systemName: "message")
                                 .font(.headline)
                         }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             currentUserViewModel.showFriendRequests = true
                         } label: {
                             Image(systemName: "tray")
                                 .font(.headline)
                         }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             currentUserViewModel.showConfirmedHits = true
                         } label: {
                             Image(systemName: "checkmark.square")
                                 .font(.headline)
                         }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             currentUserViewModel.showSettings = true
                         } label: {

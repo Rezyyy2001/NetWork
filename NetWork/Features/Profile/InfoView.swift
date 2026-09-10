@@ -21,7 +21,3 @@ struct InfoView<T: UserProfileDataProvider & ObservableObject>: View {
         }
     }
 }
-
-#Preview {
-    ProfileView()
-}

@@ -38,7 +38,6 @@ struct AvatarClusterView: View {
         .sheet(isPresented: $showSheet) {
             AvatarClusterSheetView(viewModel: viewModel, onAccept: viewModel.acceptRequests)
                 .presentationDetents([.height(CGFloat(viewModel.profiles.count) * 80)])
-                .onAppear { viewModel.fetchProfiles() }
         }
     }
 }

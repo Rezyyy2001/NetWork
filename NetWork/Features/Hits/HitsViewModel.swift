@@ -28,7 +28,9 @@ final class HitsViewModel: ObservableObject {
     @Published var requestedPostIDs: Set<String> = []
     
     @Published var acceptedPostIDs: Set<String> = []
-    
+
+    @Published var errorMessage: String?
+
     func fetchPosts() {
         Task {
             var friendIDs: [String] = []
@@ -51,15 +53,23 @@ final class HitsViewModel: ObservableObject {
     
     func sendRequest(for post: HitPost) {
         Task {
-            try await hitRequestService.sendRequest(postID: post.id, posterID: post.userID)
-            requestedPostIDs.insert(post.id)
+            do {
+                try await hitRequestService.sendRequest(postID: post.id, posterID: post.userID)
+                requestedPostIDs.insert(post.id)
+            } catch {
+                errorMessage = "Couldn't send request"
+            }
         }
     }
-    
+
     func cancelRequest(for post: HitPost) {
         Task {
-            try await hitRequestService.cancelRequest(postID: post.id)
-            requestedPostIDs.remove(post.id)
+            do {
+                try await hitRequestService.cancelRequest(postID: post.id)
+                requestedPostIDs.remove(post.id)
+            } catch {
+                errorMessage = "Couldn't cancel request"
+            }
         }
     }
     

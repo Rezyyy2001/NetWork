@@ -123,6 +123,14 @@ struct PostView: View {
                     .padding(.top, 120)
                 }
             }
+            .alert("Couldn't post", isPresented: Binding(
+                get: { viewModel.postError != nil },
+                set: { if !$0 { viewModel.postError = nil } }
+            )) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(viewModel.postError ?? "")
+            }
         }
     }
 }

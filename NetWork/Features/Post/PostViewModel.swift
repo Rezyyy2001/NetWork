@@ -16,6 +16,7 @@ final class PostViewModel: ObservableObject {
     @Published var numberOfPeople: Int = 1
     @Published var selectedDate = Date()
     @Published var errorMessage: String?
+    @Published var postError: String?
     @Published var suggestions: [PlaceSuggestion] = []
 
     @Published var hitPost: HitPost? = nil
@@ -69,8 +70,12 @@ final class PostViewModel: ObservableObject {
     func confirmPost() {
         Task {
             guard let post = hitPost else { return }
-            try? await service.savePost(post: post)
-            hitPost = nil
+            do {
+                try await service.savePost(post: post)
+                hitPost = nil
+            } catch {
+                postError = "Post failed to send"
+            }
         }
     }
 

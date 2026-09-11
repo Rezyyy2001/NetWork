@@ -13,30 +13,27 @@ import FirebaseAuth
 struct HitRequestService: Sendable {
     private let db = Firestore.firestore()
     
+    private func requestDocumentID(postID: String, requesterID: String) -> String {
+        "\(postID)_\(requesterID)"
+    }
+
     func sendRequest(postID: String, posterID: String) async throws {
+        let requesterID = Auth.auth().currentUser?.uid ?? ""
+        let docID = requestDocumentID(postID: postID, requesterID: requesterID)
+
         let hitRequestData: [String: Any] = [
             FirestoreKeys.HitRequestFields.postID: postID,
-            FirestoreKeys.HitRequestFields.requesterID: Auth.auth().currentUser?.uid ?? "",
+            FirestoreKeys.HitRequestFields.requesterID: requesterID,
             FirestoreKeys.HitRequestFields.posterID: posterID,
             FirestoreKeys.HitRequestFields.status: HitRequestStatus.pending.rawValue
         ]
-        try await db.collection(FirestoreKeys.Collections.hitrequests).addDocument(data: hitRequestData)
+        try await db.collection(FirestoreKeys.Collections.hitrequests).document(docID).setData(hitRequestData)
     }
-    
+
     func cancelRequest(postID: String) async throws {
-        if let cancellation = try await findRequest(postID: postID, requesterID: Auth.auth().currentUser?.uid ?? "") {
-            try await db.collection(FirestoreKeys.Collections.hitrequests).document(cancellation).delete()
-        }
-    }
-    
-    private func findRequest(postID: String, requesterID: String) async throws -> String? {
-        guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
-            .whereField(FirestoreKeys.HitRequestFields.postID, isEqualTo: postID)
-            .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: requesterID)
-            .getDocuments(),
-            let doc = snapshot.documents.first
-            else { return nil }
-        return doc.documentID
+        let requesterID = Auth.auth().currentUser?.uid ?? ""
+        let docID = requestDocumentID(postID: postID, requesterID: requesterID)
+        try await db.collection(FirestoreKeys.Collections.hitrequests).document(docID).delete()
     }
 
     func acceptRequest(documentID: String) async throws {

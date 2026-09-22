@@ -26,7 +26,10 @@ struct HitsView: View {
                                     isAccepted: viewModel.acceptedPostIDs.contains(post.id)
                     )}
             }
-            .onAppear {
+            .refreshable {
+                await viewModel.fetchPostsAsync()
+            }
+            .task {
                 viewModel.fetchPosts()
                 viewModel.fetchExistingRequests()
                 viewModel.fetchAcceptedRequests()

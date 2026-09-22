@@ -59,7 +59,6 @@ struct PostService: Sendable {
         do {
             let snapshot = try await query.getDocuments()
             var posts = snapshot.documents.compactMap(buildPost)
-            
 
             switch numberOfPeople {
             case 1:
@@ -71,16 +70,20 @@ struct PostService: Sendable {
             default:
                 break
             }
-            
+
+            // A UTR/USTA of 0 means the poster hasn't set a rating, not that
+            // they have the lowest possible one -- don't let the range filter
+            // hide them just because they haven't rated themselves yet.
             posts = posts.filter {
-                ($0.posterUTR ?? 0) >= Double(utrRange[0]) &&
-                ($0.posterUTR ?? 0) <= Double(utrRange[1]) &&
-                ($0.posterUSTA ?? 0) >= Double(ustaRange[0]) &&
-                ($0.posterUSTA ?? 0) <= Double(ustaRange[1])
+                let utr = $0.posterUTR ?? 0
+                let usta = $0.posterUSTA ?? 0
+                let utrOK = utr == 0 || (Double(utrRange[0])...Double(utrRange[1])).contains(utr)
+                let ustaOK = usta == 0 || (Double(ustaRange[0])...Double(ustaRange[1])).contains(usta)
+                return utrOK && ustaOK
             }
-            
+
             // TODO: Find a way to filter location or nearby location and make it look nice in filterView
-            
+
             return posts
             
         } catch {

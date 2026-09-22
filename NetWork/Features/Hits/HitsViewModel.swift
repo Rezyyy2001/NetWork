@@ -32,23 +32,25 @@ final class HitsViewModel: ObservableObject {
     @Published var errorMessage: String?
 
     func fetchPosts() {
-        Task {
-            var friendIDs: [String] = []
-            
-            if isFriends == true {
-                let userID = Auth.auth().currentUser?.uid ?? ""
-                friendIDs = await friendService.fetchFriendIDs(for: userID)
-            }
-            
-            self.hits = (try? await postService.fetchPosts(
-                isNewest: isNewest,
-                numberOfPeople: numberOfPeople,
-                isFriends: isFriends,
-                utrRange: utrRange,
-                ustaRange: ustaRange,
-                friendIDs: friendIDs
-            )) ?? []
+        Task { await fetchPostsAsync() }
+    }
+
+    func fetchPostsAsync() async {
+        var friendIDs: [String] = []
+
+        if isFriends == true {
+            let userID = Auth.auth().currentUser?.uid ?? ""
+            friendIDs = await friendService.fetchFriendIDs(for: userID)
         }
+
+        self.hits = (try? await postService.fetchPosts(
+            isNewest: isNewest,
+            numberOfPeople: numberOfPeople,
+            isFriends: isFriends,
+            utrRange: utrRange,
+            ustaRange: ustaRange,
+            friendIDs: friendIDs
+        )) ?? []
     }
     
     func sendRequest(for post: HitPost) {

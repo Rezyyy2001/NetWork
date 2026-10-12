@@ -12,10 +12,14 @@ import FirebaseAuth
 final class ConfirmedHitsViewModel: ObservableObject {
     private let service = HitRequestService()
     @Published var acceptedHitPosts: [ConfirmedHit] = []
-    
+    @Published var showUpcoming: Bool = true
+
     func fetchConfirmedHits() {
         Task {
-            self.acceptedHitPosts = (try? await service.confirmedHits(for: Auth.auth().currentUser?.uid ?? "")) ?? []
+            self.acceptedHitPosts = (try? await service.confirmedHits(
+                for: Auth.auth().currentUser?.uid ?? "",
+                upcoming: showUpcoming
+            )) ?? []
         }
     }
 }

@@ -82,7 +82,7 @@ struct HitRequestService: Sendable {
         return results
     }
     
-    func confirmedHits(for requesterID: String) async throws -> [ConfirmedHit] {
+    func confirmedHits(for requesterID: String, upcoming: Bool) async throws -> [ConfirmedHit] {
         guard let snapshot = try? await db.collection(FirestoreKeys.Collections.hitrequests)
             .whereField(FirestoreKeys.HitRequestFields.requesterID, isEqualTo: requesterID)
             .whereField(FirestoreKeys.HitRequestFields.status, isEqualTo: HitRequestStatus.accepted.rawValue)
@@ -92,38 +92,46 @@ struct HitRequestService: Sendable {
         let postID = snapshot.documents.compactMap {
             $0.data()[FirestoreKeys.HitRequestFields.postID] as? String
         }
-        return await fetchConfirmedHits(for: postID)
+        return await fetchConfirmedHits(for: postID, upcoming: upcoming)
     }
-    
-    private func fetchConfirmedHits(for postID: [String]) async -> [ConfirmedHit] {
-        var hits: [ConfirmedHit] = []
-        
-        for id in postID {
-            guard let doc = try? await db.collection(FirestoreKeys.Collections.posts).document(id).getDocument(),
-                  let data = doc.data()
-            else { continue }
-            
-            let timestamp = data[FirestoreKeys.PostFields.date] as? Timestamp
-            
-            let confirmedHit = ConfirmedHit(
-                id: id,
-                posterName: data[FirestoreKeys.PostFields.posterName] as? String ?? "",
-                posterUTR: data[FirestoreKeys.PostFields.posterUTR] as? Double,
-                posterUSTA: data[FirestoreKeys.PostFields.posterUSTA] as? Double,
-                location: data[FirestoreKeys.PostFields.location] as? String ?? "",
-                date: timestamp?.dateValue() ?? Date(),
-                extraInfo: data[FirestoreKeys.PostFields.extraInfo] as? String ?? "",
-                numberOfPeople: data[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 0,
-                profilePictureURL: data[FirestoreKeys.PostFields.profilePictureURL] as? String,
-                latitude: data[FirestoreKeys.PostFields.latitude] as? Double,
-                longitude: data[FirestoreKeys.PostFields.longitude] as? Double
-                )
-            
-            if confirmedHit.date >= Date() {
-                hits.append(confirmedHit)
+
+    private func fetchConfirmedHits(for postID: [String], upcoming: Bool) async -> [ConfirmedHit] {
+        let hits: [ConfirmedHit] = await withTaskGroup(of: ConfirmedHit?.self) { group in
+            for id in postID {
+                group.addTask {
+                    guard let doc = try? await self.db.collection(FirestoreKeys.Collections.posts).document(id).getDocument(),
+                          let data = doc.data()
+                    else { return nil }
+
+                    let timestamp = data[FirestoreKeys.PostFields.date] as? Timestamp
+
+                    return ConfirmedHit(
+                        id: id,
+                        posterName: data[FirestoreKeys.PostFields.posterName] as? String ?? "",
+                        posterUTR: data[FirestoreKeys.PostFields.posterUTR] as? Double,
+                        posterUSTA: data[FirestoreKeys.PostFields.posterUSTA] as? Double,
+                        location: data[FirestoreKeys.PostFields.location] as? String ?? "",
+                        date: timestamp?.dateValue() ?? Date(),
+                        extraInfo: data[FirestoreKeys.PostFields.extraInfo] as? String ?? "",
+                        numberOfPeople: data[FirestoreKeys.PostFields.numberOfPeople] as? Int ?? 0,
+                        profilePictureURL: data[FirestoreKeys.PostFields.profilePictureURL] as? String,
+                        latitude: data[FirestoreKeys.PostFields.latitude] as? Double,
+                        longitude: data[FirestoreKeys.PostFields.longitude] as? Double
+                    )
+                }
             }
+
+            var results: [ConfirmedHit] = []
+            for await hit in group {
+                if let hit {
+                    results.append(hit)
+                }
+            }
+            return results
         }
-        return hits.sorted { $0.date < $1.date }
+
+        let filtered = hits.filter { upcoming ? $0.date >= Date() : $0.date < Date() }
+        return upcoming ? filtered.sorted { $0.date < $1.date } : filtered.sorted { $0.date > $1.date }
     }
     
     func fetchExistingRequests() async -> [String] {

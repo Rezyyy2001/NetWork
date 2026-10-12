@@ -33,7 +33,7 @@ struct ConfirmedHitsView: View {
                         )
                     } else {
                         ScrollView {
-                            VStack(spacing: 16) {
+                            LazyVStack(spacing: 16) {
                                 ForEach(viewModel.acceptedHitPosts) { hit in
                                     ConfirmedHitCard(confirmedHit: hit)
                                 }

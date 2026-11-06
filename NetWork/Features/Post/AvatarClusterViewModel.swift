@@ -22,6 +22,15 @@ final class AvatarClusterViewModel: ObservableObject {
         self.time = time
     }
     
+    var isAcceptingLate: Bool {
+        let cutoff = time - 3600
+
+        if Date() > cutoff {
+            return true
+        }
+        return false
+    }
+    
     func fetchProfiles() {
         Task {
             if isOwner {

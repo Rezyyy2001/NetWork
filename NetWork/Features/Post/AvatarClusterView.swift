@@ -13,8 +13,8 @@ struct AvatarClusterView: View {
     
     @State private var showSheet: Bool = false
     
-    init(postID: String, isOwner: Bool) {
-        _viewModel = StateObject(wrappedValue: AvatarClusterViewModel(postID: postID, isOwner: isOwner))
+    init(postID: String, isOwner: Bool, time: Date) {
+        _viewModel = StateObject(wrappedValue: AvatarClusterViewModel(postID: postID, isOwner: isOwner, time: time))
     }
     
     var body: some View {

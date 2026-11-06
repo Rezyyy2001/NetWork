@@ -52,7 +52,7 @@ struct ConfirmedHitCard: View {
                     
                     
                     Spacer()
-                    AvatarClusterView(postID: confirmedHit.id, isOwner: false)
+                    AvatarClusterView(postID: confirmedHit.id, isOwner: false, time: confirmedHit.date)
                     Spacer()
                 }
 

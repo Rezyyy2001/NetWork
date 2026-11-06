@@ -14,10 +14,12 @@ final class AvatarClusterViewModel: ObservableObject {
     @Published var profiles: [HitRequestProfile] = []
     var postID: String
     var isOwner: Bool
+    var time: Date
     
-    init(postID: String, isOwner: Bool) {
+    init(postID: String, isOwner: Bool, time: Date) {
         self.postID = postID
         self.isOwner = isOwner
+        self.time = time
     }
     
     func fetchProfiles() {

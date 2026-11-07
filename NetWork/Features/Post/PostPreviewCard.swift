@@ -71,7 +71,7 @@ struct PostPreviewCard: View {
                     
                     Spacer()
                     
-                    AvatarClusterView(postID: post.id, isOwner: post.userID == Auth.auth().currentUser?.uid)
+                    AvatarClusterView(postID: post.id, isOwner: post.userID == Auth.auth().currentUser?.uid, time: post.date)
                     
                     Spacer()
     

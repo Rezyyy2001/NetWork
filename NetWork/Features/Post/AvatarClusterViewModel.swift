@@ -14,12 +14,25 @@ final class AvatarClusterViewModel: ObservableObject {
     @Published var profiles: [HitRequestProfile] = []
     var postID: String
     var isOwner: Bool
+    var time: Date
     
-    init(postID: String, isOwner: Bool) {
+    init(postID: String, isOwner: Bool, time: Date) {
         self.postID = postID
         self.isOwner = isOwner
+        self.time = time
     }
     
+    let oneHour: Double = 3600
+    
+    var isAcceptingLate: Bool {
+        let cutoff = time - oneHour
+        return Date() > cutoff
+    }
+
+    var minutesUntilHit: Int {
+        Int(time.timeIntervalSinceNow / 60)
+    }
+
     func fetchProfiles() {
         Task {
             if isOwner {

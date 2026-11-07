@@ -12,7 +12,9 @@ struct AvatarClusterSheetView: View {
     @ObservedObject var viewModel: AvatarClusterViewModel
     
     @State private var acceptedIDs: Set<String> = []
-    
+    @State private var showLateAcceptAlert: Bool = false
+    @State private var pendingAcceptID: String?
+
     var onAccept: (String) -> Void
 
     var body: some View {
@@ -42,8 +44,12 @@ struct AvatarClusterSheetView: View {
                                 .foregroundColor(.gray)
                         } else {
                             Button("Accept") {
-                                acceptedIDs.insert(profile.documentID)
-                                onAccept(profile.documentID)
+                                if viewModel.isAcceptingLate {
+                                    pendingAcceptID = profile.documentID
+                                    showLateAcceptAlert = true
+                                } else {
+                                    accept(profile.documentID)
+                                }
                             }
                             .buttonStyle(.borderedProminent)
                         }
@@ -53,5 +59,32 @@ struct AvatarClusterSheetView: View {
         }
         .listStyle(.plain)
         .scrollDisabled(true)
+        .alert("Accepting Late", isPresented: $showLateAcceptAlert) {
+            Button("Cancel", role: .cancel) {
+                pendingAcceptID = nil
+            }
+            Button("Accept Anyway") {
+                if let id = pendingAcceptID {
+                    accept(id)
+                }
+                pendingAcceptID = nil
+            }
+        } message: {
+            Text(lateAcceptMessage)
+        }
+    }
+
+    private func accept(_ documentID: String) {
+        acceptedIDs.insert(documentID)
+        onAccept(documentID)
+    }
+
+    private var lateAcceptMessage: String {
+        let minutesRemaining = viewModel.minutesUntilHit
+        if minutesRemaining > 0 {
+            return "This hit starts in \(minutesRemaining) minute\(minutesRemaining == 1 ? "" : "s"). Accept anyway?"
+        } else {
+            return "This hit's start time has already passed. Accept anyway?"
+        }
     }
 }

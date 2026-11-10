@@ -30,6 +30,8 @@ final class HitsViewModel: ObservableObject {
     @Published var acceptedPostIDs: Set<String> = []
 
     @Published var errorMessage: String?
+    
+    let oneHour: Double = 3600
 
     func fetchPosts() {
         Task { await fetchPostsAsync() }
@@ -87,5 +89,10 @@ final class HitsViewModel: ObservableObject {
             let postIDs = await hitRequestService.fetchAcceptedRequests()
             acceptedPostIDs = Set(postIDs)
         }
+    }
+    
+    func isRequestingLate(for post: HitPost) -> Bool {
+        let cutoff = post.date - oneHour
+        return Date() > cutoff
     }
 }

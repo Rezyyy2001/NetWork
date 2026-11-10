@@ -11,7 +11,9 @@ import FirebaseAuth
 struct HitsView: View {
     
     @StateObject private var viewModel = HitsViewModel()
-    
+    @State private var lateRequestWarning: Bool = false
+    @State private var pendingRequestPost: HitPost?
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -20,9 +22,16 @@ struct HitsView: View {
                                     showConfirm: false,
                                     onConfirm: {},
                                     showJoinButton: post.userID != Auth.auth().currentUser?.uid,
-                                    onJoinRequest: {viewModel.sendRequest(for: post)},
+                                    onJoinRequest: {
+                                        if viewModel.isRequestingLate(for: post) {
+                                            pendingRequestPost = post
+                                            lateRequestWarning = true
+                                        } else {
+                                            viewModel.sendRequest(for: post)
+                                        }
+                                    },
                                     isRequested: viewModel.requestedPostIDs.contains(post.id),
-                                    onCancelRequest:{ viewModel.cancelRequest(for: post) },
+                                    onCancelRequest: { viewModel.cancelRequest(for: post) },
                                     isAccepted: viewModel.acceptedPostIDs.contains(post.id)
                     )}
             }
@@ -63,6 +72,31 @@ struct HitsView: View {
             } message: {
                 Text(viewModel.errorMessage ?? "")
             }
+            .alert("Requesting Late", isPresented: $lateRequestWarning) {
+                Button("Cancel", role: .cancel) {
+                    pendingRequestPost = nil
+                }
+                Button("Request Anyway") {
+                    if let post = pendingRequestPost {
+                        viewModel.sendRequest(for: post)
+                    }
+                    pendingRequestPost = nil
+                }
+            } message: {
+                Text(lateRequestMessage)
+            }
+        }
+    }
+
+    private var lateRequestMessage: String {
+        guard let post = pendingRequestPost else {
+            return "Request anyway?"
+        }
+        let minutesRemaining = viewModel.minutesUntilHit(for: post)
+        if minutesRemaining > 0 {
+            return "This hit starts in \(minutesRemaining) minute\(minutesRemaining == 1 ? "" : "s"). The host may already have plans set, but they could still accept you."
+        } else {
+            return "This hit's start time has already passed."
         }
     }
 }

@@ -82,9 +82,9 @@ struct AvatarClusterSheetView: View {
     private var lateAcceptMessage: String {
         let minutesRemaining = viewModel.minutesUntilHit
         if minutesRemaining > 0 {
-            return "This hit starts in \(minutesRemaining) minute\(minutesRemaining == 1 ? "" : "s"). Accept anyway?"
+            return "This hit starts in \(minutesRemaining) minute\(minutesRemaining == 1 ? "" : "s"). Even if you accept, it may be too late for them to attend."
         } else {
-            return "This hit's start time has already passed. Accept anyway?"
+            return "This hit's start time has already passed."
         }
     }
 }

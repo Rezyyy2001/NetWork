@@ -30,8 +30,6 @@ final class HitsViewModel: ObservableObject {
     @Published var acceptedPostIDs: Set<String> = []
 
     @Published var errorMessage: String?
-    
-    let oneHour: Double = 3600
 
     func fetchPosts() {
         Task { await fetchPostsAsync() }
@@ -92,7 +90,10 @@ final class HitsViewModel: ObservableObject {
     }
     
     func isRequestingLate(for post: HitPost) -> Bool {
-        let cutoff = post.date - oneHour
-        return Date() > cutoff
+        post.date.isWithin(HitRequestService.lateWarningWindow)
+    }
+
+    func minutesUntilHit(for post: HitPost) -> Int {
+        post.date.minutesFromNow
     }
 }

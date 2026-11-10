@@ -11,8 +11,10 @@ import FirebaseFirestore
 import FirebaseAuth
 
 struct HitRequestService: Sendable {
+    static let lateWarningWindow: TimeInterval = 3600
+
     private let db = Firestore.firestore()
-    
+
     private func requestDocumentID(postID: String, requesterID: String) -> String {
         "\(postID)_\(requesterID)"
     }

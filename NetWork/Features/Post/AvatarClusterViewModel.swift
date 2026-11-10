@@ -22,15 +22,12 @@ final class AvatarClusterViewModel: ObservableObject {
         self.time = time
     }
     
-    let oneHour: Double = 3600
-    
     var isAcceptingLate: Bool {
-        let cutoff = time - oneHour
-        return Date() > cutoff
+        time.isWithin(HitRequestService.lateWarningWindow)
     }
 
     var minutesUntilHit: Int {
-        Int(time.timeIntervalSinceNow / 60)
+        time.minutesFromNow
     }
 
     func fetchProfiles() {

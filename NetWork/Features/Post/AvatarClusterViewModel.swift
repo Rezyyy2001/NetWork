@@ -23,7 +23,11 @@ final class AvatarClusterViewModel: ObservableObject {
     }
     
     var isAcceptingLate: Bool {
-        time.isWithin(HitRequestService.lateWarningWindow)
+        time.isWithin(HitRequestService.lateWarningWindow) && !time.hasPassed
+    }
+    
+    var hitHasPassed: Bool {
+        time.hasPassed
     }
 
     var minutesUntilHit: Int {

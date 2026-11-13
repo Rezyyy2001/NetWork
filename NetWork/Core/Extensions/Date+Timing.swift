@@ -11,6 +11,10 @@ extension Date {
     var minutesFromNow: Int {
         Int(timeIntervalSinceNow / 60)
     }
+    
+    var hasPassed: Bool {
+        self < Date()
+    }
 
     func isWithin(_ interval: TimeInterval) -> Bool {
         self - interval < Date()

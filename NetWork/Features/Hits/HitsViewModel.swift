@@ -90,7 +90,11 @@ final class HitsViewModel: ObservableObject {
     }
     
     func isRequestingLate(for post: HitPost) -> Bool {
-        post.date.isWithin(HitRequestService.lateWarningWindow)
+        post.date.isWithin(HitRequestService.lateWarningWindow) && !post.date.hasPassed
+    }
+    
+    func hitHasPassed(for post: HitPost) -> Bool {
+        return post.date.hasPassed
     }
 
     func minutesUntilHit(for post: HitPost) -> Int {

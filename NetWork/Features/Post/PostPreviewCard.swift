@@ -81,7 +81,7 @@ struct PostPreviewCard: View {
                                 .font(.caption)
                                 .foregroundColor(.green)
                             
-                        } else {
+                        } else if !post.date.hasPassed {
                             Button {
                                 isRequested ? onCancelRequest() : onJoinRequest()
                             } label: {

@@ -93,11 +93,7 @@ struct HitsView: View {
             return "Request anyway?"
         }
         let minutesRemaining = viewModel.minutesUntilHit(for: post)
-        if minutesRemaining > 0 {
-            return "This hit starts in \(minutesRemaining) minute\(minutesRemaining == 1 ? "" : "s"). The host may already have plans set, but they could still accept you."
-        } else {
-            return "This hit's start time has already passed."
-        }
+        return "This hit starts in \(minutesRemaining) minute\(minutesRemaining == 1 ? "" : "s"). The host may already have plans set, but they could still accept you."
     }
 }
 

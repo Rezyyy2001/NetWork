@@ -66,17 +66,8 @@ struct SignupView: View {
                           isSecureField: true)
                 .frame(maxWidth: .infinity)
                 
-                Button {
-                    viewModel.signUp() // calls viewModel.signUp when button tapped
-                } label: {
-                    // TODO: Add a simple loading screen
-                    Text("SIGN UP")
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .padding(.vertical, 18)
-                        .padding(.horizontal, 50)
-                        .background(Color(.systemBlue))
-                        .cornerRadius(10)
+                LoadingButton(title: "SIGN UP", isLoading: viewModel.isLoading) {
+                    viewModel.signUp()
                 }
                 .padding(.top, 8)
                 .onChange(of: viewModel.showHomeView) { _, show in

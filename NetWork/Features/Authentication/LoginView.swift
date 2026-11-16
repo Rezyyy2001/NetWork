@@ -26,17 +26,8 @@ struct LoginView: View {
                           isSecureField: true)
                     .frame(maxWidth: .infinity)
                 
-                Button {
+                LoadingButton(title: "LOG IN", isLoading: viewModel.isLoading) {
                     viewModel.signIn()
-                } label: {
-                    // add a loading screen
-                    Text("LOG IN")
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .padding(.vertical, 18)
-                        .padding(.horizontal, 50)
-                        .background(Color(.systemBlue))
-                        .cornerRadius(10)
                 }
                 .padding(.top, 24)
                 .onChange(of: viewModel.showHomeView) { _, show in

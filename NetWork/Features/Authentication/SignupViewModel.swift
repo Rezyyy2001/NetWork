@@ -34,7 +34,7 @@ final class SignupViewModel: ObservableObject { // observableObject allows the c
         isLoading = true // indicates onging signUp process
         Task {
             do {
-                try await AuthenticationManager.shared.signUp(name: name, email: email, password: password, birthday: birthday, usualSpot: usualSpot)
+                try await AuthenticationManager.shared.signUp(name: name, email: email, password: password)
             } catch {
                 errorMessage = error.localizedDescription
                 isLoading = false

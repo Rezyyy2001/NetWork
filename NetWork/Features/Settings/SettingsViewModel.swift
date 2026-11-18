@@ -44,6 +44,7 @@ final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
             apply(profile)
         } catch {
             self.errorMessage = "Could not find user"
+            self.showErrorAlert = true
         }
     }
     
@@ -73,6 +74,7 @@ final class SettingsViewModel: ObservableObject, UserProfileDataProvider {
             self.isEditingProfile = false
         } catch {
             self.errorMessage = "Could not save profile"
+            self.showErrorAlert = true
         }
     }
     

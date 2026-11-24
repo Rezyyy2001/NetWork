@@ -36,7 +36,9 @@ public struct SettingsView: View {
         
                 SignOutButton {
                     settingsViewModel.signOut()
-                    dismiss() // So the exit seems seemless
+                    if !settingsViewModel.showErrorAlert {
+                        dismiss()
+                    }
                 }
             }
             .navigationTitle("Settings")
